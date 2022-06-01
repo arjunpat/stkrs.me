@@ -11,6 +11,16 @@
           <div class="tw-font-light tw-text-md">{{ id }}</div>
         </div>
       </div>
+      
+      <div>
+        <div class="tw-absolute tw-left-0 tw-w-full">
+          <div class="tw-bg-green-500 tw-h-20 tw-w-full"></div>
+          <PaintDrip 
+            class="tw-w-full tw-h-20"
+            color="var(--color-green-500)"
+          />
+        </div>
+      </div>
 
       <div>
         <div class="tw-text-3xl tw-font-medium tw-mb-4">Pinned</div>
@@ -42,7 +52,7 @@
       </template>
     </div>
     
-    <div class="tw-p-4 tw-mt-24">
+    <!--<div class="tw-p-4 tw-mt-24">
       <div class="tw-text-3xl tw-font-medium tw-mb-4">Friends</div>
       <div 
         v-for="friend, i in friends" 
@@ -58,18 +68,20 @@
           <div class="tw-font-semibold tw-text-lg">{{ friend.username }}</div>
         </div>
       </div>
-    </div>
+    </div>-->
   </div>
 </template>
 
 <script>
 import Sticker from '@/components/Sticker'
 import ProfileImage from '@/components/ProfileImage'
+import PaintDrip from '@/components/PaintDrip'
 
 export default {
   name: 'Wall',
 
   components: {
+    PaintDrip,
     ProfileImage,
     Sticker,
   },
