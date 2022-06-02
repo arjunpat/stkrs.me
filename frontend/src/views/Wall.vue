@@ -1,6 +1,6 @@
 <template>
   <div class="tw-flex tw-justify-center">
-    <div class="tw-p-4 tw-max-w-6xl tw-m-auto tw-h-full tw-space-y-8">
+    <div class="tw-p-4 tw-max-w-6xl tw-m-auto tw-h-full">
       <div class="tw-flex">
         <ProfileImage 
           class="tw-mr-4"
@@ -12,42 +12,39 @@
         </div>
       </div>
       
-      <div>
-        <div class="tw-absolute tw-left-0 tw-w-full">
-          <div class="tw-bg-green-500 tw-h-20 tw-w-full"></div>
-          <PaintDrip 
-            class="tw-w-full tw-h-20"
-            color="var(--color-green-500)"
-          />
-        </div>
-      </div>
-
-      <div>
-        <div class="tw-text-3xl tw-font-medium tw-mb-4">Pinned</div>
+      <div class="tw-bg-green-600" /> <!-- needed so the tailwind class compiles -->
+      <PaintDripSection color="green-600">
+        <div class="tw-text-3xl tw-font-medium tw-mb-4 tw-text-white">Pinned</div>
         <div class="tw-space-x-4">
           <Sticker
             v-for="item, i in pinned"
             :key="i"
             v-bind="item"
+            dark
           />
         </div>
-      </div>
+      </PaintDripSection>
       
+      <div class="tw-bg-gray-500 tw-bg-red-700 tw-bg-orange-600" />
       <template v-for="category, i in categories">
         <div :key="i">
-          <div :key="`header-${i}`" class="tw-text-3xl tw-font-medium tw-mb-4">{{ category.header }}</div>
-          <div :key="`stickers-${i}`" class="tw-space-y-4">
-            <div 
-              v-for="sticker, s in category.stickers" 
-              :key="s"
-              class="tw-flex"
-            >
-              <Sticker
-                v-bind="sticker"
-              />
-              <div class="tw-p-4">{{ sticker.description }}</div>
+          <PaintDripSection :color="category.color">
+            
+            <div class="tw-text-3xl tw-font-medium tw-mb-4 tw-text-white">{{ category.header }}</div>
+            <div class="tw-space-y-4">
+              <div 
+                v-for="sticker, s in category.stickers" 
+                :key="s"
+                class="tw-flex"
+              >
+                <Sticker
+                  v-bind="sticker"
+                  dark
+                />
+                <div class="tw-p-4 tw-text-gray-200">{{ sticker.description }}</div>
+              </div>
             </div>
-          </div>
+          </PaintDripSection>
         </div>
       </template>
     </div>
@@ -75,13 +72,13 @@
 <script>
 import Sticker from '@/components/Sticker'
 import ProfileImage from '@/components/ProfileImage'
-import PaintDrip from '@/components/PaintDrip'
+import PaintDripSection from '@/components/PaintDripSection'
 
 export default {
   name: 'Wall',
 
   components: {
-    PaintDrip,
+    PaintDripSection,
     ProfileImage,
     Sticker,
   },
@@ -113,6 +110,7 @@ export default {
     categories: [
       {
         header: 'Professional',
+        color: 'gray-500',
         stickers: [
           {
             name: 'University of Pennsylvania (2020-2024)',
@@ -133,6 +131,7 @@ export default {
       },
       {
         header: 'Fun',
+        color: 'orange-600',
         stickers: [
           {
             name: 'University of Pennsylvania (2020-2024)',
@@ -153,6 +152,7 @@ export default {
       },
       {
         header: 'Communities',
+        color: 'red-700',
         stickers: [
           {
             name: 'University of Pennsylvania (2020-2024)',

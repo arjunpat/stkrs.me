@@ -1,5 +1,5 @@
 <template>
-  <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+  <svg class="-tw-mt-px" viewBox="0 0 100 100" preserveAspectRatio="none">
     <path :fill="color" vector-effect="non-scaling-stroke"
       :d="pathD"
     />
