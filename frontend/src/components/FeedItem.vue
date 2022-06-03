@@ -2,27 +2,34 @@
 
 <template>
   <div>
-    <div class="tw-bg-lime-700 tw-w-full tw-flex pa-3 tw-rounded-t-2xl tw-rounded-b-sm tw-text-white">
+    <div
+      class="tw-bg-lime-700 tw-w-full tw-flex pa-8 tw-rounded-t-2xl tw-rounded-b-sm tw-text-white"
+    >
       <div class="tw-flex">
         <ProfileImage class="tw-mr-4" :src="sticker.image" width="150" />
       </div>
       <div
-        class="tw-flex tw-flex-col tw-h-full tw-bg-dark-gray tw-space-y-1 pa-5"
+        class="tw-flex tw-flex-col tw-h-full tw-bg-dark-gray tw-space-y-4 pa-5"
       >
         <h1>
-          {{ sticker.ownerUsername }} just earned a {{ sticker.name }} NFT!
+          <span class="tw-font-bold">{{ sticker.ownerUsername }}</span> just
+          earned a <span class="tw-font-bold">{{ sticker.name }}</span> NFT!
         </h1>
         <h2>
-          Shares {{ sticker.shared.length }} communities:
-          <span v-for="community in sticker.shared" :key="community">{{
-            community
-          }}</span>
+          Shared communities:
+          <span v-for="community in sticker.shared" :key="community"
+            ><v-chip class="mr-1">{{ community }}</v-chip></span
+          >
         </h2>
-        <v-btn>Endorse</v-btn>
+        <v-btn class="tw-w-28" rounded>Endorse</v-btn>
       </div>
     </div>
 
-    <PaintDrip class="tw-h-20 tw-w-full" :color="`var(--color-lime-700)`" :numDrops="10"></PaintDrip>
+    <PaintDrip
+      class="tw-h-20 tw-w-full"
+      :color="`var(--color-lime-700)`"
+      :numDrops="10"
+    ></PaintDrip>
   </div>
 </template>
 

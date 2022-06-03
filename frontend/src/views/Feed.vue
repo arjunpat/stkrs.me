@@ -25,19 +25,19 @@ export default {
     items: ["Gaming"],
     stickers: [
       {
-        ownerUsername: 'University of Pennsylvania (2020-2024)',
+        ownerUsername: 'TantalizingTickler',
         name: 'Challenger League',
         image: 'https://directory.seas.upenn.edu/wp-content/uploads/2020/06/directory-placeholder.jpg',
         shared: ['Challenger League', 'PennCS 2020-2022']
       },
       {
-        ownerUsername: 'University of Pennsylvania (2020-2024)',
+        ownerUsername: 'AbleOmicron',
         name: 'Challenger League',
         image: 'https://directory.seas.upenn.edu/wp-content/uploads/2020/06/directory-placeholder.jpg',
         shared: ['Challenger League', 'PennCS 2020-2022']
       },
       {
-        ownerUsername: 'University of Pennsylvania (2020-2024)',
+        ownerUsername: 'SamuelPear',
         name: 'Challenger League',
         image: 'https://directory.seas.upenn.edu/wp-content/uploads/2020/06/directory-placeholder.jpg',
         shared: ['Challenger League', 'PennCS 2020-2022']
