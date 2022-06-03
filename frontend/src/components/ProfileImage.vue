@@ -1,8 +1,14 @@
 <!-- Displays a profile image with the given image src -->
 
 <template>
-  <div class="tw-inline-block tw-drop-shadow-xl">
-    <img :src="src" :style="style" />
+  <div class="tw-inline-block tw-items-center tw-drop-shadow-xl">
+    <div>
+      <img :src="src" :style="style" />
+    </div>
+    <div class="tw-text-sm tw-text-center tw-font-medium tw-my-3">
+      {{ name }}
+    </div>
+    
   </div>
 </template>
 
@@ -14,6 +20,8 @@ export default {
   name: 'ProfileImage',
 
   props: {
+    name: { type: String },
+    
     src: { type: String, required: true },
 
     width: { type: Number, default: 200 },
