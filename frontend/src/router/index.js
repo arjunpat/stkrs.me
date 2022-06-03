@@ -27,7 +27,12 @@ const routes = [
     path: '/discover',
     name: 'discover',
     component: () => import('@/views/Discover'),
-  }
+  },
+  {
+    path: '/feed',
+    name: 'feed',
+    component: () => import('@/views/Feed'),
+  },
 ]
 
 const router = new VueRouter({
