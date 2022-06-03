@@ -2,14 +2,10 @@
   <div class="tw-flex tw-p-4 tw-w-full tw-m-auto tw-h-full tw-justify-center">
       <div class="tw-flex tw-flex-col tw-space-y-8 tw-w-1/2">
         
-        <v-select
-          :items="items"
-          label="Solo field"
-          dense
-          solo
-        ></v-select>
+       
         <FeedItem v-for="(sticker, i) in stickers" :key="i" :sticker="sticker"></FeedItem>
        
+        
       </div>
 
   </div>
