@@ -54,7 +54,7 @@ export default {
     click(e) {
       const blob = this.$refs.blob
       blob.style.transition = 'transform .4s'
-      blob.style.transform = 'scale(60)'
+      blob.style.transform = 'scale(70)'
       
       // const { height, width } = blob.getBBox()
       // blob.style.width = `${width+10000}px`
