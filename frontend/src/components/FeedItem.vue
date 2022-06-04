@@ -16,7 +16,6 @@
           earned a <span class="tw-font-bold">{{ sticker.name }}</span> NFT!
         </h1>
         <h2>
-          Shared communities:
           <span v-for="community in sticker.shared" :key="community"
             ><v-chip class="mr-1 tw-text-black" color="light-green lighten-4">{{
               community
