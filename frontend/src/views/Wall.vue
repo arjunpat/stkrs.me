@@ -24,6 +24,8 @@
             :key="i"
             v-bind="item"
             dark
+            pin
+            pinned
           />
         </div>
       </PaintDripSection>

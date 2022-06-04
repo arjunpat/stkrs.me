@@ -2,8 +2,23 @@
 
 <template>
   <div class="tw-flex-col tw-items-center tw-inline-flex">
-    <div class="tw-p-1 tw-border tw-border-solid tw-border-gray-300 tw-rounded-full tw-mb-2 tw-bg-white">
+    <div 
+      class="tw-relative tw-p-1 tw-border tw-border-solid tw-border-gray-300 tw-rounded-full tw-mb-2 tw-bg-white"
+      @mouseover="showPin = true" @mouseleave="showPin = false"
+    >
       <img :src="src" class="tw-rounded-full" :style="style">
+      <v-btn 
+        @click="$emit('pin', !pinned)"
+        v-if="showPin"
+        x-small 
+        fab 
+        absolute 
+        class="tw-right-2 tw-top-2"
+        @mouseover="pinHover = true"
+        @mouseleave="pinHover = false"
+      >
+        <v-icon>{{ pinIcon }}</v-icon>
+      </v-btn>
     </div>
     <div class="tw-text-sm tw-text-center tw-font-medium" :style="textStyle" :class="textClass">
       {{ name }}
@@ -15,15 +30,27 @@
 export default {
   name: 'Sticker',
 
+  emits: ['pin'],
+
   props: {
     src: { type: String, required: true },
     name: { type: String, default: '' },
     dark: { type: Boolean, default: false },
+    pin: { type: Boolean, default: false },
+    pinned: { type: Boolean, default: false },
 
     width: { type: Number, default: 200 },
   },
 
+  data: () => ({
+    pinHover: false,
+    showPin: false,
+  }),
+
   computed: {
+    pinIcon() {
+      return this.pinned ? 'mdi-pin-off' : 'mdi-pin'
+    },
     style() {
       const { width } = this
       return { width: `${.8*width}px`, height: `${.8*width}px` }
