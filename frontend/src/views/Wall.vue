@@ -1,16 +1,19 @@
 <template>
   <div class="tw-flex tw-justify-center">
     <div class="tw-p-4 tw-max-w-6xl tw-m-auto tw-h-full">
-      <div class="tw-flex">
-        <ProfileImage 
-          class="tw-mr-4"
-          :src="profilePic"
-        />
-        <div class="tw-self-center">
-          <div class="tw-font-semibold tw-text-5xl">{{ username }}</div>
-          <div class="tw-font-light tw-text-md">{{ id }}</div>
+      <div class="tw-bg-blue-600"/>
+      <PaintDripSection class="-tw-mt-4" color="blue-600">
+        <div class="tw-flex">
+          <ProfileImage 
+            class="tw-mr-4"
+            :src="profilePic"
+          />
+          <div class="tw-self-center">
+            <div class="tw-text-white tw-font-semibold tw-text-5xl">{{ username }}</div>
+            <div class="tw-text-white tw-font-light tw-text-md">{{ id }}</div>
+          </div>
         </div>
-      </div>
+      </PaintDripSection>
       
       <div class="tw-bg-green-600" /> <!-- needed so the tailwind class compiles -->
       <PaintDripSection color="green-600">
@@ -27,25 +30,23 @@
       
       <div class="tw-bg-gray-500 tw-bg-red-700 tw-bg-orange-600" />
       <template v-for="category, i in categories">
-        <div :key="i">
-          <PaintDripSection :color="category.color">
-            
-            <div class="tw-text-3xl tw-font-medium tw-mb-4 tw-text-white">{{ category.header }}</div>
-            <div class="tw-space-y-4">
-              <div 
-                v-for="sticker, s in category.stickers" 
-                :key="s"
-                class="tw-flex"
-              >
-                <Sticker
-                  v-bind="sticker"
-                  dark
-                />
-                <div class="tw-p-4 tw-text-gray-200">{{ sticker.description }}</div>
-              </div>
+        <PaintDripSection :key="i" :color="category.color">
+          
+          <div class="tw-text-3xl tw-font-medium tw-mb-4 tw-text-white">{{ category.header }}</div>
+          <div class="tw-space-y-4">
+            <div 
+              v-for="sticker, s in category.stickers" 
+              :key="s"
+              class="tw-flex"
+            >
+              <Sticker
+                v-bind="sticker"
+                dark
+              />
+              <div class="tw-p-4 tw-text-gray-200">{{ sticker.description }}</div>
             </div>
-          </PaintDripSection>
-        </div>
+          </div>
+        </PaintDripSection>
       </template>
     </div>
     

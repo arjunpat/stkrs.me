@@ -2,55 +2,63 @@
   <v-app>
     <v-app-bar
       app
-      color="primary"
-      dark
+      color="transparent"
+      flat
+      class="tw-z-20"
     >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
+      <div class="d-flex align-center tw-text-white tw-font-extrabold tw-text-lg">
+        STKRS
       </div>
 
       <v-spacer></v-spacer>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+
+      <BlobButton 
+        @click="navigate('wall')"
+        text="Wall"
+        :variant="0"
+        fill="var(--color-blue-500)"
+      />
+      <BlobButton 
+        @click="navigate('feed')"
+        text="Feed"
+        :variant="1"
+        fill="var(--color-green-500)"
+      />
+      <BlobButton 
+        @click="navigate('discover')"
+        text="Discover"
+        :variant="2"
+        fill="var(--color-red-600)"
+      />
     </v-app-bar>
 
-    <v-main>
+    <v-main class="tw-p-0">
       <router-view/>
     </v-main>
   </v-app>
 </template>
 
 <script>
+import BlobButton from '@/components/BlobButton'
 
 export default {
   name: 'App',
 
+  components: {
+    BlobButton,
+  },
+
   data: () => ({
-    //
+    
   }),
+
+  methods: {
+    navigate(name) {
+      if (this.$route.name !== name)
+        this.$router.push({ name: name })
+    }
+  },
 };
 </script>
 
