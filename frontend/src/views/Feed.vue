@@ -1,13 +1,24 @@
 <template>
-  <div class="tw-flex tw-p-4 tw-w-full tw-m-auto tw-h-full tw-justify-center">
-      <div class="tw-flex tw-flex-col tw-space-y-8 tw-w-1/2">
-        
-       
-        <FeedItem v-for="(sticker, i) in stickers" :key="i" :sticker="sticker"></FeedItem>
-       
-        
+  <div
+    class="tw-flex tw-p-4 tw-w-full tw-m-auto tw-h-full tw-justify-center tw-bg-lime-200"
+  >
+    <div class="tw-flex tw-flex-col tw-space-y-8 tw-w-1/2 tw-align-top">
+      <div>
+        <v-select
+          :items="items"
+          v-model="selected"
+          label="Category"
+          dense
+          solo
+        ></v-select>
       </div>
-
+      <v-fade-transition v-for="(sticker, i) in stickers" :key="i">
+        <FeedItem
+          :sticker="sticker"
+          v-if="selected == 'All' || selected == sticker.category"
+        ></FeedItem
+      ></v-fade-transition>
+    </div>
   </div>
 </template>
 
@@ -22,28 +33,34 @@ export default {
   },
 
   data: () => ({
-    items: ["Gaming"],
+    selected: 'All',
+    items: ['All', 'Gaming', 'Professional'],
     stickers: [
       {
         ownerUsername: 'TantalizingTickler',
         name: 'Challenger League',
-        image: 'https://directory.seas.upenn.edu/wp-content/uploads/2020/06/directory-placeholder.jpg',
-        shared: ['Challenger League', 'PennCS 2020-2022']
+        image:
+          'https://directory.seas.upenn.edu/wp-content/uploads/2020/06/directory-placeholder.jpg',
+        shared: ['Challenger League', 'PennCS 2020-2022'],
+        category: 'Gaming',
       },
       {
         ownerUsername: 'AbleOmicron',
         name: 'Challenger League',
-        image: 'https://directory.seas.upenn.edu/wp-content/uploads/2020/06/directory-placeholder.jpg',
-        shared: ['Challenger League', 'PennCS 2020-2022']
+        image:
+          'https://directory.seas.upenn.edu/wp-content/uploads/2020/06/directory-placeholder.jpg',
+        shared: ['Challenger League', 'PennCS 2020-2022'],
+        category: 'Gaming',
       },
       {
-        ownerUsername: 'SamuelPear',
+        ownerUsername: 'AbleOmicron',
         name: 'Challenger League',
-        image: 'https://directory.seas.upenn.edu/wp-content/uploads/2020/06/directory-placeholder.jpg',
-        shared: ['Challenger League', 'PennCS 2020-2022']
+        image:
+          'https://directory.seas.upenn.edu/wp-content/uploads/2020/06/directory-placeholder.jpg',
+        shared: ['Challenger League', 'PennCS 2020-2022'],
+        category: 'Professional',
       },
     ],
-
   }),
 }
 </script>

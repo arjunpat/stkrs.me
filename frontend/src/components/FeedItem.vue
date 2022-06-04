@@ -3,13 +3,13 @@
 <template>
   <div>
     <div
-      class="tw-bg-lime-700 tw-w-full tw-flex pa-8 tw-rounded-t-2xl tw-rounded-b-sm tw-text-white"
+      class="tw-bg-lime-700 tw-w-full tw-flex py-8 pl-16 tw-rounded-t-2xl tw-rounded-b-sm tw-text-white"
     >
       <div class="tw-flex">
         <ProfileImage class="tw-mr-4" :src="sticker.image" width="150" />
       </div>
       <div
-        class="tw-flex tw-flex-col tw-h-full tw-bg-dark-gray tw-space-y-4 pa-5"
+        class="tw-flex tw-flex-col tw-h-full tw-bg-dark-gray tw-space-y-4 pl-5 pt-12"
       >
         <h1>
           <span class="tw-font-bold">{{ sticker.ownerUsername }}</span> just
@@ -18,10 +18,12 @@
         <h2>
           Shared communities:
           <span v-for="community in sticker.shared" :key="community"
-            ><v-chip class="mr-1">{{ community }}</v-chip></span
+            ><v-chip class="mr-1 tw-text-black" color="light-green lighten-4">{{
+              community
+            }}</v-chip></span
           >
         </h2>
-        <v-btn class="tw-w-28" rounded>Endorse</v-btn>
+        <v-btn class="tw-w-36" rounded>Endorse</v-btn>
       </div>
     </div>
 
