@@ -1,3 +1,9 @@
+actor {
+    public shared query (msg) func whoami() : async Principal {
+        msg.caller
+    };
+};
+
 import Error "mo:base/Error";
 import Hash "mo:base/Hash";
 import HashMap "mo:base/HashMap";
