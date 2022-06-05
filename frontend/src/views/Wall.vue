@@ -19,8 +19,9 @@
       </PaintDripSection>
 
       <!-- needed so the tailwind class compiles -->
-      <div class="tw-bg-green-600 tw-bg-purple-600 tw-bg-gray-600 tw-bg-reed-600">
-        </div>
+      <div
+        class="tw-bg-green-600 tw-bg-purple-600 tw-bg-gray-600 tw-bg-reed-600"
+      ></div>
 
       <PaintDripSection color="green-600">
         <div
@@ -88,7 +89,6 @@
           />
         </div>
       </PaintDripSection>
-
     </div>
 
     <!--<div class="tw-p-4 tw-mt-24">
@@ -108,7 +108,6 @@
         </div>
       </div>
     </div>-->
-
   </div>
 </template>
 
@@ -125,7 +124,7 @@ export default {
     PaintDripSection,
     ProfileImage,
     Sticker,
-    Comment
+    Comment,
   },
 
   data: () => ({
@@ -188,30 +187,55 @@ export default {
       {
         user: {
           username: 'orangeBananaPeels',
-          profilePic: 'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550'
+          profilePic:
+            'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
         },
-        shared: ['Google Developer'],
+        shared: [
+          {
+            name: 'Google Developer',
+            logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+          },
+        ],
         date: new Date(2022, 2, 14),
-        comment: 'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
+        comment:
+          'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
       },
       {
         user: {
           username: 'orangeBananaPeels',
-          profilePic: 'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550'
+          profilePic:
+            'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
         },
-        shared: ['Google Developer'],
+        shared: [
+          {
+            name: 'Google Developer',
+            logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+          },
+          {
+            name: 'Intel Software Engineer',
+            logo: 'https://logos-world.net/wp-content/uploads/2021/09/Intel-Emblem.png',
+          },
+        ],
         date: new Date(2022, 2, 14),
-        comment: 'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
+        comment:
+          'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
       },
       {
         user: {
           username: 'orangeBananaPeels',
-          profilePic: 'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550'
+          profilePic:
+            'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
         },
-        shared: ['Google Developer'],
+        shared: [
+          {
+            name: 'Google Developer',
+            logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+          },
+        ],
         date: new Date(2022, 2, 14),
-        comment: 'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
-      }
+        comment:
+          'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
+      },
     ],
 
     categoryColors: {
