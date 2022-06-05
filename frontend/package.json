@@ -9,6 +9,8 @@
   "dependencies": {
     "@connect2ic/core": "^0.0.9",
     "@connect2ic/vue": "^0.0.2",
+    "@dfinity/agent": "^0.11.3",
+    "@dfinity/auth-client": "^0.11.3",
     "core-js": "^3.8.3",
     "vue": "^2.6.14",
     "vue-router": "^3.5.1",
