@@ -5,12 +5,16 @@
       <PaintDripSection class="-tw-mt-4" color="blue-600">
         <div class="tw-flex">
           <ProfileImage 
-            class="tw-mr-4"
+            class="tw-mr-8"
             :src="profilePic"
           />
           <div class="tw-self-center">
             <div class="tw-text-white tw-font-semibold tw-text-5xl">{{ username }}</div>
             <div class="tw-text-white tw-font-light tw-text-md">{{ id }}</div>
+            <div class="tw-text-white tw-font-light tw-my-4">
+              <!-- bio goes here -->
+              Bio: Hi, I'm 0xSounds, UPenn Grad and ex-Goldman analyst. Follow my Twitter at @Sounds and Instagram at @0xSounds.
+            </div>
           </div>
         </div>
       </PaintDripSection>

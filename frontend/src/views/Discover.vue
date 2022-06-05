@@ -1,8 +1,8 @@
 <template>
-  <div class="tw-justify-center">
+  <div class="tw-justify-center tw-h-full tw-bg-red-400">
     <div class="tw-p-4 tw-max-w-6xl tw-m-auto tw-h-full tw-space-y-8">
       <h1 class="tw-text-6xl tw-font-bold tw-place-content-center text-center">Discover Page</h1>
-      <Search ></Search>
+      <Search holder="Search StkrWalls..."></Search>
       <div class="tw-flex">
         <h1 class="tw-text-5xl tw-font-bold">Popular Stkr Walls of the Day</h1>
       </div>
@@ -70,7 +70,21 @@
               name: "0xKnownUser",
               src: "https://cdn.vox-cdn.com/thumbor/2xj1ySLIz1EZ49NvSsPzq8Itjyg=/1400x1050/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/23084330/bored_ape_nft_accidental_.jpg"
             },
-          ]
+          ],
+          searchItems: [
+            {
+              title: "0xSearchedUser"
+            },
+            {
+              title: "0xSearchedUser"
+            },
+            {
+              title: "0xSearchedUser"
+            },
+            {
+              title: "0xSearchedUser"
+            },
+          ],
         }),
     }
 </script>
