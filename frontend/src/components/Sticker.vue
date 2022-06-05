@@ -1,12 +1,11 @@
 <!-- Displays a sticker with the given image src and name/description -->
 
 <template>
-  <div class="tw-flex-col tw-items-center tw-inline-flex">
+  <div class="tw-flex-col tw-items-center tw-inline-flex" @mouseover="showPin = true" @mouseleave="showPin = false">
     <div 
       class="tw-relative tw-p-1 tw-border tw-border-solid tw-border-gray-300 tw-rounded-full tw-mb-2 tw-bg-white"
-      @mouseover="showPin = true" @mouseleave="showPin = false"
     >
-      <img :src="src" class="tw-rounded-full" :style="style">
+      <img :src="src" class="tw-rounded-full tw-object-cover" :style="style">
       <v-btn 
         @click="$emit('pin', !pinned)"
         v-if="showPin"
@@ -20,7 +19,7 @@
         <v-icon>{{ pinIcon }}</v-icon>
       </v-btn>
     </div>
-    <div class="tw-text-sm tw-text-center tw-font-medium" :style="textStyle" :class="textClass">
+    <div v-if="showName" class="tw-text-sm tw-text-center tw-font-medium" :style="textStyle" :class="textClass">
       {{ name }}
     </div>
   </div>
@@ -38,6 +37,7 @@ export default {
     dark: { type: Boolean, default: false },
     pin: { type: Boolean, default: false },
     pinned: { type: Boolean, default: false },
+    showName: { type: Boolean, default: false },
 
     width: { type: Number, default: 200 },
   },
