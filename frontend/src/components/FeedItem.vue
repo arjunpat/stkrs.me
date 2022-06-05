@@ -17,7 +17,7 @@
         </h1>
         <h2>
           <span v-for="community in sticker.shared" :key="community"
-            ><v-chip class="mr-1 tw-text-black" color="light-green lighten-4">{{
+            ><v-chip small class="mr-1 tw-text-black" color="light-green lighten-4">{{
               community
             }}</v-chip></span
           >
