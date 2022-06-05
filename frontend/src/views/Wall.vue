@@ -36,34 +36,7 @@
         </div>
       </PaintDripSection>
       
-      <div class="tw-bg-gray-500 tw-bg-red-700 tw-bg-orange-600" />
-      <template v-for="category, i in Object.keys(categories)">
-        <PaintDripSection :key="i" :color="categories[category].color">
-          
-          <div class="tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white">{{ category }}</div>
-          <div class="tw-space-y-4">
-            <div 
-              v-for="stickerId, s in categories[category].stickers" 
-              :key="s"
-              class="tw-flex"
-            >
-              <Sticker
-                v-bind="stickers[stickerId]"
-                :pinned="isPinned(stickerId)"
-                dark
-                @pin="togglePin(stickerId)"
-              />
-              <div class="tw-w-96 tw-p-4">
-                <div class="tw-text-white tw-text-lg tw-font-semibold tw-tracking-wide">{{ stickers[stickerId].name }}</div>
-                <div class="tw-text-gray-300">{{ stickers[stickerId].description }}</div>
-              </div>
-            </div>
-          </div>
-        </PaintDripSection>
-      </template>
-    </div>
-    
-    <!--<div class="tw-p-4 tw-mt-24">
+      <!-- <div class="tw-p-4 tw-mt-24">
       <div class="tw-text-3xl tw-font-medium tw-mb-4">Friends</div>
       <div 
         v-for="friend, i in friends" 
@@ -79,14 +52,71 @@
           <div class="tw-font-semibold tw-text-lg">{{ friend.username }}</div>
         </div>
       </div>
-    </div>-->
-  </div>
+    </div> -->
+
+      <!-- <div class="tw-bg-yellow-500 tw-bg-red-700 tw-bg-orange-600" />
+      <template v-for="category, i in Object.keys(categories)">
+        <PaintDripSection :key="i" :color="categories[category].color"> -->
+          
+      <PaintDripSection :color="tabColor"  >
+        <v-tabs
+          id="tabGroup"
+          v-model="tab"
+          centered
+          :background-color="`var(--${tabColor})`"
+        >
+          <v-tabs-slider color="yellow"></v-tabs-slider>
+          <v-tab
+            v-for="category in Object.keys(categories)"
+            :key="category"
+            class="tabsbarstuff"
+          >
+            {{ category }}
+          </v-tab>
+        </v-tabs>
+
+
+        <v-tabs-items continuous v-model="tab" class="tabItemGroup tw-w-screen">
+          <v-tab-item
+            v-for="(category, i) in Object.keys(categories)"
+            :key="category"
+            active-class="tabstuff"
+          >
+            <PaintDripSection :key="i" :color="categories[category].color">
+                <div class="tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white">{{ category }}</div>
+                  <div class="tw-space-y-4">
+                    <div 
+                      v-for="stickerId, s in categories[category].stickers" 
+                      :key="s"
+                      class="tw-flex"
+                    >
+                      <Sticker
+                        v-bind="stickers[stickerId]"
+                        :pinned="isPinned(stickerId)"
+                        dark
+                        @pin="togglePin(stickerId)"
+                      />
+                      <div class="tw-w-96 tw-p-4">
+                        <div class="tw-text-white tw-text-lg tw-font-semibold tw-tracking-wide">{{ stickers[stickerId].name }}</div>
+                        <div class="tw-text-gray-300">{{ stickers[stickerId].description }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  </PaintDripSection>
+          </v-tab-item>
+        </v-tabs-items>
+        
+        </PaintDripSection>
+        </div>
+  </div> 
+  
 </template>
 
 <script>
 import Sticker from '@/components/Sticker'
 import ProfileImage from '@/components/ProfileImage'
 import PaintDripSection from '@/components/PaintDripSection'
+import PaintDrip from '@/components/PaintDrip.vue'
 
 export default {
   name: 'Wall',
@@ -95,13 +125,18 @@ export default {
     PaintDripSection,
     ProfileImage,
     Sticker,
-  },
+    PaintDrip
+},
 
   data: () => ({
     username: 'Sounds',
+    tabColor: '',
     id: '0x1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2',
     profilePic: 'https://lh3.googleusercontent.com/gxfnxG53rQYUNh6_fOiJ-H3g_vPF0OH2m3_3eMrwL5eTKzn0YVjqulzC6dmL4kQIVPx4mWR_dOHUbZ2QXGiuoJeI4gX730_inVAvUw=w343',
 
+    tab: null,
+
+        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
     stickers: {
       'asdf': {
         name: 'Google Developer (2016-2020)',
@@ -149,8 +184,13 @@ export default {
 
     pinned: ['asdf', 'abcd', 'ncie'],
 
+    categoryOrders: {
+      category1: 'Professional',
+      category2: 'Fun',
+      category3: 'Communities'
+    },
     categoryColors: {
-      'Professional': 'gray-500',
+      'Professional': 'yellow-500',
       'Fun': 'orange-600',
       'Communities': 'red-700',
     },
@@ -190,6 +230,25 @@ export default {
     },
   },
 
+  watch: {
+    tab : {
+      immediate: false,
+      handler(val) {
+        this.tabColor=Object.values(this.categories)[this.tab].color;
+        // console.log(this.tab);
+        // console.log(key);
+        
+        // console.log(this.categories);
+        // console.log(this.categories[key].color)
+        console.log("hi", Object.values(this.categories)[this.tab].color);
+      }
+      
+    },
+    
+
+
+  },
+
   methods: {
     togglePin(stickerId) {
       if (this.isPinned(stickerId)) {
@@ -204,3 +263,24 @@ export default {
   },
 }
 </script>
+
+<style>
+#tabsholder .tabsbarstuff {
+  width: 100% !important;
+}
+
+#tabsholder .tabstuff {
+  width: 100% !important;
+
+  height: 100% !important;
+}
+
+#tabsholder .mytabs {
+  width: 100% !important;
+  background-color: black !important;
+}
+
+
+
+
+</style>
