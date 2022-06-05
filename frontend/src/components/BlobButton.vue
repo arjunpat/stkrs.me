@@ -1,9 +1,9 @@
 <template>
   <div class="tw-drop-shadow-md tw-relative tw-select-none tw-h-20 tw-w-32 tw-flex tw-flex-col tw-justify-center tw-items-center" @click="click">
     <svg id="blob" ref="blob" style="width: 128px; height: 80px;" class="tw-absolute visible" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-      <path @mouseenter="mouseenter" @mouseleave="mouseleave" class="tw-cursor-pointer" :fill="fill" :d="d" transform="translate(100 100)" />
+      <path @mouseover="mouseenter" @mouseleave="mouseleave" class="tw-cursor-pointer" :fill="fill" :d="d" transform="translate(100 100)" />
     </svg>
-    <div @mouseenter="mouseenter" @mouseleave="mouseleave" class="tw-cursor-pointer tw-absolute tw-text-white tw-font-semibold">{{ text }}</div>
+    <div @mouseover="mouseenter" @mouseleave="mouseleave" class="tw-cursor-pointer tw-absolute tw-text-white tw-font-semibold">{{ text }}</div>
   </div>
 </template>
 

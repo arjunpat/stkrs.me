@@ -3,7 +3,7 @@
 <template>
   <div>
     <div
-      class="tw-bg-lime-700 tw-w-full tw-flex py-8 pl-16 tw-rounded-t-2xl tw-rounded-b-sm tw-text-white"
+      class="tw-bg-green-700 tw-w-full tw-flex py-8 pl-16 tw-rounded-t-2xl tw-rounded-b-sm tw-text-white"
     >
       <div class="tw-flex">
         <ProfileImage class="tw-mr-4" :src="sticker.image" width="150" />
@@ -28,7 +28,7 @@
 
     <PaintDrip
       class="tw-h-20 tw-w-full"
-      :color="`var(--color-lime-700)`"
+      :color="`var(--color-green-700)`"
       :numDrops="10"
     ></PaintDrip>
   </div>
