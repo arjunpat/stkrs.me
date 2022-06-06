@@ -1,5 +1,5 @@
 <template>
-  <div class="tw-justify-center tw-h-full tw-bg-red-400">
+  <div class="tw-justify-center tw-h-full tw-bg-red-700">
     <div class="tw-p-4 tw-max-w-6xl tw-m-auto tw-h-full tw-space-y-8">
       <h1 class="tw-text-white tw-text-6xl tw-font-bold tw-place-content-center text-center">Discover Page</h1>
       <Search holder="Search StkrWalls..."></Search>

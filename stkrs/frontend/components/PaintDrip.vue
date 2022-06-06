@@ -1,5 +1,5 @@
 <template>
-  <svg class="-tw-mt-px" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <svg class="-tw-mt-px" :class="shadow && 'tw-drop-shadow-md'" viewBox="0 0 100 100" preserveAspectRatio="none">
     <path :fill="color" vector-effect="non-scaling-stroke"
       :d="pathD"
     />
@@ -13,6 +13,8 @@ export default {
   props: {
     numDrops: { type: Number, default: 5 },
     color: { type: String, default: '' },
+
+    shadow: { type: Boolean, default: false },
   },
 
   computed: {

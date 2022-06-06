@@ -1,15 +1,15 @@
 <template>
   <div class="tw-flex tw-justify-center tw-bg-blue-600 tw-pb-56">
     <div class="tw-p-4 tw-max-w-6xl tw-m-auto tw-h-full">
-      <PaintDripSection class="-tw-mt-4" color="blue-600">
+      <PaintDripSection class="-tw-mt-4" color="blue-700">
         <div class="tw-flex">
           <ProfileImage class="tw-mr-8" :src="profilePic" />
           <div class="tw-self-center">
             <div class="tw-text-white tw-font-semibold tw-text-5xl">
               {{ username }}
             </div>
-            <div class="tw-text-white tw-font-light tw-text-md">{{ id }}</div>
-            <div class="tw-text-white tw-font-light tw-my-4">
+            <div class="tw-text-white tw-font-extralight tw-text-md">{{ id }}</div>
+            <div class="tw-text-white tw-font-normal tw-my-4">
               <!-- bio goes here -->
               Hi, I'm 0xSounds, UPenn Grad and ex-Goldman analyst. Follow my
               Twitter at @Sounds and Instagram at @0xSounds.
@@ -18,12 +18,7 @@
         </div>
       </PaintDripSection>
 
-      <!-- needed so the tailwind class compiles -->
-      <div
-        class="tw-bg-green-600 tw-bg-purple-600 tw-bg-gray-600 tw-bg-reed-600"
-      ></div>
-
-      <PaintDripSection color="green-600">
+      <PaintDripSection color="green-700">
         <div
           class="tw-text-center tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white"
         >
@@ -65,20 +60,24 @@
       <template v-for="category, i in Object.keys(categories)">
         <PaintDripSection :key="i" :color="categories[category].color"> -->
           
-      <PaintDripSection :color="tabColor"  >
+      <PaintDripSection :color="tabColor">
         <v-tabs
           id="tabGroup"
           v-model="tab"
           centered
           :background-color="`var(--${tabColor})`"
+          icons-and-text
         >
-          <v-tabs-slider color="yellow"></v-tabs-slider>
+          <v-tabs-slider color="transparent"></v-tabs-slider>
           <v-tab
             v-for="category in Object.keys(categories)"
             :key="category"
-            class="tabsbarstuff"
+            :ripple="false"
           >
-            {{ category }}
+            <BlobButton 
+              :text="category"
+              :fill="`var(--color-${categoryBtnColors[category]})`"
+            />
           </v-tab>
         </v-tabs>
 
@@ -87,7 +86,6 @@
           <v-tab-item
             v-for="(category, i) in Object.keys(categories)"
             :key="category"
-            active-class="tabstuff"
           >
             <PaintDripSection :key="i" :color="categories[category].color">
                 <div class="tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white">{{ category }}</div>
@@ -113,8 +111,8 @@
           </v-tab-item>
         </v-tabs-items>
         
-        </PaintDripSection>
-        </div>
+      </PaintDripSection>
+    </div>
   </div> 
   
 </template>
@@ -125,11 +123,13 @@ import ProfileImage from '../components/ProfileImage.vue'
 import PaintDripSection from '../components/PaintDripSection.vue'
 import PaintDrip from '../components/PaintDrip.vue'
 import Comment from '../components/Comment.vue'
+import BlobButton from '../components/BlobButton.vue'
 
 export default {
   name: 'Wall',
 
   components: {
+    BlobButton,
     PaintDripSection,
     ProfileImage,
     Sticker,
@@ -145,7 +145,6 @@ export default {
       profilePic:
         'https://lh3.googleusercontent.com/gxfnxG53rQYUNh6_fOiJ-H3g_vPF0OH2m3_3eMrwL5eTKzn0YVjqulzC6dmL4kQIVPx4mWR_dOHUbZ2QXGiuoJeI4gX730_inVAvUw=w343',
       tab: null,
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       stickers: {
         asdf: {
           name: 'Google Developer (2016-2020)',
@@ -202,9 +201,14 @@ export default {
         category3: 'Communities'
       },
       categoryColors: {
-        'Professional': 'yellow-500',
-        'Fun': 'orange-600',
+        'Professional': 'violet-700',
+        'Fun': 'orange-700',
         'Communities': 'red-700',
+      },
+      categoryBtnColors: {
+        'Professional': 'violet-600',
+        'Fun': 'orange-600',
+        'Communities': 'red-600',
       },
       comments: [
         {
@@ -293,12 +297,6 @@ export default {
         },
       ],
 
-      categoryColors: {
-        Professional: 'gray-500',
-        Fun: 'orange-600',
-        Communities: 'red-700',
-      },
-
       friends: [
         {
           pic: 'https://lh3.googleusercontent.com/6NodEirTq6RnAG6OG1LBr1MclLtIrTNdW5nMgnzGKxfZ2_odAuzwsYPsVStfYmQdZKAs44nM_1tP8TdxjTYv2Ucm-TjkQgPFfOBm7Q=w343',
@@ -338,14 +336,8 @@ export default {
   watch: {
     tab : {
       immediate: false,
-      handler(val) {
-        this.tabColor=Object.values(this.categories)[this.tab].color;
-        // console.log(this.tab);
-        // console.log(key);
-        
-        // console.log(this.categories);
-        // console.log(this.categories[key].color)
-        console.log("hi", Object.values(this.categories)[this.tab].color);
+      handler() {
+        this.tabColor = Object.values(this.categories)[this.tab].color
       }
       
     },

@@ -18,18 +18,21 @@
         text="My Wall"
         :variant="0"
         fill="var(--color-blue-500)"
+        expand-on-click
       />
       <BlobButton 
         @click="navigate('feed')"
         text="Feed"
         :variant="1"
         fill="var(--color-green-500)"
+        expand-on-click
       />
       <BlobButton 
         @click="navigate('discover')"
         text="Discover"
         :variant="2"
         fill="var(--color-red-600)"
+        expand-on-click
       />
     </v-app-bar>
 
@@ -63,8 +66,6 @@ export default {
 </script>
 
 <style lang="scss">
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 * {
   font-family: 'Poppins', sans-serif;

@@ -1,9 +1,9 @@
 <template>
   <div class="tw-drop-shadow-md tw-relative tw-select-none tw-h-20 tw-w-32 tw-flex tw-flex-col tw-justify-center tw-items-center" @click="click">
-    <svg id="blob" ref="blob" style="width: 128px; height: 80px;" class="tw-absolute visible" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <svg id="blob" ref="blob" :width="width" :height="height" class="tw-absolute visible" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
       <path @mouseover="mouseenter" @mouseleave="mouseleave" class="tw-cursor-pointer" :fill="fill" :d="d" transform="translate(100 100)" />
     </svg>
-    <div @mouseover="mouseenter" @mouseleave="mouseleave" class="tw-cursor-pointer tw-absolute tw-text-white tw-font-semibold">{{ text }}</div>
+    <div @mouseover="mouseenter" @mouseleave="mouseleave" class="tw-normal-case tw-tracking-normal tw-text-base tw-cursor-pointer tw-absolute tw-text-white tw-font-semibold">{{ text }}</div>
   </div>
 </template>
 
@@ -31,6 +31,10 @@ export default {
     text: { type: String, default: '' },
     fill: { type: String, default: '#FF0066' },
     variant: { type: Number, default: 0 }, // either 0, 1, or 2
+    width: { type: Number, default: 128 },
+    height: { type: Number, default: 80 },
+
+    expandOnClick: { type: Boolean, default: false },
   },
 
   data: () => ({
@@ -41,7 +45,7 @@ export default {
     d() {
       switch(this.variant) {
         case 0: 
-          return 'M35.1,-56.9C47.5,-53.5,61,-48.3,70,-38.5C79,-28.7,83.4,-14.4,83.1,-0.2C82.8,14,77.9,28.1,65.6,32C53.2,36,33.4,29.8,21.2,38.2C9.1,46.7,4.5,69.9,-1.8,73C-8.2,76.2,-16.4,59.5,-24.1,48.4C-31.7,37.3,-38.7,31.8,-45.9,24.7C-53.1,17.6,-60.5,8.8,-63.1,-1.5C-65.7,-11.8,-63.5,-23.6,-55.2,-28.7C-46.8,-33.9,-32.3,-32.3,-22,-36.9C-11.8,-41.5,-5.9,-52.2,2.7,-56.9C11.3,-61.6,22.6,-60.2,35.1,-56.9Z'
+          return 'M24.2,-36.9C34.5,-35.9,48.3,-35.9,55,-29.9C61.7,-23.9,61.3,-11.9,60.4,-0.5C59.6,10.9,58.2,21.9,53.5,31.2C48.7,40.6,40.6,48.4,31.1,58.1C21.6,67.9,10.8,79.6,2.3,75.6C-6.1,71.5,-12.3,51.7,-24.5,43.5C-36.7,35.4,-55,38.8,-64.7,33.5C-74.5,28.2,-75.7,14.1,-76.8,-0.6C-77.8,-15.3,-78.7,-30.6,-70.8,-39.1C-62.9,-47.6,-46.1,-49.3,-32.9,-48.6C-19.6,-47.9,-9.8,-44.8,-1.4,-42.3C6.9,-39.8,13.8,-37.9,24.2,-36.9Z'
         case 1:
           return 'M34.8,-45.3C48.1,-38.1,64.2,-32.1,71.5,-20.6C78.8,-9.2,77.3,7.7,70.3,20.9C63.3,34,50.8,43.3,38.2,53.2C25.5,63.2,12.8,73.7,0.9,72.4C-10.9,71.2,-21.9,58.2,-37.6,49.2C-53.3,40.3,-73.8,35.5,-76.3,25.4C-78.7,15.2,-63.2,-0.1,-55.7,-16.5C-48.2,-32.9,-48.7,-50.2,-40.7,-59.2C-32.7,-68.2,-16.4,-68.8,-2.8,-64.8C10.7,-60.9,21.4,-52.5,34.8,-45.3Z'
         default: 
@@ -52,6 +56,11 @@ export default {
 
   methods: {
     click(e) {
+      if (!this.expandOnClick) {
+        this.$emit('click', e)
+        return
+      }
+
       const blob = this.$refs.blob
       blob.style.transition = 'transform .4s'
       blob.style.transform = 'scale(70)'
@@ -73,7 +82,7 @@ export default {
             this.allowHover = true
           }, 500)
         }, 100)
-      }, 500)
+      }, 450)
     }, 
     mouseenter() {
       if (!this.allowHover) return
