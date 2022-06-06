@@ -1,5 +1,7 @@
 import { createVuePlugin } from 'vite-plugin-vue2'
 import { defineConfig } from "vite"
+import { VuetifyResolver } from 'unplugin-vue-components/resolvers'
+import Components from 'unplugin-vue-components/vite'
 import path from "path"
 import dfxJson from "./dfx.json"
 import fs from "fs"
@@ -48,7 +50,15 @@ const DFX_PORT = dfxJson.networks.local.bind.split(":")[1]
 // See guide on how to configure Vite at:
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [createVuePlugin()],
+  plugins: [
+    createVuePlugin(),
+    Components({
+      resolvers: [
+        // Vuetify
+        VuetifyResolver(),
+      ],
+    }),
+  ],
   resolve: {
     alias: {
       // Here we tell Vite the "fake" modules that we want to define

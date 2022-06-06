@@ -63,8 +63,8 @@
 <style scoped></style>
 
 <script>
-import PaintDrip from './components/PaintDrip.vue'
-import ProfileImage from './components/ProfileImage.vue'
+import PaintDrip from '../components/PaintDrip.vue'
+import ProfileImage from '../components/ProfileImage.vue'
 
 export default {
   name: 'Comment',

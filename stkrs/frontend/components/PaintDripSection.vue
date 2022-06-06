@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import PaintDrip from './components/PaintDrip.vue'
+import PaintDrip from '../components/PaintDrip.vue'
 
 export default {
   name: 'PaintDripSection',
