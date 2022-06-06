@@ -1,38 +1,73 @@
 <template>
-  <div class="App">
-    <Auth />
-    <Intro />
-  </div>
+  <v-app>
+    <v-app-bar
+      app
+      color="transparent"
+      flat
+      class="tw-z-20"
+    >
+      <div class="d-flex align-center tw-text-white tw-font-extrabold tw-text-lg">
+        STKRS
+      </div>
+
+      <v-spacer></v-spacer>
+
+
+      <BlobButton 
+        @click="navigate('wall')"
+        text="My Wall"
+        :variant="0"
+        fill="var(--color-blue-500)"
+      />
+      <BlobButton 
+        @click="navigate('feed')"
+        text="Feed"
+        :variant="1"
+        fill="var(--color-green-500)"
+      />
+      <BlobButton 
+        @click="navigate('discover')"
+        text="Discover"
+        :variant="2"
+        fill="var(--color-red-600)"
+      />
+    </v-app-bar>
+
+    <v-main class="tw-p-0">
+      <router-view/>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import Intro from "./Intro.vue"
-import Auth from "./Auth.vue"
+import BlobButton from './components/BlobButton.vue'
 
 export default {
-  name: "App",
+  name: 'App',
+
   components: {
-    Intro,
-    Auth,
+    BlobButton,
   },
-}
+
+  data: () => ({
+    
+  }),
+
+  methods: {
+    navigate(name) {
+      if (this.$route.name !== name)
+        this.$router.push({ name: name })
+    }
+  },
+};
 </script>
 
-<style>
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-  sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<style lang="scss">
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+* {
+  font-family: 'Poppins', sans-serif;
 }
 
-button {
-  font-weight: 600;
-}
-
-.App {
-  text-align: center;
-}
 </style>
