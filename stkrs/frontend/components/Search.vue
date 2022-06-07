@@ -1,7 +1,7 @@
 <template> 
     <div class="tw-flex tw-text-center">
         <template>
-            <input class="tw-w-5/6 tw-bg-white" type="text" v-model="input" :placeholder="holder"  />
+            <input class="tw-w-5/6 tw-bg-white tw-mr-1" type="text" v-model="input" :placeholder="holder"  />
             <button @click="search(input)" class="tw-w-1/6 tw-bg-white">Search</button>
         </template>
             <!-- <v-list v-if="dropdownDisplay= true">

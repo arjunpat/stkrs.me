@@ -112,6 +112,23 @@
         </v-tabs-items>
         
       </PaintDripSection>
+
+      <PaintDripSection color="purple-600">
+        <div
+          class="tw-text-center tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white"
+        >
+          Comments
+        </div>
+        <div class="tw-grid tw-grid-cols-3 tw-gap-4">
+          <Comment
+            v-for="(comment, i) in comments"
+            :key="i"
+            :comment="comment"
+          />
+        </div>
+      </PaintDripSection>
+
+
     </div>
   </div> 
   
@@ -194,6 +211,93 @@ export default {
       },
 
       pinned: ['asdf', 'abcd', 'ncie'],
+
+      comments: [
+      {
+        user: {
+          username: 'orangeBananaPeels',
+          profilePic:
+            'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
+        },
+        shared: [
+          {
+            name: 'Google Developer',
+            logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+          },
+        ],
+        date: new Date(2022, 2, 14),
+        comment:
+          'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
+      },
+      {
+        user: {
+          username: 'orangeBananaPeels',
+          profilePic:
+            'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
+        },
+        shared: [
+          {
+            name: 'Google Developer',
+            logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+          },
+          {
+            name: 'Intel Software Engineer',
+            logo: 'https://logos-world.net/wp-content/uploads/2021/09/Intel-Emblem.png',
+          },
+        ],
+        date: new Date(2022, 2, 14),
+        comment:
+          'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
+      },
+      {
+        user: {
+          username: 'orangeBananaPeels',
+          profilePic:
+            'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
+        },
+        shared: [
+          {
+            name: 'Google Developer',
+            logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+          },
+        ],
+        date: new Date(2022, 2, 14),
+        comment:
+          'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
+      },
+      {
+        user: {
+          username: 'orangeBananaPeels',
+          profilePic:
+            'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
+        },
+        shared: [
+          {
+            name: 'Google Developer',
+            logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+          },
+        ],
+        date: new Date(2022, 2, 14),
+        comment:
+          'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
+      },
+      {
+        user: {
+          username: 'orangeBananaPeels',
+          profilePic:
+            'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
+        },
+        shared: [
+          {
+            name: 'Google Developer',
+            logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+          },
+        ],
+        date: new Date(2022, 2, 14),
+        comment:
+          'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
+      },
+    ],
 
       categoryOrders: {
         category1: 'Professional',

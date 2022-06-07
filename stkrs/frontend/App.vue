@@ -15,7 +15,7 @@
 
       <BlobButton 
         @click="navigate('wall')"
-        text="My Wall"
+        text="Wall"
         :variant="0"
         fill="var(--color-blue-500)"
         expand-on-click
