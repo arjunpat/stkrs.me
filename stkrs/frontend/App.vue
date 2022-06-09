@@ -12,29 +12,62 @@
 
       <v-spacer></v-spacer>
 
-
-      <BlobButton 
-        @click="navigate('wall')"
-        text="Wall"
-        :variant="0"
-        fill="var(--color-blue-500)"
-        expand-on-click
-      />
-      <BlobButton 
-        @click="navigate('feed')"
-        text="Feed"
-        :variant="1"
-        fill="var(--color-green-500)"
-        expand-on-click
-      />
+      <template v-if="authUserIdentity">
+        <BlobButton 
+          @click="navigate('wall')"
+          text="Wall"
+          :variant="2"
+          fill="var(--color-blue-500)"
+          expand-on-click
+        />
+        <BlobButton 
+          @click="navigate('feed')"
+          text="Feed"
+          :variant="1"
+          fill="var(--color-green-500)"
+          expand-on-click
+        />
+      </template>
       <BlobButton 
         @click="navigate('discover')"
         text="Discover"
-        :variant="2"
-        fill="var(--color-red-600)"
+        :variant="0"
+        fill="var(--color-orange-500)"
         expand-on-click
       />
+
+      <v-btn 
+        v-if="authUserIdentity"
+        @click="signOut"
+        class="tw-text-base tw-text-white"
+        text
+      >
+        Sign out
+      </v-btn>
+      <v-btn 
+        v-else
+        @click="signInDialog = true"
+        class="tw-text-base tw-text-white"
+        text
+      >
+        Sign in
+      </v-btn>
     </v-app-bar>
+
+    <v-dialog
+      v-model="signInDialog"
+      width="400"
+    >
+      <v-card>
+        <v-card-title>Sign in</v-card-title>
+        <v-card-text>
+          <v-btn block @click="signIn">
+            Sign in with 
+            <img alt="" style="width: 33px; margin-left: 0.7em;" src="./assets/dfinity.svg" />
+          </v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog> 
 
     <v-main class="tw-p-0">
       <router-view/>
@@ -43,7 +76,10 @@
 </template>
 
 <script>
+import { AuthClient } from '@dfinity/auth-client';
+import { mapState, mapMutations } from 'vuex'
 import BlobButton from './components/BlobButton.vue'
+import { signIn, signOut } from './utils'
 
 export default {
   name: 'App',
@@ -53,14 +89,47 @@ export default {
   },
 
   data: () => ({
-    
+    signInDialog: false,
   }),
 
+  computed: {
+    ...mapState(['authClient', 'authUserIdentity']),
+  },
+
   methods: {
+    ...mapMutations(['setAuthClient','setAuthUserIdentity']),
     navigate(name) {
       if (this.$route.name !== name)
         this.$router.push({ name: name })
+    },
+    async signIn() {
+      try {
+        await signIn()
+        this.signInDialog = false
+        this.$router.push({ name: 'wall' })
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    async signOut() {
+      await signOut()
+      this.$router.push({ name: 'discover' })
+    },
+  },
+
+  async created() {
+    const authClient = await AuthClient.create()
+    this.setAuthClient(authClient)
+    const isAuthenticated = await authClient.isAuthenticated()
+
+    if (isAuthenticated) {
+      const identity = authClient.getIdentity()
+      this.setAuthUserIdentity(identity)
     }
+
+    setTimeout(() => {
+      console.log(this.authClient)
+    }, 1000)
   },
 };
 </script>
@@ -69,6 +138,12 @@ export default {
 
 * {
   font-family: 'Poppins', sans-serif;
+}
+
+.v-btn {
+  font-weight: 500 !important;
+  letter-spacing: unset !important;
+  text-transform: unset !important;
 }
 
 </style>

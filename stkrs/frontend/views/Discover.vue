@@ -1,5 +1,5 @@
 <template>
-  <div class="tw-justify-center tw-h-full tw-bg-red-700 tw-pt-16">
+  <div class="tw-justify-center tw-h-full tw-bg-orange-600 tw-pt-16">
     <div class="tw-p-4 tw-max-w-6xl tw-m-auto tw-h-full tw-space-y-8">
       <h1 class="tw-text-white tw-text-6xl tw-font-bold tw-place-content-center text-center">Discover</h1>
       <Search holder="Search StkrWalls..."></Search>
@@ -8,7 +8,7 @@
       </div>
       <ProfileImage class="tw-mr-20 tw-text-white "
           v-for="item, i in popularSouls"
-          :key="i"
+          :key="`popular-${i}`"
           v-bind="item" />
       <div>
         <h1 class="tw-text-white tw-text-4xl tw-font-bold">Meet Someone New!</h1>

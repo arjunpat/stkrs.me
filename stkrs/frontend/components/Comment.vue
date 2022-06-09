@@ -8,7 +8,7 @@
       >
         <div class="tw-flex">
           <div class="tw-flex-col tw-mr-2">
-            <ProfileImage :src="comment.user.profilePic" width="45" />
+            <ProfileImage :src="comment.user.profilePic" :width="45" />
           </div>
           <div class="tw-flex-col">
             <h1 class="tw-text-sm tw-text-black">

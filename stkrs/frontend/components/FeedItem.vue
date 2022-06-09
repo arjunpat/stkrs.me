@@ -2,39 +2,39 @@
 
 <template>
   <div>
-    <div
-      class="tw-bg-green-700 tw-w-full tw-flex py-8 pl-8 tw-rounded-t-2xl tw-rounded-b-sm tw-text-white"
-    >
-      <div class="tw-flex">
-        <ProfileImage class="tw-mr-2" :src="sticker.image" width="150" />
+    <div class="tw-bg-green-700 tw-w-full tw-flex py-8 pl-8 tw-rounded-t-2xl tw-rounded-b-sm tw-text-white tw-relative">
+      <div class="tw-absolute tw-top-5 tw-left-5 tw-bg-green-600 tw-rounded-full pa-1">
+        <v-icon large color="white">
+          {{ categoryIcon }}
+        </v-icon>
       </div>
-      <div
-        class="tw-flex tw-flex-col tw-h-full tw-bg-dark-gray tw-space-y-4 pl-5 pt-12"
-      >
+      <div class="tw-flex tw-ml-16">
+        <ProfileImage class="tw-mr-3" :src="sticker.image" :width="150" />
+      </div>
+      <div class="tw-flex tw-flex-col tw-h-full tw-bg-dark-gray tw-space-y-4 pl-5 pt-12">
         <h1 class="tw-text-lg">
           <span class="tw-font-bold">{{ sticker.ownerUsername }}</span> just
           earned a <span class="tw-font-bold">{{ sticker.name }}</span> NFT!
         </h1>
         <h2>
-          <span v-for="community in sticker.shared" :key="community"
-            ><v-chip small class="mr-1 tw-text-black" color="light-green lighten-4">{{
-              community
-            }}</v-chip></span
-          >
+          <span v-for="community in sticker.shared" :key="community">
+            <v-chip small class="mr-1 tw-text-black" color="light-green lighten-4">{{
+                community
+            }}</v-chip>
+          </span>
         </h2>
         <v-btn class="tw-w-36" rounded>Endorse</v-btn>
+
+
       </div>
     </div>
 
-    <PaintDrip
-      class="tw-h-20 tw-w-full"
-      :color="`var(--color-green-700)`"
-      :numDrops="10"
-    ></PaintDrip>
+    <PaintDrip class="tw-h-20 tw-w-full" :color="`var(--color-green-700)`" :numDrops="10"></PaintDrip>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>
 
 <script>
 import PaintDrip from '../components/PaintDrip.vue'
@@ -54,8 +54,17 @@ export default {
 
   data: () => ({}),
 
-  computed: {},
+  computed: {
+    categoryIcon() {
+      switch (this.sticker.category) {
+        case 'Gaming':
+          return 'mdi-google-controller'
+        case 'Professional':
+          return 'mdi-account-tie'
+      }
+    }
+  },
 
-  created() {},
+  created() { },
 }
 </script>
