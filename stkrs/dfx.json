@@ -1,12 +1,12 @@
 {
   "canisters": {
-    "counter": {
-      "main": "counter-canister/main.mo",
+    "stkr": {
+      "main": "stkr-canister/main.mo",
       "type": "motoko"
     },
     "assets": {
       "dependencies": [
-        "counter"
+        "stkr"
       ],
       "frontend": {
         "entrypoint": "dist/index.html"

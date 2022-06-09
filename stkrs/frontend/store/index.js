@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     authClient: null,
     authUserIdentity: null,
+    stkr: null,
   },
   getters: {
     principal(state) {
@@ -20,6 +21,9 @@ export default new Vuex.Store({
     },
     setAuthClient(state, authClient) {
       state.authClient = authClient
+    },
+    setStkr(state, stkr) {
+      state.stkr = stkr
     },
   },
   actions: {

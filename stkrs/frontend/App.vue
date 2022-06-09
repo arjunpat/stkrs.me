@@ -78,6 +78,7 @@
 <script>
 import { AuthClient } from '@dfinity/auth-client';
 import { mapState, mapMutations } from 'vuex'
+import { createActor } from 'canisters/stkr'
 import BlobButton from './components/BlobButton.vue'
 import { signIn, signOut } from './utils'
 
@@ -93,11 +94,11 @@ export default {
   }),
 
   computed: {
-    ...mapState(['authClient', 'authUserIdentity']),
+    ...mapState(['authClient', 'authUserIdentity', 'stkr']),
   },
 
   methods: {
-    ...mapMutations(['setAuthClient','setAuthUserIdentity']),
+    ...mapMutations(['setAuthClient','setAuthUserIdentity', 'setStkr']),
     navigate(name) {
       if (this.$route.name !== name)
         this.$router.push({ name: name })
@@ -125,11 +126,15 @@ export default {
     if (isAuthenticated) {
       const identity = authClient.getIdentity()
       this.setAuthUserIdentity(identity)
-    }
 
-    setTimeout(() => {
-      console.log(this.authClient)
-    }, 1000)
+      const stkr = createActor(process.env.COUNTER_CANISTER_ID, {
+        agentOptions: {
+          identity,
+        }, 
+      })
+      this.setStkr(stkr)
+      console.log('WHO AM I', await stkr.whoami())
+    }
   },
 };
 </script>
