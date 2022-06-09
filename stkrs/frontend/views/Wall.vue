@@ -19,25 +19,15 @@
       </PaintDripSection>
 
       <PaintDripSection color="green-700">
-        <div
-          class="tw-text-center tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white"
-        >
+        <div class="tw-text-center tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white">
           Pinned
         </div>
         <div class="tw-space-x-4">
-          <Sticker
-            v-for="(stickerId, i) in pinned"
-            :key="i"
-            v-bind="stickers[stickerId]"
-            dark
-            pin
-            showName
-            :pinned="isPinned(stickerId)"
-            @pin="togglePin(stickerId)"
-          />
+          <Sticker v-for="(stickerId, i) in pinned" :key="i" v-bind="stickers[stickerId]" dark pin showName
+            :pinned="isPinned(stickerId)" @pin="togglePin(stickerId)" />
         </div>
       </PaintDripSection>
-      
+
       <!-- <div class="tw-p-4 tw-mt-24">
       <div class="tw-text-3xl tw-font-medium tw-mb-4">Friends</div>
       <div 
@@ -59,79 +49,53 @@
       <!-- <div class="tw-bg-yellow-500 tw-bg-red-700 tw-bg-orange-600" />
       <template v-for="category, i in Object.keys(categories)">
         <PaintDripSection :key="i" :color="categories[category].color"> -->
-          
+
       <PaintDripSection :color="tabColor">
-        <v-tabs
-          id="tabGroup"
-          v-model="tab"
-          centered
-          :background-color="`var(--${tabColor})`"
-          icons-and-text
-        >
+        <v-tabs id="tabGroup" v-model="tab" centered :background-color="`var(--${tabColor})`" icons-and-text>
           <v-tabs-slider color="transparent"></v-tabs-slider>
-          <v-tab
-            v-for="category in Object.keys(categories)"
-            :key="category"
-            :ripple="false"
-          >
-            <BlobButton 
-              :text="category"
-              :fill="`var(--color-${categoryBtnColors[category]})`"
-            />
+          <v-tab v-for="category in Object.keys(categories)" :key="category" :ripple="false">
+            <BlobButton :text="category" :fill="`var(--color-${categoryBtnColors[category]})`" />
           </v-tab>
         </v-tabs>
 
 
         <v-tabs-items continuous v-model="tab" class="tabItemGroup tw-w-screen">
-          <v-tab-item
-            v-for="(category, i) in Object.keys(categories)"
-            :key="category"
-          >
+          <v-tab-item v-for="(category, i) in Object.keys(categories)" :key="category">
             <PaintDripSection :key="i" :color="categories[category].color">
-                <div class="tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white">{{ category }}</div>
-                  <div class="tw-space-y-4">
-                    <div 
-                      v-for="stickerId, s in categories[category].stickers" 
-                      :key="s"
-                      class="tw-flex"
-                    >
-                      <Sticker
-                        v-bind="stickers[stickerId]"
-                        :pinned="isPinned(stickerId)"
-                        dark
-                        @pin="togglePin(stickerId)"
-                      />
-                      <div class="tw-w-96 tw-p-4">
-                        <div class="tw-text-white tw-text-lg tw-font-semibold tw-tracking-wide">{{ stickers[stickerId].name }}</div>
-                        <div class="tw-text-gray-300">{{ stickers[stickerId].description }}</div>
-                      </div>
-                    </div>
+              <div class="tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white">{{ category }}</div>
+              <div class="tw-space-y-4">
+                <div v-for="stickerId, s in categories[category].stickers" :key="s" class="tw-flex">
+                  <Sticker v-bind="stickers[stickerId]" :pinned="isPinned(stickerId)" dark
+                    @pin="togglePin(stickerId)" />
+                  <div class="tw-w-96 tw-p-4">
+                    <div class="tw-text-white tw-text-lg tw-font-semibold tw-tracking-wide">{{ stickers[stickerId].name
+                    }}</div>
+                    <div class="tw-text-gray-300">{{ stickers[stickerId].description }}</div>
                   </div>
-                  </PaintDripSection>
+                </div>
+              </div>
+            </PaintDripSection>
           </v-tab-item>
         </v-tabs-items>
-        
+
       </PaintDripSection>
 
       <PaintDripSection color="purple-600">
-        <div
-          class="tw-text-center tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white"
-        >
+        <div class="tw-text-center tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white">
           Comments
         </div>
         <div class="tw-grid tw-grid-cols-3 tw-gap-4">
-          <Comment
-            v-for="(comment, i) in comments"
-            :key="i"
-            :comment="comment"
-          />
+          <Comment v-for="(comment, i) in comments" :key="i" :comment="comment" />
+        </div>
+        <div class="tw-text-center tw-mt-5">
+          <CommentModal class="tw-mt-6"></CommentModal>
         </div>
       </PaintDripSection>
 
 
     </div>
-  </div> 
-  
+  </div>
+
 </template>
 
 <script>
@@ -141,6 +105,7 @@ import PaintDripSection from '../components/PaintDripSection.vue'
 import PaintDrip from '../components/PaintDrip.vue'
 import Comment from '../components/Comment.vue'
 import BlobButton from '../components/BlobButton.vue'
+import CommentModal from '../components/CommentModal.vue'
 
 import { mapGetters } from 'vuex'
 
@@ -154,6 +119,7 @@ export default {
     Sticker,
     PaintDrip,
     Comment,
+    CommentModal,
   },
 
   data() {
@@ -214,91 +180,91 @@ export default {
       pinned: ['asdf', 'abcd', 'ncie'],
 
       comments: [
-      {
-        user: {
-          username: 'orangeBananaPeels',
-          profilePic:
-            'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
+        {
+          user: {
+            username: 'orangeBananaPeels',
+            profilePic:
+              'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
+          },
+          shared: [
+            {
+              name: 'Google Developer',
+              logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+            },
+          ],
+          date: new Date(2022, 2, 14),
+          comment:
+            'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
         },
-        shared: [
-          {
-            name: 'Google Developer',
-            logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+        {
+          user: {
+            username: 'orangeBananaPeels',
+            profilePic:
+              'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
           },
-        ],
-        date: new Date(2022, 2, 14),
-        comment:
-          'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
-      },
-      {
-        user: {
-          username: 'orangeBananaPeels',
-          profilePic:
-            'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
+          shared: [
+            {
+              name: 'Google Developer',
+              logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+            },
+            {
+              name: 'Intel Software Engineer',
+              logo: 'https://logos-world.net/wp-content/uploads/2021/09/Intel-Emblem.png',
+            },
+          ],
+          date: new Date(2022, 2, 14),
+          comment:
+            'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
         },
-        shared: [
-          {
-            name: 'Google Developer',
-            logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+        {
+          user: {
+            username: 'orangeBananaPeels',
+            profilePic:
+              'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
           },
-          {
-            name: 'Intel Software Engineer',
-            logo: 'https://logos-world.net/wp-content/uploads/2021/09/Intel-Emblem.png',
-          },
-        ],
-        date: new Date(2022, 2, 14),
-        comment:
-          'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
-      },
-      {
-        user: {
-          username: 'orangeBananaPeels',
-          profilePic:
-            'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
+          shared: [
+            {
+              name: 'Google Developer',
+              logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+            },
+          ],
+          date: new Date(2022, 2, 14),
+          comment:
+            'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
         },
-        shared: [
-          {
-            name: 'Google Developer',
-            logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+        {
+          user: {
+            username: 'orangeBananaPeels',
+            profilePic:
+              'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
           },
-        ],
-        date: new Date(2022, 2, 14),
-        comment:
-          'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
-      },
-      {
-        user: {
-          username: 'orangeBananaPeels',
-          profilePic:
-            'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
+          shared: [
+            {
+              name: 'Google Developer',
+              logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+            },
+          ],
+          date: new Date(2022, 2, 14),
+          comment:
+            'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
         },
-        shared: [
-          {
-            name: 'Google Developer',
-            logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+        {
+          user: {
+            username: 'orangeBananaPeels',
+            profilePic:
+              'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
           },
-        ],
-        date: new Date(2022, 2, 14),
-        comment:
-          'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
-      },
-      {
-        user: {
-          username: 'orangeBananaPeels',
-          profilePic:
-            'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
+          shared: [
+            {
+              name: 'Google Developer',
+              logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+            },
+          ],
+          date: new Date(2022, 2, 14),
+          comment:
+            'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
         },
-        shared: [
-          {
-            name: 'Google Developer',
-            logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
-          },
-        ],
-        date: new Date(2022, 2, 14),
-        comment:
-          'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
-      },
-    ],
+      ],
 
       categoryOrders: {
         category1: 'Professional',
@@ -306,14 +272,14 @@ export default {
         category3: 'Communities'
       },
       categoryColors: {
-        'Professional': 'violet-600',
+        'Professional': 'red-600',
         'Fun': 'orange-600',
-        'Communities': 'red-600',
+        'Communities': 'pink-600',
       },
       categoryBtnColors: {
-        'Professional': 'violet-500',
+        'Professional': 'red-500',
         'Fun': 'orange-500',
-        'Communities': 'red-500',
+        'Communities': 'pink-500',
       },
       comments: [
         {
@@ -440,14 +406,14 @@ export default {
   },
 
   watch: {
-    tab : {
+    tab: {
       immediate: false,
       handler() {
         this.tabColor = Object.values(this.categories)[this.tab].color
       }
-      
+
     },
-    
+
 
 
   },
@@ -482,8 +448,4 @@ export default {
   width: 100% !important;
   background-color: black !important;
 }
-
-
-
-
 </style>
