@@ -38,6 +38,7 @@ export default {
         holder: { type: String },
     },
     data: () => ({
+        input: '',
         usernames: [
             {
                 name: "blob"

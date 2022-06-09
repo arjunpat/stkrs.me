@@ -6,7 +6,7 @@
       class="tw-bg-green-700 tw-w-full tw-flex py-8 pl-8 tw-rounded-t-2xl tw-rounded-b-sm tw-text-white"
     >
       <div class="tw-flex">
-        <ProfileImage class="tw-mr-2" :src="sticker.image" width="150" />
+        <ProfileImage class="tw-mr-2" :src="sticker.image" :width="150" />
       </div>
       <div
         class="tw-flex tw-flex-col tw-h-full tw-bg-dark-gray tw-space-y-4 pl-5 pt-12"

@@ -13,16 +13,16 @@
 <script>
   import { AuthClient } from "@dfinity/auth-client";
   
-  //import { renderIndex } from "./views";
-  //import { renderLoggedIn } from "./views/loggedIn";
-  //import { canisterId, createActor } from "../../declarations/whoami";
-  import { Actor, Identity } from "@dfinity/agent";
-  
   export default {
     name: 'SignIn',
 
-    components: {
-    },
+    data: () => ({
+      client: null,
+      clientReady: false,
+      principal: '',
+      signedIn: false,
+    }),
+
     methods: {
       async checkLogIn() {
         if (await authClient.isAuthenticated()) {
@@ -44,6 +44,18 @@
       }
     },
     async mounted() {
+      this.client = await AuthClient.create()
+      clientReady.value = true
+      const isAuthenticated = await client.isAuthenticated()
+
+      if (isAuthenticated) {
+        const identity = client.getIdentity()
+        principal.value = identity.getPrincipal().toString()
+        signedIn.value = true
+      }
+
+
+
       const authClient = await AuthClient.create();
       const loginButton = document.getElementById(
         "loginButton"

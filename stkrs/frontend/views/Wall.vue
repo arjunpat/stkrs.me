@@ -1,14 +1,14 @@
 <template>
   <div class="tw-flex tw-justify-center tw-bg-blue-600 tw-pb-56">
     <div class="tw-p-4 tw-max-w-6xl tw-m-auto tw-h-full">
-      <PaintDripSection class="-tw-mt-4" color="blue-700">
+      <PaintDripSection class="-tw-mt-4" color="blue-600">
         <div class="tw-flex">
           <ProfileImage class="tw-mr-8" :src="profilePic" />
           <div class="tw-self-center">
             <div class="tw-text-white tw-font-semibold tw-text-5xl">
               {{ username }}
             </div>
-            <div class="tw-text-white tw-font-extralight tw-text-md">{{ id }}</div>
+            <div class="tw-text-white tw-font-extralight tw-text-md">{{ principal }}</div>
             <div class="tw-text-white tw-font-normal tw-my-4">
               <!-- bio goes here -->
               Hi, I'm 0xSounds, UPenn Grad and ex-Goldman analyst. Follow my
@@ -142,6 +142,8 @@ import PaintDrip from '../components/PaintDrip.vue'
 import Comment from '../components/Comment.vue'
 import BlobButton from '../components/BlobButton.vue'
 
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Wall',
 
@@ -158,7 +160,6 @@ export default {
     return {
       username: 'Sounds',
       tabColor: '',
-      id: '0x1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2',
       profilePic:
         'https://lh3.googleusercontent.com/gxfnxG53rQYUNh6_fOiJ-H3g_vPF0OH2m3_3eMrwL5eTKzn0YVjqulzC6dmL4kQIVPx4mWR_dOHUbZ2QXGiuoJeI4gX730_inVAvUw=w343',
       tab: null,
@@ -305,14 +306,14 @@ export default {
         category3: 'Communities'
       },
       categoryColors: {
-        'Professional': 'violet-700',
-        'Fun': 'orange-700',
-        'Communities': 'red-700',
-      },
-      categoryBtnColors: {
         'Professional': 'violet-600',
         'Fun': 'orange-600',
         'Communities': 'red-600',
+      },
+      categoryBtnColors: {
+        'Professional': 'violet-500',
+        'Fun': 'orange-500',
+        'Communities': 'red-500',
       },
       comments: [
         {
@@ -419,6 +420,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters(['principal']),
     categories() {
       const c = {}
       for (const stickerId of Object.keys(this.stickers)) {

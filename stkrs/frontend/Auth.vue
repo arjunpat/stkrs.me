@@ -44,6 +44,7 @@ export default {
           onSuccess: () => {
             const identity = client.getIdentity()
             const principal = identity.getPrincipal().toString()
+            console.log(identity, principal)
             resolve({ identity, principal })
           },
           onError: reject,
