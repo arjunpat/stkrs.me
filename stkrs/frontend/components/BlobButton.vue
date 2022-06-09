@@ -3,7 +3,7 @@
     <svg id="blob" ref="blob" :width="width" :height="height" class="tw-absolute visible" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
       <path @mouseover="mouseenter" @mouseleave="mouseleave" class="tw-cursor-pointer" :fill="fill" :d="d" transform="translate(100 100)" />
     </svg>
-    <div @mouseover="mouseenter" @mouseleave="mouseleave" class="tw-normal-case tw-tracking-normal tw-text-base tw-cursor-pointer tw-absolute tw-text-white tw-font-semibold">{{ text }}</div>
+    <div @mouseover="mouseenter" @mouseleave="mouseleave" class="tw-normal-case tw-tracking-normal tw-text-base tw-cursor-pointer tw-absolute tw-text-white tw-font-medium">{{ text }}</div>
   </div>
 </template>
 

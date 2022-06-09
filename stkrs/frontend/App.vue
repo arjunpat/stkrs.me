@@ -39,20 +39,35 @@
       <v-btn 
         v-if="authUserIdentity"
         @click="signOut"
-        class="tw-normal-case tw-tracking-normal tw-text-base tw-text-white tw-font-semibold"
+        class="tw-text-base tw-text-white"
         text
       >
         Sign out
       </v-btn>
       <v-btn 
         v-else
-        @click="signIn"
-        class="tw-normal-case tw-tracking-normal tw-text-base tw-text-white tw-font-semibold"
+        @click="signInDialog = true"
+        class="tw-text-base tw-text-white"
         text
       >
         Sign in
       </v-btn>
     </v-app-bar>
+
+    <v-dialog
+      v-model="signInDialog"
+      width="400"
+    >
+      <v-card>
+        <v-card-title>Sign in</v-card-title>
+        <v-card-text>
+          <v-btn block @click="signIn">
+            Sign in with 
+            <img alt="" style="width: 33px; margin-left: 0.7em;" src="./assets/dfinity.svg" />
+          </v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog> 
 
     <v-main class="tw-p-0">
       <router-view/>
@@ -62,7 +77,7 @@
 
 <script>
 import { AuthClient } from '@dfinity/auth-client';
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import BlobButton from './components/BlobButton.vue'
 import { signIn, signOut } from './utils'
 
@@ -74,6 +89,7 @@ export default {
   },
 
   data: () => ({
+    signInDialog: false,
   }),
 
   computed: {
@@ -89,6 +105,7 @@ export default {
     async signIn() {
       try {
         await signIn()
+        this.signInDialog = false
         this.$router.push({ name: 'wall' })
       } catch (err) {
         console.error(err)
@@ -121,6 +138,12 @@ export default {
 
 * {
   font-family: 'Poppins', sans-serif;
+}
+
+.v-btn {
+  font-weight: 500 !important;
+  letter-spacing: unset !important;
+  text-transform: unset !important;
 }
 
 </style>
