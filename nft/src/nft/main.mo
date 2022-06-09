@@ -15,6 +15,7 @@ actor {
   private var stkrEntries: Buffer.Buffer<T.Stkr> = Buffer.Buffer(0);
   private var userToStkr = HashMap.HashMap<Principal, TrieSet.Set<Nat>>(10, Principal.equal, Principal.hash);
   private var userToData = HashMap.HashMap<Principal, T.UserData>(10, Principal.equal, Principal.hash);
+  private var userToPins = HashMap.HashMap<Principal, TrieSet.Set<Nat>>(10, Principal.equal, Principal.hash);
 
   public shared(msg) func createStkr(title: Text, organization: Text, description: Text, image: Text): async Nat {
     let s: T.Stkr = {
@@ -61,12 +62,52 @@ actor {
     };
 
     let stkrs: TrieSet.Set<Nat> = switch (userToStkr.get(user)) {
-      case null {
-        TrieSet.empty()
-      };
+      case null TrieSet.empty();
       case (?s) s
     };
     Array.map(TrieSet.toArray(stkrs), stkrEntries.get)
   };
 
+  public shared(msg) func addPin(stkr: Nat): () {
+    assert stkrEntries.size() > stkr;
+    let user: Principal = msg.caller;
+    let stkrs = switch (userToStkr.get(user)) {
+      case null TrieSet.empty();
+      case (?s) s
+    };
+    assert TrieSet.mem(stkrs, stkr, Int.hash(stkr), Nat.equal);
+
+    let pins: TrieSet.Set<Nat> = switch (userToPins.get(user)) {
+      case null TrieSet.empty();
+      case (?s) s
+    };
+    assert not TrieSet.mem(pins, stkr, Int.hash(stkr), Nat.equal);
+    userToPins.put(user, TrieSet.put(pins, stkr, Int.hash(stkr), Nat.equal));
+  };
+
+  public shared(msg) func getPins(u: ?Principal): async [Nat] {
+    let user: Principal = switch (u) {
+      case null msg.caller;
+      case (?u) u
+    };
+    let pins: TrieSet.Set<Nat> = switch (userToPins.get(user)) {
+      case null TrieSet.empty();
+      case (?s) s
+    };
+    TrieSet.toArray(pins)
+  };
+
+  public shared(msg) func getUsersWStkr(stkr: Nat): async [Principal] {
+    let ret: Buffer.Buffer<Principal> = Buffer.Buffer(0);
+    for (key in userToStkr.keys()) {
+      let stkrs: TrieSet.Set<Nat> = switch (userToStkr.get(key)) {
+        case null TrieSet.empty();
+        case (?s) s
+      };
+      if (TrieSet.mem(stkrs, stkr, Int.hash(stkr), Nat.equal)) {
+        ret.add(key);
+      }
+    };
+    ret.toArray()
+  }
 }
