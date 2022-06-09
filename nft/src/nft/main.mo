@@ -1,44 +1,72 @@
 import Principal "mo:base/Principal";
-import Trie "mo:base/Trie";
+import Nat "mo:base/Nat";
+import Int "mo:base/Int";
+import TrieSet "mo:base/TrieSet";
 import Buffer "mo:base/Buffer";
+import HashMap "mo:base/HashMap";
+import Hash "mo:base/Hash";
+import Array "mo:base/Array";
+import Debug "mo:base/Debug";
+import Option "mo:base/Option";
 
-/* 
-NFT Details:
--can't be sent more than once
--title, organization, and description are required
--image URL
-*/
-
-class Token(id: Nat, creator: Principal, title: Text, organization: Text, description: Text, image: Text) {
-  let id = id;
-  let creator = creator;
-  let title = title;
-  let organization = organization;
-  let description = description;
-  let image = image;
-  let owners : Trie.Trie<Principal, ()> = Trie.empty<Principal>();
-}
+import T "types";
 
 actor {
-  private type TokenAddress = Principal;
+  private var stkrEntries: Buffer.Buffer<T.Stkr> = Buffer.Buffer(0);
+  private var userToStkr = HashMap.HashMap<Principal, TrieSet.Set<Nat>>(10, Principal.equal, Principal.hash);
+  private var userToData = HashMap.HashMap<Principal, T.UserData>(10, Principal.equal, Principal.hash);
 
-  private stable var tokenEntries : Buffer<Token> = Buffer(0);
+  public shared(msg) func createStkr(title: Text, organization: Text, description: Text, image: Text): async Nat {
+    let s: T.Stkr = {
+      id = stkrEntries.size();
+      creator = msg.caller;
+      title;
+      organization;
+      description;
+      image;
+    };
+    stkrEntries.add(s);
+    return s.id;
+  };
 
-  public shared(msg) func createToken(title: Text, organization: Text, description: Text, image: Text) {
-    let token = Token(tokenEntries.length, msg.caller, title, organization, description, image);
-    tokenEntries.add(token);
-    return token;
-  }
+  public shared(msg) func sendStkr(stkr: Nat, to: Principal): () {
+    assert stkrEntries.size() > stkr;
+    assert stkrEntries.get(stkr).creator == msg.caller;
 
-  public shared(msg) func sendToken(token: Nat, to: Principal) {
-    assert tokenEntries.size() > token;
-    assert !tokenEntries.get(token).owners.mem(to);
-    assert tokenEntries.get(token).creator == msg.caller;
-    tokenEntries.get(token).owners.put(to);
-  }
+    let stkrs: TrieSet.Set<Nat> = switch (userToStkr.get(to)) {
+      case null {
+        TrieSet.empty()
+      };
+      case (?s) s
+    };
+    assert not TrieSet.mem(stkrs, stkr, Int.hash(stkr), Nat.equal);
+    userToStkr.put(to, TrieSet.put(stkrs, stkr, Int.hash(stkr), Nat.equal));
+  };
 
-  public shared(msg) func getToken(token: Nat) {
-    assert tokenEntries.size() > token;
-    return tokenEntries.get(token);
-  }
+  public shared(msg) func setUser(user: T.UserData): () {
+    userToData.put(msg.caller, user);
+  };
+
+  public shared(msg) func getUser(user: ?Principal): async ?T.UserData {
+    switch (user) {
+      case null userToData.get(msg.caller);
+      case (?u) userToData.get(u)
+    }
+  };
+
+  public shared(msg) func getStkrs(u: ?Principal): async [T.Stkr] {
+    let user: Principal = switch (u) {
+      case (null) msg.caller;
+      case (?u) u
+    };
+
+    let stkrs: TrieSet.Set<Nat> = switch (userToStkr.get(user)) {
+      case null {
+        TrieSet.empty()
+      };
+      case (?s) s
+    };
+    Array.map(TrieSet.toArray(stkrs), stkrEntries.get)
+  };
+
 }
