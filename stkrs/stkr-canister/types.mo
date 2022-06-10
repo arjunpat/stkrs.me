@@ -7,6 +7,7 @@ module {
     title: Text;
     organization: Text;
     description: Text;
+    category: Text;
     image: Text;
   };
 

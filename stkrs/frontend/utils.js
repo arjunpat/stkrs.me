@@ -16,7 +16,7 @@ export const signIn = async () => {
     })
   })
   store.commit('setAuthUserIdentity', result.identity)
-  const stkr = createActor(process.env.COUNTER_CANISTER_ID, {
+  const stkr = createActor(process.env.STKR_CANISTER_ID, {
     agentOptions: {
       identity: result.identity,
     }, 
