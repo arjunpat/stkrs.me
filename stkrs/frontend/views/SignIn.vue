@@ -1,11 +1,11 @@
 
 <template>
-  <div class="tw-grid tw-h-full tw-w-full tw-place-content-center">
+  <div class="tw-grid tw-h-full tw-w-full tw-place-content-center tw-content-center">
     <div>
       <h1>Internet Identity Client</h1>
       <h2>You are not authenticated</h2>
       <p>To log in, click this button!</p>
-      <button type="button" id="loginButton" class="tw-content-center">Log in</button>
+      <button type="button" id="loginButton">Log in</button>
     </div>
   </div>
 </template>
