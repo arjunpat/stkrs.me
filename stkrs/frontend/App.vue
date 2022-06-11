@@ -6,9 +6,7 @@
       flat
       class="tw-z-20"
     >
-      <div class="d-flex align-center tw-mt-24 tw-w-1/6">
-        <img class="tw-h-64" src="./assets/logostkrs.png">
-      </div>
+      <img class="tw-h-32 tw-bg-contain" src="./assets/logostkrs.png">
 
       <v-spacer></v-spacer>
 
