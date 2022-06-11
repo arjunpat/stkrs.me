@@ -6,8 +6,8 @@
       flat
       class="tw-z-20"
     >
-      <div class="d-flex align-center tw-text-white tw-font-extrabold tw-text-lg">
-        STKRS
+      <div class="d-flex align-center tw-mt-24 tw-w-1/6">
+        <img class="tw-h-64" src="./assets/logostkrs.png">
       </div>
 
       <v-spacer></v-spacer>

@@ -6,17 +6,21 @@
       <div class="tw-flex">
         <h1 class="tw-text-white tw-text-4xl tw-font-bold">Popular Stkr Walls of the Day</h1>
       </div>
-      <ProfileImage class="tw-mr-20 tw-text-white "
+      <div class="tw-grid tw-grid-flow-col">
+        <ProfileImage class="tw-flex tw-mr-20 tw-text-white "
           v-for="item, i in popularSouls"
-          :key="`popular-${i}`"
-          v-bind="item" />
+          :key="`popular-${i}`" 
+          v-bind="item"/>
+      </div> 
       <div>
         <h1 class="tw-text-white tw-text-4xl tw-font-bold">Meet Someone New!</h1>
       </div>
+      <div class="tw-grid tw-grid-flow-col">
       <ProfileImage class="tw-mr-20 tw-text-white"
           v-for="item, i in discover"
           :key="i"
           v-bind="item" />
+        </div>
     </div>
   </div>
 </template>
