@@ -11,6 +11,16 @@ const routes = [
     component: Discover
   },
   {
+    path: '/onboard',
+    name: 'onboard',
+    component: () => import('../views/Onboard.vue')
+  },
+  {
+    path: '/sharedstkrs',
+    name: 'sharedstkrs',
+    component: () => import('../views/SharedStkrs.vue')
+  },
+  {
     path: '/wall',
     name: 'wall',
     component: () => import('../views/Wall.vue'),

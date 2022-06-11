@@ -9,7 +9,7 @@ export const signIn = async () => {
     store.state.authClient.login({
       identityProvider: 
         process.env.NODE_ENV === 'development' 
-        ? 'http://localhost:8000/?canisterId=rkp4c-7iaaa-aaaaa-aaaca-cai' 
+        ? 'http://localhost:8000/?canisterId=renrk-eyaaa-aaaaa-aaada-cai' 
         : 'https://identity.ic0.app',
       onSuccess: () => {
         const identity = store.state.authClient.getIdentity()

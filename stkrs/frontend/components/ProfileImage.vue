@@ -1,14 +1,25 @@
 <!-- Displays a profile image with the given image src -->
 
 <template>
-  <div class="tw-inline-block tw-items-center tw-drop-shadow-xl">
-    <div>
-      <img :src="src" :style="style" />
+  <div>
+    <div v-if="horizontalDisplay" class="tw-flex"> 
+       <img :src="src" :style="style" />
+        <div class="tw-self-center tw-ml-8">
+          <div class="tw-text-white tw-font-semibold tw-text-5xl">
+            {{name}}
+          </div>
+          <div class="tw-text-white tw-font-extralight tw-text-md">{{principal}}</div>
+          <div class="tw-text-white tw-font-normal tw-my-4">{{bio}}</div>
+        </div>
     </div>
-    <div class="tw-text-sm tw-text-center tw-font-medium tw-my-3">
-      {{ name }}
+    <div v-else class="tw-inline-block tw-items-center tw-drop-shadow-xl">
+      <div>
+        <img :src="src" :style="style" />
+      </div>
+      <div class="tw-text-sm tw-text-center tw-font-medium tw-my-3">
+        {{ name }}
+      </div>  
     </div>
-    
   </div>
 </template>
 
@@ -25,6 +36,12 @@ export default {
     src: { type: String, required: true },
 
     width: { type: Number, default: 200 },
+
+    horizontalDisplay: { type: Boolean, default: false },
+
+    principal: { type: String, default: ""},
+
+    bio: { type: String, default: ""},
   },
 
   data: () => ({
