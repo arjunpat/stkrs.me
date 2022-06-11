@@ -1,1 +1,2 @@
 createStkr("Google Developer", "Google", "Employee at Google from May 2016 - June 2020 working on the Robotics/AI team", "https://blog.hubspot.com/hubfs/image8-2.jpg")
+setUser(record {bio="I am a real person :)"; profile_image="https://img.seadn.io/files/6f26da3c43d626d2be2f53aeca1f1869.png"; name="jonypony"})

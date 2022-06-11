@@ -12,7 +12,10 @@ export default new Vuex.Store({
   getters: {
     principal(state) {
       if (!state.authUserIdentity) return ''
-      return state.authUserIdentity.getPrincipal().toString()
+      return state.authUserIdentity.getPrincipal()
+    },
+    principalString(state, getters) {
+      return getters.principal.toString()
     },
   },
   mutations: {

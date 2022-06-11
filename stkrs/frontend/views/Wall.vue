@@ -5,14 +5,12 @@
         <div class="tw-flex">
           <ProfileImage class="tw-mr-8" :src="profilePic" />
           <div class="tw-self-center">
-            <div class="tw-text-white tw-font-semibold tw-text-5xl">
+            <div class="tw-text-white tw-font-semibold tw-text-5xl tw-mb-2">
               {{ username }}
             </div>
-            <div class="tw-text-white tw-font-extralight tw-text-md">{{ principal }}</div>
+            <div class="tw-text-white tw-font-extralight tw-text-md">{{ principalString }}</div>
             <div class="tw-text-white tw-font-normal tw-my-4">
-              <!-- bio goes here -->
-              Hi, I'm 0xSounds, UPenn Grad and ex-Goldman analyst. Follow my
-              Twitter at @Sounds and Instagram at @0xSounds.
+              {{ bio }}
             </div>
           </div>
         </div>
@@ -27,28 +25,6 @@
             :pinned="isPinned(stickerId)" @pin="togglePin(stickerId)" />
         </div>
       </PaintDripSection>
-
-      <!-- <div class="tw-p-4 tw-mt-24">
-      <div class="tw-text-3xl tw-font-medium tw-mb-4">Friends</div>
-      <div 
-        v-for="friend, i in friends" 
-        :key="i"
-        class="tw-flex"
-      >
-        <ProfileImage
-          class="tw-mr-4"
-          :src="friend.pic"
-          :width="100"
-        />
-        <div class="tw-self-center">
-          <div class="tw-font-semibold tw-text-lg">{{ friend.username }}</div>
-        </div>
-      </div>
-    </div> -->
-
-      <!-- <div class="tw-bg-yellow-500 tw-bg-red-700 tw-bg-orange-600" />
-      <template v-for="category, i in Object.keys(categories)">
-        <PaintDripSection :key="i" :color="categories[category].color"> -->
 
       <PaintDripSection :color="tabColor">
         <v-tabs id="tabGroup" v-model="tab" centered :background-color="`var(--${tabColor})`" icons-and-text>
@@ -107,7 +83,7 @@ import Comment from '../components/Comment.vue'
 import BlobButton from '../components/BlobButton.vue'
 import CommentModal from '../components/CommentModal.vue'
 
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'Wall',
@@ -124,10 +100,10 @@ export default {
 
   data() {
     return {
-      username: 'Sounds',
+      username: '',
+      bio: '',
+      profilePic: '',
       tabColor: '',
-      profilePic:
-        'https://lh3.googleusercontent.com/gxfnxG53rQYUNh6_fOiJ-H3g_vPF0OH2m3_3eMrwL5eTKzn0YVjqulzC6dmL4kQIVPx4mWR_dOHUbZ2QXGiuoJeI4gX730_inVAvUw=w343',
       tab: null,
       stickers: {
         asdf: {
@@ -177,94 +153,7 @@ export default {
         },
       },
 
-      pinned: ['asdf', 'abcd', 'ncie'],
-
-      comments: [
-        {
-          user: {
-            username: 'orangeBananaPeels',
-            profilePic:
-              'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
-          },
-          shared: [
-            {
-              name: 'Google Developer',
-              logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
-            },
-          ],
-          date: new Date(2022, 2, 14),
-          comment:
-            'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
-        },
-        {
-          user: {
-            username: 'orangeBananaPeels',
-            profilePic:
-              'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
-          },
-          shared: [
-            {
-              name: 'Google Developer',
-              logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
-            },
-            {
-              name: 'Intel Software Engineer',
-              logo: 'https://logos-world.net/wp-content/uploads/2021/09/Intel-Emblem.png',
-            },
-          ],
-          date: new Date(2022, 2, 14),
-          comment:
-            'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
-        },
-        {
-          user: {
-            username: 'orangeBananaPeels',
-            profilePic:
-              'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
-          },
-          shared: [
-            {
-              name: 'Google Developer',
-              logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
-            },
-          ],
-          date: new Date(2022, 2, 14),
-          comment:
-            'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
-        },
-        {
-          user: {
-            username: 'orangeBananaPeels',
-            profilePic:
-              'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
-          },
-          shared: [
-            {
-              name: 'Google Developer',
-              logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
-            },
-          ],
-          date: new Date(2022, 2, 14),
-          comment:
-            'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
-        },
-        {
-          user: {
-            username: 'orangeBananaPeels',
-            profilePic:
-              'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
-          },
-          shared: [
-            {
-              name: 'Google Developer',
-              logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
-            },
-          ],
-          date: new Date(2022, 2, 14),
-          comment:
-            'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
-        },
-      ],
+      pinned: [],
 
       categoryOrders: {
         category1: 'Professional',
@@ -367,26 +256,12 @@ export default {
             'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
         },
       ],
-
-      friends: [
-        {
-          pic: 'https://lh3.googleusercontent.com/6NodEirTq6RnAG6OG1LBr1MclLtIrTNdW5nMgnzGKxfZ2_odAuzwsYPsVStfYmQdZKAs44nM_1tP8TdxjTYv2Ucm-TjkQgPFfOBm7Q=w343',
-          username: '65XHouseyhfX',
-        },
-        {
-          pic: 'https://lh3.googleusercontent.com/eDVk2W966z7SCKdNS2dxzwDaonh5Dk1ng_vC26Gd9J7MRVDp5c-B9jqHlYa1aClFeeL9C6yDlbtbblIDhdviPGHMw34iIQ18j83F8Gk=w343',
-          username: '77JackoXX',
-        },
-        {
-          pic: 'https://lh3.googleusercontent.com/s3KebNXqAyDiDEjmo0btMJUtllRhP2guk3wGKy_VcTk1u0gxx-x6DDREf6X4WE6vaQITapum_9lsVdZTNfO6hvmoMiNUtkRjM5z7SHQ=w343',
-          username: '88KadiE91',
-        },
-      ],
     }
   },
 
   computed: {
-    ...mapGetters(['principal']),
+    ...mapState(['stkr', 'authUserIdentity']),
+    ...mapGetters(['principal', 'principalString']),
     categories() {
       const c = {}
       for (const stickerId of Object.keys(this.stickers)) {
@@ -411,24 +286,45 @@ export default {
       handler() {
         this.tabColor = Object.values(this.categories)[this.tab].color
       }
-
     },
-
-
-
   },
 
   methods: {
     togglePin(stickerId) {
       if (this.isPinned(stickerId)) {
         this.pinned = this.pinned.filter((id) => id !== stickerId)
+        this.stkr.removePin(parseInt(stickerId))
       } else {
+        this.stkr.addPin(parseInt(stickerId))
         this.pinned.push(stickerId)
       }
     },
     isPinned(stickerId) {
       return this.pinned.includes(stickerId)
     },
+  },
+
+  async created() {
+    this.stickers = {}
+    this.stkr.getUser([]).then(([{ bio, name, profile_image }]) => {
+      this.username = name
+      this.profilePic = profile_image
+      this.bio = bio
+    })
+    this.stkr.getStkrs([]).then((stickers) => {
+      this.stickers = {}
+      for (const sticker of stickers) {
+        this.stickers[sticker.id] = {
+          name: sticker.title,
+          description: sticker.description,
+          src: sticker.image,
+          category: sticker.category,
+        }
+      }
+    })
+    this.stkr.getPins([]).then(pinned => {
+      this.pinned = pinned
+    })
   },
 }
 </script>

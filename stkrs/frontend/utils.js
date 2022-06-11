@@ -2,6 +2,9 @@ import store from './store'
 import { createActor } from 'canisters/stkr'
 
 export const signIn = async () => {
+  const days = BigInt(1)
+  const hours = BigInt(24)
+  const nanoseconds = BigInt(3600000000000)
   const result = await new Promise((resolve, reject) => {
     store.state.authClient.login({
       identityProvider: 
@@ -13,6 +16,7 @@ export const signIn = async () => {
         resolve({ identity })
       },
       onError: reject,
+      maxTimeToLive: days * hours * nanoseconds,
     })
   })
   store.commit('setAuthUserIdentity', result.identity)

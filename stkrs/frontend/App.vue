@@ -133,7 +133,6 @@ export default {
         }, 
       })
       this.setStkr(stkr)
-      console.log('WHO AM I', await stkr.whoami())
     }
   },
 };
