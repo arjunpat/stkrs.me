@@ -17,7 +17,7 @@
         <img :src="src" :style="style" />
       </div>
       <div class="tw-text-sm tw-text-center tw-font-medium tw-my-3">
-        {{ name }}
+        <v-chip color="orange" class="tw-text-white">{{ name }}</v-chip>
       </div>  
     </div>
   </div>
