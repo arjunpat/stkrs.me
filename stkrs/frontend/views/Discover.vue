@@ -1,8 +1,8 @@
 <template>
-  <div class="tw-justify-center tw-h-full tw-bg-orange-600 tw-pt-16">
+  <div class="tw-justify-center tw-h-full tw-bg-orange-600 tw-pt-32">
     <div class="tw-p-4 tw-max-w-6xl tw-m-auto tw-h-full">
       <h1
-        class="tw-text-white tw-text-6xl tw-font-bold tw-place-content-center text-center tw-underline tw-decoration-8 tw-decoration-orange-400">
+        class="tw-mb-10 tw-text-white tw-text-6xl tw-font-bold tw-place-content-center text-center tw-underline tw-decoration-8 tw-decoration-orange-400">
         Discover</h1>
       <Search holder="Search StkrWalls..."></Search>
       <div class="tw-flex">

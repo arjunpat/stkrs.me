@@ -17,7 +17,7 @@
         <img :src="src" :style="style" />
       </div>
       <div class="tw-text-sm tw-text-center tw-font-medium tw-my-3">
-        <v-chip color="orange" class="tw-text-white">{{ name }}</v-chip>
+        <v-chip color="orange" class="tw-text-white" v-show="name !== ''">{{ name }}</v-chip>
       </div>  
     </div>
   </div>
@@ -31,7 +31,7 @@ export default {
   name: 'ProfileImage',
 
   props: {
-    name: { type: String },
+    name: { type: String, default: '' },
     
     src: { type: String, required: true },
 

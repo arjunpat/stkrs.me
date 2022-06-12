@@ -3,7 +3,7 @@
     class="tw-flex tw-p-4 tw-w-full tw-m-auto tw-h-full tw-justify-center tw-bg-green-600"
   >
   
-    <div class="tw-flex tw-pt-16 tw-flex-col tw-space-y-8 tw-w-3/5 tw-align-top">
+    <div class="tw-flex tw-pt-32 tw-flex-col tw-space-y-8 tw-w-3/5 tw-align-top">
       <h1 class="tw-text-white tw-text-6xl tw-font-bold tw-place-content-center text-center tw-underline tw-decoration-8 tw-decoration-green-400">Feed</h1>
       <div>
         <v-select
