@@ -59,7 +59,7 @@
       <v-card>
         <v-card-title>Sign in</v-card-title>
         <v-card-text>
-          <v-btn block @click="signIn">
+          <v-btn block @click="signIn" :loading="loadingSignIn">
             Sign in with 
             <img alt="" style="width: 33px; margin-left: 0.7em;" src="./assets/dfinity.svg" />
           </v-btn>
@@ -75,10 +75,10 @@
 
 <script>
 import { AuthClient } from '@dfinity/auth-client';
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import { createActor } from 'canisters/stkr'
 import BlobButton from './components/BlobButton.vue'
-import { signIn, signOut } from './utils'
+import { signIn, signOut, formatUser } from './utils'
 
 export default {
   name: 'App',
@@ -88,6 +88,7 @@ export default {
   },
 
   data: () => ({
+    loadingSignIn: false,
     signInDialog: false,
   }),
 
@@ -96,16 +97,27 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['setAuthClient','setAuthUserIdentity', 'setStkr']),
+    ...mapMutations(['setUser', 'setAuthClient','setAuthUserIdentity', 'setStkr']),
+    ...mapActions(['fetchUser', 'fetchStickers', 'fetchPins']),
     navigate(name) {
       if (this.$route.name !== name)
         this.$router.push({ name: name })
     },
     async signIn() {
       try {
+        this.loadingSignIn = true
         await signIn()
+        const user = await this.stkr.getUser([])
+        if (user.length === 0) {
+          this.$router.push({ name: 'onboard' })
+        } else {
+          this.setUser(formatUser(user)) 
+          this.fetchStickers()
+          this.fetchPins()
+          this.$router.push({ name: 'wall' })
+        }
+        this.loadingSignIn = false
         this.signInDialog = false
-        this.$router.push({ name: 'wall' })
       } catch (err) {
         console.error(err)
       }
@@ -116,7 +128,7 @@ export default {
     },
   },
 
-  async created() {
+  async mounted() {
     const authClient = await AuthClient.create()
     this.setAuthClient(authClient)
     const isAuthenticated = await authClient.isAuthenticated()
@@ -131,6 +143,14 @@ export default {
         }, 
       })
       this.setStkr(stkr)
+
+      // console.log('fetchuser: ', this.fetchUser)
+
+      this.$store.dispatch('fetchUser')
+      this.$store.dispatch('fetchStickers')
+      this.$store.dispatch('fetchPins')
+      // this.fetchStickers()
+      // this.fetchPins()
     }
   },
 };

@@ -32,3 +32,24 @@ export const signOut = async () => {
   await store.state.authClient.logout()
   store.commit('setAuthUserIdentity', null)
 }
+
+export const formatUser = ([{ bio, name, profile_image }]) => {
+  return {
+    username: name,
+    profilePic: profile_image,
+    bio,
+  }
+}
+
+export const formatStickers = stickers => {
+  const s = {}
+  for (const sticker of stickers) {
+    s[sticker.id] = {
+      name: sticker.title,
+      description: sticker.description,
+      src: sticker.image,
+      category: sticker.category,
+    }
+  }
+  return s
+}

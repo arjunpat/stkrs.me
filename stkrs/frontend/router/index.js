@@ -13,7 +13,8 @@ const routes = [
   {
     path: '/onboard',
     name: 'onboard',
-    component: () => import('../views/Onboard.vue')
+    component: () => import('../views/Onboard.vue'),
+    props: ({ query: { username, profilePic, bio } }) => ({ username, profilePic, bio }),
   },
   {
     path: '/sharedstkrs',
