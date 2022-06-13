@@ -87,7 +87,6 @@
           }
           Promise.all(promises).then(() => {
             this.setLoading(false)
-            console.log('ollol')
           })
         })
 
