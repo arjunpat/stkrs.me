@@ -54,17 +54,17 @@ export default new Vuex.Store({
   },
   actions: {
     fetchUser({ state, commit }) {
-      state.stkr.getUser([]).then(user => {
+      return state.stkr.getUser([]).then(user => {
         commit('setUser', formatUser(user))
       })
     },
     fetchStickers({ state, commit }) {
-      state.stkr.getStkrs([]).then(stickers => {
+      return state.stkr.getStkrs([]).then(stickers => {
         commit('setStickers', formatStickers(stickers))
       })
     },
     fetchPins({ state, commit }) {
-      state.stkr.getPins([]).then(pins => {
+      return state.stkr.getPins([]).then(pins => {
         commit('setPins', pins)
       })
     },

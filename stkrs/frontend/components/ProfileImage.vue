@@ -3,7 +3,7 @@
 <template>
   <div>
     <div v-if="horizontalDisplay" class="tw-flex"> 
-       <img :src="src" :style="style" />
+       <img @click="e => $emit('click', e)" :src="src" :style="style" class="tw-cursor-pointer" />
         <div class="tw-self-center tw-ml-8">
           <div class="tw-text-white tw-font-semibold tw-text-5xl tw-mb-2">
             {{name}}
@@ -29,6 +29,8 @@
 <script>
 export default {
   name: 'ProfileImage',
+
+  emits: ['click'],
 
   props: {
     name: { type: String, default: '' },

@@ -12,7 +12,7 @@
     "@dfinity/authentication": "0.10.0",
     "@dfinity/candid": "0.10.0",
     "@dfinity/identity": "0.10.0",
-    "@dfinity/principal": "0.10.0",
+    "@dfinity/principal": "^0.10.4",
     "vite-plugin-vue2": "^2.0.1",
     "vue": "^2.6.14",
     "vue-router": "^3.5.1",

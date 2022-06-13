@@ -24,8 +24,14 @@ const routes = [
   },
   {
     path: '/wall',
+    name: 'my-wall',
+    component: () => import('../views/Wall.vue'),
+  },
+  {
+    path: '/wall/:id',
     name: 'wall',
     component: () => import('../views/Wall.vue'),
+    props: true,
   },
   {
     path: '/about',

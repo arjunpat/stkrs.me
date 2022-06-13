@@ -26,8 +26,17 @@
           Pinned
         </div>
         <div class="tw-space-x-4">
-          <Sticker v-for="(stickerId, i) in pins" :key="i" v-bind="stickers[stickerId]" dark pin showName
-            :pinned="isPinned(stickerId)" @pin="togglePin(stickerId)" @click="showSticker(stickerId)"/>
+          <Sticker 
+            v-for="(stickerId, i) in pins" 
+            :key="i" 
+            v-bind="stickers[stickerId]" 
+            dark 
+            :pin="isCurUser" 
+            showName
+            :pinned="isPinned(stickerId)" 
+            @pin="togglePin(stickerId)" 
+            @click="showSticker(stickerId)"
+          />
         </div>
       </PaintDripSection>
 
@@ -46,8 +55,14 @@
               <div class="tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white">{{ category }}</div>
               <div class="tw-space-y-4">
                 <div v-for="stickerId, s in categories[category].stickers" :key="s" class="tw-flex">
-                  <Sticker v-bind="stickers[stickerId]" :pinned="isPinned(stickerId)" dark
-                    @pin="togglePin(stickerId)" @click="showSticker(stickerId)" />
+                  <Sticker 
+                    v-bind="stickers[stickerId]" 
+                    :pinned="isPinned(stickerId)" 
+                    dark
+                    @pin="togglePin(stickerId)" 
+                    @click="showSticker(stickerId)" 
+                    :pin="isCurUser"
+                  />
                   <div class="tw-w-96 tw-p-4">
                     <div class="tw-text-white tw-text-lg tw-font-semibold tw-tracking-wide">{{ stickers[stickerId].name
                     }}</div>
@@ -87,11 +102,17 @@ import PaintDrip from '../components/PaintDrip.vue'
 import Comment from '../components/Comment.vue'
 import BlobButton from '../components/BlobButton.vue'
 import CommentModal from '../components/CommentModal.vue'
+import { Principal } from "@dfinity/principal";
 
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
+import { formatUser, formatStickers } from '../utils'
 
 export default {
   name: 'Wall',
+
+  props: {
+    id: { type: String, default: '' },
+  },
 
   components: {
     BlobButton,
@@ -256,12 +277,22 @@ export default {
             'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
         },
       ],
+
+      user: null,
+      stickers: [],
+      pins: [],
+      principalString: '',
     }
   },
 
   computed: {
-    ...mapState(['stkr', 'authUserIdentity', 'user', 'stickers', 'pins']),
-    ...mapGetters(['principal', 'principalString']),
+    ...mapState(['stkr', 'authUserIdentity']),
+    ...mapState({
+      curUser: 'user', 
+      curUserStickers: 'stickers', 
+      curUserPins: 'pins',
+    }),
+    ...mapGetters({ curUserPrincipalString: 'principalString' }),
     categories() {
       const c = {}
       for (const stickerId of Object.keys(this.stickers)) {
@@ -278,14 +309,8 @@ export default {
       }
       return c
     },
-  },
-
-  watch: {
-    tab: {
-      immediate: false,
-      handler() {
-        this.tabColor = Object.values(this.categories)[this.tab].color
-      }
+    isCurUser() {
+      return this.id === ''
     },
   },
 
@@ -311,12 +336,55 @@ export default {
     showSticker(stickerId) {
       this.$router.push({ name: 'stkr', params: { id: stickerId } })
     },
+
+    setup() {
+      if (this.isCurUser) {
+        this.user = this.curUser
+        this.stickers = this.curUserStickers
+        this.pins = this.curUserPins
+        this.principalString = this.curUserPrincipalString
+        this.$store.dispatch('fetchUser').then(() => this.user = this.curUser)
+        this.$store.dispatch('fetchStickers').then(() => this.stickers = this.curUserStickers)
+        this.$store.dispatch('fetchPins').then(() => this.pins = this.curUserPins)
+      } else {
+        this.user = null
+        this.stickers = []
+        this.pins = []
+        this.principalString = ''
+        const principal = Principal.fromText(this.id)
+        this.principalString = principal.toString()
+        this.stkr.getUser([principal]).then(user => {
+          this.user = formatUser(user)
+        })
+        this.stkr.getStkrs([principal]).then(stickers => {
+          this.stickers = formatStickers(stickers)
+        })
+        this.stkr.getPins([principal]).then(pins => {
+          this.pins = pins
+        })
+
+        
+      }
+    },
   },
 
-  mounted() {
-    this.$store.dispatch('fetchUser')
-    this.$store.dispatch('fetchStickers')
-    this.$store.dispatch('fetchPins')
+  created() {
+    this.setup()
+  },
+
+  watch: {
+    tab: {
+      immediate: false,
+      handler() {
+        this.tabColor = Object.values(this.categories)[this.tab].color
+      }
+    },
+    $route: {
+      immediate: true,
+      handler() {
+        this.setup()
+      },
+    },
   },
 }
 </script>

@@ -11,9 +11,10 @@
         
         <div class="tw-grid tw-grid-cols-1 tw-gap-y-12 tw-justify-self-center tw-pt-5"> 
             <ProfileImage 
+            v-for="user, i in users"
+            @click="viewWall(user.principal)"
             horizontalDisplay
             class="tw-text-white tw-mt-5 tw-ml-5"
-            v-for="user, i in users"
             :key="`popular-${i}`" 
             :name="user.username"
             :src="user.profilePic"
@@ -61,6 +62,12 @@
 
     computed: {
       ...mapState([ 'stkr' ]),
+    },
+
+    methods: {
+      viewWall(principal) {
+        this.$router.push({ name: 'wall', params: { id: principal } })
+      },
     },
 
     async created() {

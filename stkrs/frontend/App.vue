@@ -1,12 +1,12 @@
 <template>
   <v-app>
     <v-app-bar app color="transparent" flat class="tw-z-20">
-      <img @click="() => $router.push('wall')" class="tw-h-32 tw-bg-contain" src="./assets/logostkrs.png">
+      <img @click="navigate('my-wall')" class="tw-h-32 tw-bg-contain" src="./assets/logostkrs.png">
 
       <v-spacer></v-spacer>
 
       <template v-if="authUserIdentity">
-        <BlobButton @click="navigate('wall')" text="Wall" :variant="2" fill="var(--color-blue-500)" expand-on-click />
+        <BlobButton @click="navigate('my-wall')" text="Wall" :variant="2" fill="var(--color-blue-500)" expand-on-click />
         <BlobButton @click="navigate('feed')" text="Feed" :variant="1" fill="var(--color-green-500)" expand-on-click />
       </template>
       <BlobButton @click="navigate('discover')" text="Discover" :variant="0" fill="var(--color-orange-500)"

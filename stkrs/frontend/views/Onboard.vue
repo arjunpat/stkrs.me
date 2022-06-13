@@ -78,7 +78,7 @@
     methods: {
       ...mapActions([ 'fetchUser', 'fetchStickers', 'fetchPins' ]),
       async submit() {
-        this.$router.push({ name: 'wall' })
+        this.$router.push({ name: 'my-wall' })
         await this.stkr.setUser({
           name: this._username,
           bio: this._bio,
