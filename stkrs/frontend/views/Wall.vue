@@ -1,5 +1,5 @@
 <template>
-  <div class="tw-flex tw-justify-center tw-bg-blue-600 tw-pb-56">
+  <div class="tw-flex tw-justify-center tw-bg-blue-600 tw-pb-56 tw-pt-20">
     <div class="tw-p-4 tw-max-w-6xl tw-m-auto tw-h-full">
       <PaintDripSection v-if="user" class="-tw-mt-4" color="blue-600">
         <div class="tw-flex">

@@ -8,14 +8,16 @@
           {{ categoryIcon }}
         </v-icon>
       </div>
-      <div class="tw-flex tw-ml-16">
-        <ProfileImage class="tw-mr-3" :src="sticker.image" :width="150" />
+      <div class="tw-flex tw-ml-12 tw-pr-3">
+        <ProfileImage :src="sticker.image" :width="150" />
       </div>
-      <div class="tw-flex tw-flex-col tw-h-full tw-bg-dark-gray tw-space-y-4 pl-5 pt-12">
+      <div class="tw-flex tw-flex-col tw-h-full tw-bg-dark-gray tw-space-y-4 pl-5 pt-6">
+        <div class="tw-bg-green-400 tw-rounded-lg tw-px-2 tw-mr-3">
         <h1 class="tw-text-lg">
-          <span class="tw-font-bold">{{ sticker.ownerUsername }}</span> just
+          <span class="tw-font-bold">{{ sticker.ownerUsername }}</span>
           earned a <span class="tw-font-bold">{{ sticker.name }}</span> NFT!
         </h1>
+        </div>
         <h2>
           <span v-for="community in sticker.shared" :key="community">
             <v-chip small class="mr-1 tw-text-black" color="light-green lighten-4">{{
@@ -61,6 +63,10 @@ export default {
           return 'mdi-google-controller'
         case 'Professional':
           return 'mdi-account-tie'
+        case 'Academic':
+          return 'mdi-school'
+        case 'Sports':
+          return 'mdi-basketball'
       }
     }
   },
