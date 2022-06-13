@@ -14,6 +14,8 @@ export default new Vuex.Store({
     user: null,
     stickers: [],
     pins: [],
+
+    loading: false,
   },
   getters: {
     principal(state) {
@@ -50,6 +52,10 @@ export default new Vuex.Store({
     },
     removePin(state, stickerId) {
       state.pins = state.pins.filter((id) => id !== stickerId)
+    },
+
+    setLoading(state, loading) {
+      state.loading = loading
     },
   },
   actions: {

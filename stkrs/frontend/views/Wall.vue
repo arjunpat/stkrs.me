@@ -315,7 +315,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['addPin', 'removePin']),
+    ...mapMutations(['addPin', 'removePin', 'setLoading']),
     ...mapActions(['fetchUser', 'fetchStickers', 'fetchPins']),
     edit() {
       const { username, profilePic, bio } = this.user
@@ -338,14 +338,18 @@ export default {
     },
 
     setup() {
+      this.setLoading(true)
+
+      let userP, stickersP, pinsP
       if (this.isCurUser) {
+        if (this.user) this.setLoading(false)
         this.user = this.curUser
         this.stickers = this.curUserStickers
         this.pins = this.curUserPins
         this.principalString = this.curUserPrincipalString
-        this.$store.dispatch('fetchUser').then(() => this.user = this.curUser)
-        this.$store.dispatch('fetchStickers').then(() => this.stickers = this.curUserStickers)
-        this.$store.dispatch('fetchPins').then(() => this.pins = this.curUserPins)
+        userP = this.$store.dispatch('fetchUser').then(() => this.user = this.curUser)
+        stickersP = this.$store.dispatch('fetchStickers').then(() => this.stickers = this.curUserStickers)
+        pinsP = this.$store.dispatch('fetchPins').then(() => this.pins = this.curUserPins)
       } else {
         this.user = null
         this.stickers = []
@@ -353,18 +357,20 @@ export default {
         this.principalString = ''
         const principal = Principal.fromText(this.id)
         this.principalString = principal.toString()
-        this.stkr.getUser([principal]).then(user => {
+        userP = this.stkr.getUser([principal]).then(user => {
           this.user = formatUser(user)
         })
-        this.stkr.getStkrs([principal]).then(stickers => {
+        stickersP = this.stkr.getStkrs([principal]).then(stickers => {
           this.stickers = formatStickers(stickers)
         })
-        this.stkr.getPins([principal]).then(pins => {
+        pinsP = this.stkr.getPins([principal]).then(pins => {
           this.pins = pins
         })
-
-        
       }
+
+      Promise.all([userP, stickersP, pinsP]).then(() => {
+        this.setLoading(false)
+      })
     },
   },
 

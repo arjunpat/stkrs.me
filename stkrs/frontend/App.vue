@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="transparent" flat class="tw-z-20">
+    <v-app-bar app color="transparent" flat class="tw-z-30">
       <img @click="navigate('my-wall')" class="tw-h-32 tw-bg-contain" src="./assets/logostkrs.png">
 
       <v-spacer></v-spacer>
@@ -32,6 +32,15 @@
       </v-card>
     </v-dialog>
 
+    <v-fade-transition>
+      <div v-if="loading" class="tw-fixed tw-z-20 tw-left-0 tw-top-0 tw-h-screen tw-w-screen tw-bg-blue-600 tw-grid tw-place-content-center">
+        <div class="-tw-mt-40 tw-flex tw-items-center">
+          <img class="tw-h-40 tw-bg-contain" src="./assets/loader.svg">
+          <div class="tw-text-7xl tw-font-semibold tw-text-center tw-text-white">Loading...</div>
+        </div>
+      </div>
+    </v-fade-transition>
+
     <v-main class="tw-p-0 tw-relative tw-z-10">
       <router-view />
     </v-main>
@@ -58,7 +67,7 @@ export default {
   }),
 
   computed: {
-    ...mapState(['authClient', 'authUserIdentity', 'stkr']),
+    ...mapState(['authClient', 'authUserIdentity', 'stkr', 'loading']),
   },
 
   methods: {

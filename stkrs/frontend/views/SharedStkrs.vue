@@ -32,7 +32,7 @@
   import ProfileImage from '../components/ProfileImage.vue'
   import PaintDripSection from '../components/PaintDripSection.vue'
   import PaintDrip from '../components/PaintDrip.vue'
-  import { mapState } from 'vuex'
+  import { mapState, mapMutations } from 'vuex'
   import { formatUser } from '../utils'
 
 
@@ -65,24 +65,49 @@
     },
 
     methods: {
+      ...mapMutations([ 'setLoading' ]),
       viewWall(principal) {
         this.$router.push({ name: 'wall', params: { id: principal } })
       },
+      setup() {
+        this.users = []
+        this.setLoading(true)
+
+        this.stkr.getUsersWStkr(parseInt(this.id)).then(users => {
+          const promises = []
+          for (const principal of users) {
+            promises.push(
+              this.stkr.getUser([ principal ]).then(user => {
+                this.users.push({
+                  ...formatUser(user),
+                  principal: principal.toString(),
+                })
+              })
+            )
+          }
+          Promise.all(promises).then(() => {
+            this.setLoading(false)
+            console.log('ollol')
+          })
+        })
+
+        // TODO: add logic for getting the details of the stkr with the given id
+      },
     },
 
-    async created() {
-      this.stkr.getUsersWStkr(parseInt(this.id)).then(users => {
-        for (const principal of users) {
-          this.stkr.getUser([ principal ]).then(user => {
-            this.users.push({
-              ...formatUser(user),
-              principal: principal.toString(),
-            })
-          })
-        }
-      })
+    created() {
+      console.log('created')
+      this.setup()
+    },
 
-      // TODO: add logic for getting the details of the stkr with the given id
+    watch: {
+      $route: {
+        immediate: false,
+        handler() {
+          console.log('routee')
+          this.setup()
+        },
+      },
     },
   }
 </script>
