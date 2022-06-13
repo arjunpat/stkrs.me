@@ -1,10 +1,7 @@
 <template>
   <v-app>
-    <div class="tw-absolute -tw-top-7 tw-left-3 tw-z-40">
-      <img @click="() => $router.push('wall')" class="tw-h-56" src="./assets/logostkrs.png">
-    </div>
     <v-app-bar app color="transparent" flat class="tw-z-20">
-
+      <img @click="() => $router.push('wall')" class="tw-h-32 tw-bg-contain" src="./assets/logostkrs.png">
 
       <v-spacer></v-spacer>
 
@@ -95,7 +92,7 @@ export default {
     },
   },
 
-  async mounted() {
+  async created() {
     const authClient = await AuthClient.create()
     this.setAuthClient(authClient)
     const isAuthenticated = await authClient.isAuthenticated()

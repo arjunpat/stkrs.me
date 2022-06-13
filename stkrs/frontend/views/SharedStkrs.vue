@@ -9,13 +9,16 @@
             <div class="tw-text-white tw-text-xl tw-font-bold text-center"> {{ name }} </div>
         </template>
         
-        <div class="tw-w-screen tw-m-8 tw-grid tw-h-96 tw-justify-self-center tw-pt-5 tw-overflow-auto"> 
+        <div class="tw-grid tw-grid-cols-1 tw-gap-y-12 tw-justify-self-center tw-pt-5"> 
             <ProfileImage 
             horizontalDisplay
-            class="tw-text-white tw-mt-5 tw-ml-32"
-            v-for="item, i in users"
+            class="tw-text-white tw-mt-5 tw-ml-5"
+            v-for="user, i in users"
             :key="`popular-${i}`" 
-            v-bind="item"
+            :name="user.username"
+            :src="user.profilePic"
+            :bio="user.bio"
+            :principal="user.principal"
             />
         </div>
     </div>
@@ -24,15 +27,20 @@
 </template>
 
 <script>
-  import { AuthClient } from "@dfinity/auth-client";
   import Sticker from '../components/Sticker.vue'
   import ProfileImage from '../components/ProfileImage.vue'
   import PaintDripSection from '../components/PaintDripSection.vue'
   import PaintDrip from '../components/PaintDrip.vue'
+  import { mapState } from 'vuex'
+  import { formatUser } from '../utils'
 
 
   export default {
     name: 'SharedStkrs',
+
+    props: {
+      id: { type: Number | String, required: true },
+    },
 
     components: {
         Sticker,
@@ -48,95 +56,26 @@
 
       sharedStkr: "https://blog.hubspot.com/hubfs/image8-2.jpg",
       name: "Google Dev",
-       users: [
-            {
-              name: "0xFa333mousUser",
-              src: "https://lh3.googleusercontent.com/gxfnxG53rQYUNh6_fOiJ-H3g_vPF0OH2m3_3eMrwL5eTKzn0YVjqulzC6dmL4kQIVPx4mWR_dOHUbZ2QXGiuoJeI4gX730_inVAvUw=w343",
-              principal: "Engineer",
-              bio: "Worked as a cafeteria worker in UPenn, specialist in Cookies",
-            },
-            {
-              name: "0xFamousUser",
-              src: "https://preview.redd.it/n6obp98tlpx81.jpg?width=640&crop=smart&auto=webp&s=dab57706ecb0ad9f29bed995927140fbc7b179fc",
-              principal: "Engineer",
-              bio: "Worked as a cafeteria worker in UPenn, specialist in Cookies",
-            },
-            {
-              name: "0xFamousUser",
-              src: "https://i.pinimg.com/736x/d8/c0/03/d8c0032028f9039f0daee27a3a41c51c.jpg",
-              principal: "Engineer",
-              bio: "Worked as a cafeteria worker in UPenn, specialist in Cookies",
-            },
-            {
-              name: "0xFamousUser",
-              src: "https://lh3.googleusercontent.com/gxfnxG53rQYUNh6_fOiJ-H3g_vPF0OH2m3_3eMrwL5eTKzn0YVjqulzC6dmL4kQIVPx4mWR_dOHUbZ2QXGiuoJeI4gX730_inVAvUw=w343",
-              principal: "Engineer",
-              bio: "Worked as a cafeteria worker in UPenn, specialist in Cookies",
-            },
-            {
-              name: "0xFamousUser",
-              src: "https://lh3.googleusercontent.com/gxfnxG53rQYUNh6_fOiJ-H3g_vPF0OH2m3_3eMrwL5eTKzn0YVjqulzC6dmL4kQIVPx4mWR_dOHUbZ2QXGiuoJeI4gX730_inVAvUw=w343",
-              principal: "Engineer",
-              bio: "Worked as a cafeteria worker in UPenn, specialist in Cookies",
-            },
-       ],
+      users: [],
     }),
 
-    methods: {
-      async checkLogIn() {
-        if (await authClient.isAuthenticated()) {
-          handleAuthenticated(authClient);
-        }
-      },
-      async handleAuthenticated(authClient) {
-        const idenityt = await authClient.getIdentity();
-        const whoami_actor = createActor(canisterId, {
-          agentOptions: {
-            identity,
-          },
-        });
-        authClient.idleManager?.registerCallback(() => {
-          Actor.agentOf(whoami_actor)?.invalidateIdentity?.();
-          renderIndex();
-        });
-        //redirect goes here to a logged in wall or something
-      }
+    computed: {
+      ...mapState([ 'stkr' ]),
     },
-    async mounted() {
-      this.client = await AuthClient.create()
-      clientReady.value = true
-      const isAuthenticated = await client.isAuthenticated()
 
-      if (isAuthenticated) {
-        const identity = client.getIdentity()
-        principal.value = identity.getPrincipal().toString()
-        signedIn.value = true
-      }
+    async created() {
+      this.stkr.getUsersWStkr(parseInt(this.id)).then(users => {
+        for (const principal of users) {
+          this.stkr.getUser([ principal ]).then(user => {
+            this.users.push({
+              ...formatUser(user),
+              principal: principal.toString(),
+            })
+          })
+        }
+      })
 
-
-
-      const authClient = await AuthClient.create();
-      const loginButton = document.getElementById(
-        "loginButton"
-      );
-
-      const days = BigInt(4);
-      const hours = BigInt(24);
-      const nanoseconds = BigInt(3600000000000);
-
-      loginButton.onclick = async () => {
-        await authClient.login({
-          onSuccess: async () => {
-            handleAuthenticated(authClient);
-          },
-          identityProvider:
-            process.env.DFX_NETWORK === "ic"
-              ? "https://identity.ic0.app/#authorize"
-              : process.env.LOCAL_II_CANISTER,
-          // Maximum authorization expiration is 8 days
-          maxTimeToLive: days * hours * nanoseconds,
-        });
-      };
-    }
+      // TODO: add logic for getting the details of the stkr with the given id
+    },
   }
 </script>

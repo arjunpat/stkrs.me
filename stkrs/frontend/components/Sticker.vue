@@ -5,10 +5,10 @@
     <div 
       class="tw-relative tw-p-1 tw-border tw-border-solid tw-border-gray-300 tw-rounded-full tw-mb-2 tw-bg-white"
     >
-      <img :src="src" class="tw-rounded-full tw-object-cover" :style="style">
+      <img @click="e => $emit('click', e)" :src="src" class="tw-rounded-full tw-object-cover tw-cursor-pointer" :style="style">
       <v-btn 
         @click="$emit('pin', !pinned)"
-        v-if="showPin"
+        v-if="pin && showPin"
         x-small 
         fab 
         absolute 
@@ -29,7 +29,7 @@
 export default {
   name: 'Sticker',
 
-  emits: ['pin'],
+  emits: ['pin', 'click'],
 
   props: {
     src: { type: String, required: true },

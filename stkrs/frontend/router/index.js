@@ -17,9 +17,10 @@ const routes = [
     props: ({ query: { username, profilePic, bio } }) => ({ username, profilePic, bio }),
   },
   {
-    path: '/sharedstkrs',
-    name: 'sharedstkrs',
-    component: () => import('../views/SharedStkrs.vue')
+    path: '/stkr/:id',
+    name: 'stkr',
+    component: () => import('../views/SharedStkrs.vue'),
+    props: true,
   },
   {
     path: '/wall',

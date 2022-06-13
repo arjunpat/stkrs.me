@@ -27,7 +27,7 @@
         </div>
         <div class="tw-space-x-4">
           <Sticker v-for="(stickerId, i) in pins" :key="i" v-bind="stickers[stickerId]" dark pin showName
-            :pinned="isPinned(stickerId)" @pin="togglePin(stickerId)" />
+            :pinned="isPinned(stickerId)" @pin="togglePin(stickerId)" @click="showSticker(stickerId)"/>
         </div>
       </PaintDripSection>
 
@@ -47,7 +47,7 @@
               <div class="tw-space-y-4">
                 <div v-for="stickerId, s in categories[category].stickers" :key="s" class="tw-flex">
                   <Sticker v-bind="stickers[stickerId]" :pinned="isPinned(stickerId)" dark
-                    @pin="togglePin(stickerId)" />
+                    @pin="togglePin(stickerId)" @click="showSticker(stickerId)" />
                   <div class="tw-w-96 tw-p-4">
                     <div class="tw-text-white tw-text-lg tw-font-semibold tw-tracking-wide">{{ stickers[stickerId].name
                     }}</div>
@@ -280,11 +280,6 @@ export default {
     },
   },
 
-  methods: {
-    ...mapMutations(['addPin', 'removePin']),
-    ...mapActions(['fetchUser', 'fetchStickers', 'fetchPins']),
-  },
-
   watch: {
     tab: {
       immediate: false,
@@ -295,6 +290,8 @@ export default {
   },
 
   methods: {
+    ...mapMutations(['addPin', 'removePin']),
+    ...mapActions(['fetchUser', 'fetchStickers', 'fetchPins']),
     edit() {
       const { username, profilePic, bio } = this.user
       this.$router.push({ name: 'onboard', query: { username, profilePic, bio  } })
@@ -310,6 +307,9 @@ export default {
     },
     isPinned(stickerId) {
       return this.pins.includes(stickerId)
+    },
+    showSticker(stickerId) {
+      this.$router.push({ name: 'stkr', params: { id: stickerId } })
     },
   },
 

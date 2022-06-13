@@ -5,7 +5,7 @@
     <div v-if="horizontalDisplay" class="tw-flex"> 
        <img :src="src" :style="style" />
         <div class="tw-self-center tw-ml-8">
-          <div class="tw-text-white tw-font-semibold tw-text-5xl">
+          <div class="tw-text-white tw-font-semibold tw-text-5xl tw-mb-2">
             {{name}}
           </div>
           <div class="tw-text-white tw-font-extralight tw-text-md">{{principal}}</div>
