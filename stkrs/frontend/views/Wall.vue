@@ -9,7 +9,7 @@
               <div class="tw-text-white tw-font-semibold tw-text-5xl tw-mr-4">
                 {{ user.username }}
               </div>
-              <v-btn @click="edit" icon class="tw-text-white">
+              <v-btn v-if="isCurUser" @click="edit" icon class="tw-text-white">
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
             </div>
@@ -64,8 +64,12 @@
                     :pin="isCurUser"
                   />
                   <div class="tw-w-96 tw-p-4">
-                    <div class="tw-text-white tw-text-lg tw-font-semibold tw-tracking-wide">{{ stickers[stickerId].name
-                    }}</div>
+                    <div class="tw-text-white tw-text-xl tw-font-semibold tw-tracking-wide">{{ stickers[stickerId].name}}</div>
+                    <div class="tw-text-white tw-flex tw-items-center">
+                      <div class="tw-mr-1">Awarded by</div> 
+                      <div class="tw-font-medium tw-mr-1">{{ stickers[stickerId].organization }}</div>
+                      <v-icon class="tw-text-blue-400 tw-text-sm">mdi-check-decagram</v-icon>
+                    </div>
                     <div class="tw-text-gray-300">{{ stickers[stickerId].description }}</div>
                   </div>
                 </div>

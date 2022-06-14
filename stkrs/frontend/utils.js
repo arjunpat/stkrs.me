@@ -46,6 +46,7 @@ export const formatStickers = stickers => {
   for (const sticker of stickers) {
     s[sticker.id] = {
       name: sticker.title,
+      organization: sticker.organization,
       description: sticker.description,
       src: sticker.image,
       category: sticker.category,

@@ -90,6 +90,7 @@ export default {
 
   methods: {
     ...mapMutations(['setUser', 'setAuthClient','setAuthUserIdentity', 'setStkr']),
+    ...mapActions(['fetchStickers', 'fetchPins']),
     navigate(name) {
       if (this.$route.name !== name)
         this.$router.push({ name: name })
