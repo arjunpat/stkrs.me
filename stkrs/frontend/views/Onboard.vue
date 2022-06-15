@@ -5,8 +5,8 @@
   <div class="tw-grid tw-h-full tw-w-full tw-place-content-center">
     <div>
       <img class="tw-object-scale-down tw-h-72 tw-w-96" src="../assets/logostkrs.png">
-      <form class="tw-pt-8 tw-space-y-8">
-          <div class="tw-flex tw-flex-col tw-space-y-4">
+      <form class="tw-pt-8 tw-space-y-8 tw-text-white">
+          <div class="tw-flex tw-flex-col tw-space-y-4 ">
               <label>Welcome! What do you want your username to be?</label>
               <input 
               v-model="_username"
