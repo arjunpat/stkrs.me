@@ -2,7 +2,7 @@
   <v-app>
     <template v-if="$route.meta.showNavBar">
       <v-app-bar app color="transparent" flat class="tw-z-30">
-      <img @click="navigate('my-wall')" class="tw-h-32 tw-bg-contain hover:tw-h-48 hover:w-64" src="./assets/logostkrs.png">
+      <img @click="navigate('my-wall')" class="tw-h-32 tw-bg-contain" src="./assets/logostkrs.png">
 
       <v-spacer></v-spacer>
 
