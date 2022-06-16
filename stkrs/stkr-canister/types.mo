@@ -11,6 +11,12 @@ module {
     image: Text;
   };
 
+  public type Comment = {
+    creator: Principal;
+    content: Text;
+    createdAt: Int;
+  };
+
   public type UserData = {
     name: Text;
     bio: Text;

@@ -8,6 +8,7 @@ import Hash "mo:base/Hash";
 import Array "mo:base/Array";
 import Debug "mo:base/Debug";
 import Option "mo:base/Option";
+import Time "mo:base/Time";
 
 import T "types";
 
@@ -16,6 +17,7 @@ actor {
   private var userToStkr = HashMap.HashMap<Principal, TrieSet.Set<Nat>>(10, Principal.equal, Principal.hash);
   private var userToData = HashMap.HashMap<Principal, T.UserData>(10, Principal.equal, Principal.hash);
   private var userToPins = HashMap.HashMap<Principal, TrieSet.Set<Nat>>(10, Principal.equal, Principal.hash);
+  private var userToComments = HashMap.HashMap<Principal, Buffer.Buffer<T.Comment>>(10, Principal.equal, Principal.hash);
 
   public shared (msg) func createStkr(title: Text, organization: Text, description: Text, category: Text, image: Text): async Nat {
     let s: T.Stkr = {
@@ -72,6 +74,31 @@ actor {
       case (?s) s
     };
     Array.map(TrieSet.toArray(stkrs), stkrEntries.get)
+  };
+
+  public shared (msg) func addComment(u: Principal, content: Text): () {
+    let comments: Buffer.Buffer<T.Comment> = switch (userToComments.get(u)) {
+      case null {
+        let b = Buffer.Buffer<T.Comment>(0);
+        userToComments.put(u, b);
+        b
+      };
+      case (?c) c
+    };
+    let c: T.Comment = {
+      creator = u;
+      content;
+      createdAt = Time.now();
+    };
+    comments.add(c);
+  };
+
+  public shared query func getComments(u: Principal): async [T.Comment]  {
+    let comments: Buffer.Buffer<T.Comment> = switch (userToComments.get(u)) {
+      case null Buffer.Buffer<T.Comment>(0);
+      case (?c) c
+    };
+    comments.toArray()
   };
 
   public shared (msg) func addPin(stkr: Nat): () {
