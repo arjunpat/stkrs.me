@@ -9,15 +9,50 @@ import Array "mo:base/Array";
 import Debug "mo:base/Debug";
 import Option "mo:base/Option";
 import Time "mo:base/Time";
+import Iter "mo:base/Iter";
 
 import T "types";
 
 actor {
-  private var stkrEntries: Buffer.Buffer<T.Stkr> = Buffer.Buffer(0);
-  private var userToStkr = HashMap.HashMap<Principal, TrieSet.Set<Nat>>(10, Principal.equal, Principal.hash);
-  private var userToData = HashMap.HashMap<Principal, T.UserData>(10, Principal.equal, Principal.hash);
-  private var userToPins = HashMap.HashMap<Principal, TrieSet.Set<Nat>>(10, Principal.equal, Principal.hash);
-  private var userToComments = HashMap.HashMap<Principal, Buffer.Buffer<T.Comment>>(10, Principal.equal, Principal.hash);
+  private stable var stkrEntries_s: [T.Stkr] = [];
+  private stable var userToStkr_s: [(Principal, TrieSet.Set<Nat>)] = [];
+  private stable var userToData_s: [(Principal, T.UserData)] = [];
+  private stable var userToPins_s: [(Principal, TrieSet.Set<Nat>)] = [];
+  private stable var userToComments_s: [(Principal, [T.Comment])] = [];
+
+  private func fromArray<X>(elems: [X]): Buffer.Buffer<X> {
+    let buff = Buffer.Buffer<X>(elems.size());
+    for (elem in elems.vals()) {
+      buff.add(elem)
+    };
+    buff
+  };
+
+  private let stkrEntries: Buffer.Buffer<T.Stkr> = fromArray(stkrEntries_s);
+  private let userToStkr = HashMap.fromIter<Principal, TrieSet.Set<Nat>>(userToStkr_s.vals(), 10, Principal.equal, Principal.hash);
+  private let userToData = HashMap.fromIter<Principal, T.UserData>(userToData_s.vals(), 10, Principal.equal, Principal.hash);
+  private let userToPins = HashMap.fromIter<Principal, TrieSet.Set<Nat>>(userToPins_s.vals(), 10, Principal.equal, Principal.hash);
+  private let userToComments = HashMap.fromIter<Principal, [T.Comment]>(userToComments_s.vals(), 10, Principal.equal, Principal.hash);
+
+  system func preupgrade() {
+    Debug.print("Starting pre-upgrade hook...");
+    stkrEntries_s := stkrEntries.toArray();
+    userToStkr_s := Iter.toArray(userToStkr.entries());
+    userToData_s := Iter.toArray(userToData.entries());
+    userToPins_s := Iter.toArray(userToPins.entries());
+    userToComments_s := Iter.toArray(userToComments.entries());
+    Debug.print("pre-upgrade finished.");
+  };
+
+  system func postupgrade() {
+    Debug.print("Starting post-upgrade hook...");
+    stkrEntries_s := [];
+    userToStkr_s := [];
+    userToData_s := [];
+    userToPins_s := [];
+    userToComments_s := [];
+    Debug.print("post-upgrade finished.");
+  };
 
   public shared (msg) func createStkr(title: Text, organization: Text, description: Text, category: Text, image: Text): async Nat {
     let s: T.Stkr = {
@@ -78,12 +113,8 @@ actor {
 
   public shared (msg) func addComment(u: Principal, content: Text): () {
     let comments: Buffer.Buffer<T.Comment> = switch (userToComments.get(u)) {
-      case null {
-        let b = Buffer.Buffer<T.Comment>(0);
-        userToComments.put(u, b);
-        b
-      };
-      case (?c) c
+      case null Buffer.Buffer<T.Comment>(0);
+      case (?c) fromArray(c);
     };
     let c: T.Comment = {
       creator = msg.caller;
@@ -91,14 +122,14 @@ actor {
       createdAt = Time.now();
     };
     comments.add(c);
+    userToComments.put(u, comments.toArray());
   };
 
   public shared query func getComments(u: Principal): async [T.Comment]  {
-    let comments: Buffer.Buffer<T.Comment> = switch (userToComments.get(u)) {
-      case null Buffer.Buffer<T.Comment>(0);
+    switch (userToComments.get(u)) {
+      case null [];
       case (?c) c
-    };
-    comments.toArray()
+    }
   };
 
   public shared (msg) func addPin(stkr: Nat): () {
@@ -153,5 +184,17 @@ actor {
       }
     };
     ret.toArray()
+  };
+
+  public query func getSharedStkrs(u1: Principal, u2: Principal): async [Nat] {
+    let u1stkrs = switch (userToStkr.get(u1)) {
+      case null TrieSet.empty();
+      case (?s) s
+    };
+    let u2stkrs = switch (userToStkr.get(u2)) {
+      case null TrieSet.empty();
+      case (?s) s
+    };
+    TrieSet.toArray(TrieSet.intersect(u1stkrs, u2stkrs, Nat.equal))
   }
 }
