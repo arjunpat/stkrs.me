@@ -33,7 +33,10 @@ export const signOut = async () => {
   store.commit('setAuthUserIdentity', null)
 }
 
-export const formatUser = ([{ bio, name, profile_image }]) => {
+export const formatUser = ([user]) => {
+  if (!user) return null
+  
+  const { bio, name, profile_image } = user
   return {
     username: name,
     profilePic: profile_image,
@@ -44,13 +47,17 @@ export const formatUser = ([{ bio, name, profile_image }]) => {
 export const formatStickers = stickers => {
   const s = {}
   for (const sticker of stickers) {
-    s[sticker.id] = {
-      name: sticker.title,
-      organization: sticker.organization,
-      description: sticker.description,
-      src: sticker.image,
-      category: sticker.category,
-    }
+    s[sticker.id] = formatSticker(sticker)
   }
   return s
+}
+
+export const formatSticker = sticker => {
+  return {
+    name: sticker.title,
+    organization: sticker.organization,
+    description: sticker.description,
+    src: sticker.image,
+    category: sticker.category,
+  }
 }

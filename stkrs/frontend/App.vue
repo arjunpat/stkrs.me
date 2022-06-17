@@ -42,7 +42,7 @@
       </div>
     </v-fade-transition>
 
-    <v-main class="tw-p-0 tw-relative tw-z-10">
+    <v-main class="tw-p-0 tw-relative tw-z-10 tw-saturate-[.7]">
       <router-view />
     </v-main>
     </template> 
@@ -89,7 +89,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['setUser', 'setAuthClient','setAuthUserIdentity', 'setStkr']),
+    ...mapMutations(['setUser', 'setStickers', 'setPins', 'setAuthClient','setAuthUserIdentity', 'setStkr']),
     ...mapActions(['fetchStickers', 'fetchPins']),
     navigate(name) {
       if (this.$route.name !== name)
@@ -116,6 +116,9 @@ export default {
     },
     async signOut() {
       await signOut()
+      this.setUser(null)
+      this.setStickers([])
+      this.setPins([])
       this.$router.push({ name: 'discover' })
     },
   },

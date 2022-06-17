@@ -1,12 +1,11 @@
 
 <template>
-  <div class="tw-justify-center tw-h-full tw-pt-16 tw-bg-green-600">
-    <PaintDripSection class="-tw-mt-4 tw-h-5/6" color="blue-600">
+  <div>
+    <PaintDripSection color="blue-600">
     <div class="tw-grid tw-justify-center"> 
         <template>
             <h1 class="tw-text-white tw-text-6xl tw-font-bold text-center">StkrWalls With: </h1>
-            <Sticker class="tw-pt-4" :src="sharedStkr" showName> </Sticker>
-            <div class="tw-text-white tw-text-xl tw-font-bold text-center"> {{ name }} </div>
+            <Sticker class="tw-pt-4" v-bind="sticker" showName dark> </Sticker>
         </template>
         
         <div class="tw-grid tw-grid-cols-1 tw-gap-y-12 tw-justify-self-center tw-pt-5"> 
@@ -24,6 +23,7 @@
         </div>
     </div>
     </PaintDripSection>
+    <div class="tw-bg-green-600 tw-h-40"></div>
   </div>
 </template>
 
@@ -33,7 +33,7 @@
   import PaintDripSection from '../components/PaintDripSection.vue'
   import PaintDrip from '../components/PaintDrip.vue'
   import { mapState, mapMutations } from 'vuex'
-  import { formatUser } from '../utils'
+  import { formatSticker, formatUser } from '../utils'
 
 
   export default {
@@ -51,6 +51,7 @@
     },
 
     data: () => ({
+      sticker: {},
       client: null,
       clientReady: false,
       signedIn: false,
@@ -91,6 +92,9 @@
         })
 
         // TODO: add logic for getting the details of the stkr with the given id
+        this.stkr.getStkr(parseInt(this.id)).then(sticker => {
+          this.sticker = formatSticker(sticker)
+        })
       },
     },
 

@@ -25,7 +25,7 @@
         <div class="tw-text-center tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white">
           Pinned
         </div>
-        <div class="tw-space-x-4">
+        <div v-if="pins.length > 0" class="tw-space-x-4">
           <Sticker 
             v-for="(stickerId, i) in pins" 
             :key="i" 
@@ -38,46 +38,59 @@
             @click="showSticker(stickerId)"
           />
         </div>
+        <div v-else class="tw-text-center tw-text-lg tw-text-white">
+          No pinned stkrs yet!
+        </div>  
       </PaintDripSection>
 
       <PaintDripSection :color="tabColor">
-        <v-tabs id="tabGroup" v-model="tab" centered :background-color="`var(--${tabColor})`" icons-and-text>
-          <v-tabs-slider color="transparent"></v-tabs-slider>
-          <v-tab v-for="category in Object.keys(categories)" :key="category" :ripple="false">
-            <BlobButton :text="category" :fill="`var(--color-${categoryBtnColors[category]})`" />
-          </v-tab>
-        </v-tabs>
+        <template v-if="Object.keys(stickers).length === 0">
+          <div class="tw-text-center tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white">
+            Stkrs
+          </div>
+          <div class="tw-text-center tw-text-lg tw-text-white">
+            No stkrs yet!
+          </div>
+        </template>
+
+        <template v-else>
+          <v-tabs id="tabGroup" v-model="tab" centered :background-color="`var(--${tabColor})`" icons-and-text>
+            <v-tabs-slider color="transparent"></v-tabs-slider>
+            <v-tab v-for="category in Object.keys(categories)" :key="category" :ripple="false">
+              <BlobButton :text="category" :fill="`var(--color-${categoryBtnColors[category]})`" />
+            </v-tab>
+          </v-tabs>
 
 
-        <v-tabs-items continuous v-model="tab" class="tabItemGroup tw-w-screen">
-          <v-tab-item v-for="(category, i) in Object.keys(categories)" :key="category">
-            <PaintDripSection :key="i" :color="categories[category].color">
-              <div class="tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white">{{ category }}</div>
-              <div class="tw-space-y-4">
-                <div v-for="stickerId, s in categories[category].stickers" :key="s" class="tw-flex">
-                  <Sticker 
-                    v-bind="stickers[stickerId]" 
-                    :pinned="isPinned(stickerId)" 
-                    dark
-                    @pin="togglePin(stickerId)" 
-                    @click="showSticker(stickerId)" 
-                    :pin="isCurUser"
-                  />
-                  <div class="tw-w-96 tw-p-4">
-                    <div class="tw-text-white tw-text-xl tw-font-semibold tw-tracking-wide">{{ stickers[stickerId].name}}</div>
-                    <div class="tw-text-white tw-flex tw-items-center">
-                      <div class="tw-mr-1">Awarded by</div> 
-                      <div class="tw-font-medium tw-mr-1">{{ stickers[stickerId].organization }}</div>
-                      <v-icon class="tw-text-blue-400 tw-text-sm">mdi-check-decagram</v-icon>
+          <v-tabs-items continuous v-model="tab" class="tabItemGroup tw-w-screen">
+            <v-tab-item v-for="(category, i) in Object.keys(categories)" :key="category">
+              <PaintDripSection :key="i" :color="categories[category].color">
+                <div class="tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white">{{ category }}</div>
+                <div class="tw-space-y-4">
+                  <div v-for="stickerId, s in categories[category].stickers" :key="s" class="tw-flex">
+                    <Sticker 
+                      v-bind="stickers[stickerId]" 
+                      :pinned="isPinned(stickerId)" 
+                      dark
+                      @pin="togglePin(stickerId)" 
+                      @click="showSticker(stickerId)" 
+                      :pin="isCurUser"
+                    />
+                    <div class="tw-w-96 tw-p-4">
+                      <div class="tw-text-white tw-text-xl tw-font-semibold tw-tracking-wide">{{ stickers[stickerId].name}}</div>
+                      <div class="tw-text-white tw-flex tw-items-center">
+                        <div class="tw-mr-1">Awarded by</div> 
+                        <div class="tw-font-medium tw-mr-1">{{ stickers[stickerId].organization }}</div>
+                        <v-icon class="tw-text-blue-400 tw-text-sm">mdi-check-decagram</v-icon>
+                      </div>
+                      <div class="tw-text-gray-300">{{ stickers[stickerId].description }}</div>
                     </div>
-                    <div class="tw-text-gray-300">{{ stickers[stickerId].description }}</div>
                   </div>
                 </div>
-              </div>
-            </PaintDripSection>
-          </v-tab-item>
-        </v-tabs-items>
-
+              </PaintDripSection>
+            </v-tab-item>
+          </v-tabs-items>
+        </template>
       </PaintDripSection>
 
       <PaintDripSection color="purple-600">
@@ -130,7 +143,7 @@ export default {
 
   data() {
     return {
-      tabColor: '',
+      tabColor: 'red-600',
       tab: null,
       // stickers: {
       //   asdf: {
@@ -351,7 +364,7 @@ export default {
         this.stickers = this.curUserStickers
         this.pins = this.curUserPins
         this.principalString = this.curUserPrincipalString
-        userP = this.$store.dispatch('fetchUser').then(() => this.user = this.curUser)
+        userP = this.$store.dispatch('fetchUser').then(() => {this.user = this.curUser})
         stickersP = this.$store.dispatch('fetchStickers').then(() => this.stickers = this.curUserStickers)
         pinsP = this.$store.dispatch('fetchPins').then(() => this.pins = this.curUserPins)
       } else {
@@ -393,6 +406,21 @@ export default {
       immediate: true,
       handler() {
         this.setup()
+      },
+    },
+    curUser: {
+      handler() {
+        this.user = this.curUser
+      },
+    },
+    curUserStickers: {
+      handler() {
+        this.stickers = this.curUserStickers
+      },
+    },
+    curUserPins: {
+      handler() {
+        this.pins = this.curUserPins
       },
     },
   },
