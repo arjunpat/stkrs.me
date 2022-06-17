@@ -8,6 +8,18 @@
             <div class="tw-mb-2 tw-flex tw-items-center">
               <div class="tw-text-white tw-font-semibold tw-text-5xl tw-mr-4">
                 {{ user.username }}
+                <v-tooltip top v-if="Object.keys(stickers).length > 3">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon class="tw-text-4xl tw-text-green-300" v-bind="attrs" v-on="on">mdi-check-decagram</v-icon>
+                  </template>
+                  <span>Verified</span>
+                </v-tooltip>
+                <v-tooltip top v-else>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon class="tw-text-4xl tw-text-yellow-300" v-bind="attrs" v-on="on">mdi-help-circle</v-icon>
+                  </template>
+                  <span>Unverified</span>
+                </v-tooltip>
               </div>
               <v-btn v-if="isCurUser" @click="edit" icon class="tw-text-white">
                 <v-icon>mdi-pencil</v-icon>
@@ -26,21 +38,12 @@
           Pinned
         </div>
         <div v-if="pins.length > 0" class="tw-space-x-4">
-          <Sticker 
-            v-for="(stickerId, i) in pins" 
-            :key="i" 
-            v-bind="stickers[stickerId]" 
-            dark 
-            :pin="isCurUser" 
-            showName
-            :pinned="isPinned(stickerId)" 
-            @pin="togglePin(stickerId)" 
-            @click="showSticker(stickerId)"
-          />
+          <Sticker v-for="(stickerId, i) in pins" :key="i" v-bind="stickers[stickerId]" dark :pin="isCurUser" showName
+            :pinned="isPinned(stickerId)" @pin="togglePin(stickerId)" @click="showSticker(stickerId)" />
         </div>
         <div v-else class="tw-text-center tw-text-lg tw-text-white">
           No pinned stkrs yet!
-        </div>  
+        </div>
       </PaintDripSection>
 
       <PaintDripSection :color="tabColor">
@@ -68,18 +71,14 @@
                 <div class="tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white">{{ category }}</div>
                 <div class="tw-space-y-4">
                   <div v-for="stickerId, s in categories[category].stickers" :key="s" class="tw-flex">
-                    <Sticker 
-                      v-bind="stickers[stickerId]" 
-                      :pinned="isPinned(stickerId)" 
-                      dark
-                      @pin="togglePin(stickerId)" 
-                      @click="showSticker(stickerId)" 
-                      :pin="isCurUser"
-                    />
+                    <Sticker v-bind="stickers[stickerId]" :pinned="isPinned(stickerId)" dark @pin="togglePin(stickerId)"
+                      @click="showSticker(stickerId)" :pin="isCurUser" />
                     <div class="tw-w-96 tw-p-4">
-                      <div class="tw-text-white tw-text-xl tw-font-semibold tw-tracking-wide">{{ stickers[stickerId].name}}</div>
+                      <div class="tw-text-white tw-text-xl tw-font-semibold tw-tracking-wide">{{
+                          stickers[stickerId].name
+                      }}</div>
                       <div class="tw-text-white tw-flex tw-items-center">
-                        <div class="tw-mr-1">Awarded by</div> 
+                        <div class="tw-mr-1">Awarded by</div>
                         <div class="tw-font-medium tw-mr-1">{{ stickers[stickerId].organization }}</div>
                         <v-icon class="tw-text-blue-400 tw-text-sm">mdi-check-decagram</v-icon>
                       </div>
@@ -102,7 +101,7 @@
         </div>
         <div v-else class="tw-text-center tw-text-lg tw-text-white">
           No comments yet!
-        </div>  
+        </div>
         <div v-if="!isCurUser" class="tw-text-center tw-mt-5">
           <CommentModal class="tw-mt-6" @submit="text => addComment(text)"></CommentModal>
         </div>
@@ -309,8 +308,8 @@ export default {
   computed: {
     ...mapState(['stkr', 'authUserIdentity']),
     ...mapState({
-      curUser: 'user', 
-      curUserStickers: 'stickers', 
+      curUser: 'user',
+      curUserStickers: 'stickers',
       curUserPins: 'pins',
       curUserComments: 'comments',
     }),
@@ -348,7 +347,7 @@ export default {
     },
     edit() {
       const { username, profilePic, bio } = this.user
-      this.$router.push({ name: 'onboard', query: { username, profilePic, bio  } })
+      this.$router.push({ name: 'onboard', query: { username, profilePic, bio } })
     },
     togglePin(stickerId) {
       if (this.isPinned(stickerId)) {
@@ -377,7 +376,7 @@ export default {
         this.pins = this.curUserPins
         this.principalString = this.curUserPrincipalString
         promises = [
-          this.$store.dispatch('fetchUser').then(() => {this.user = this.curUser}),
+          this.$store.dispatch('fetchUser').then(() => { this.user = this.curUser }),
           this.$store.dispatch('fetchStickers').then(() => this.stickers = this.curUserStickers),
           this.$store.dispatch('fetchPins').then(() => this.pins = this.curUserPins),
           this.$store.dispatch('fetchComments').then(() => this.comments = this.curUserComments),
@@ -404,7 +403,7 @@ export default {
               this.comments = comments
               resolve()
             })
-          }) 
+          })
         ]
       }
 
