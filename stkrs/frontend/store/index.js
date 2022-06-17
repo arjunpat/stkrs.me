@@ -1,4 +1,4 @@
-import { formatStickers, formatUser } from '../utils'
+import { formatStickers, formatUser, getComments } from '../utils'
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -14,6 +14,7 @@ export default new Vuex.Store({
     user: null,
     stickers: [],
     pins: [],
+    comments: [],
 
     loading: false,
   },
@@ -35,6 +36,9 @@ export default new Vuex.Store({
     },
     setStkr(state, stkr) {
       state.stkr = stkr
+    },
+    setComments(state, comments) {
+      state.comments = comments
     },
 
     setUser(state, user) {
@@ -59,21 +63,26 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    fetchUser({ state, commit }) {
-      return state.stkr.getUser([]).then(user => {
+    async fetchUser({ state, commit }) {
+      await state.stkr.getUser([]).then(user => {
         commit('setUser', formatUser(user))
       })
     },
-    fetchStickers({ state, commit }) {
-      return state.stkr.getStkrs([]).then(stickers => {
+    async fetchStickers({ state, commit }) {
+      await state.stkr.getStkrs([]).then(stickers => {
         commit('setStickers', formatStickers(stickers))
       })
     },
-    fetchPins({ state, commit }) {
-      return state.stkr.getPins([]).then(pins => {
+    async fetchPins({ state, commit }) {
+      await state.stkr.getPins([]).then(pins => {
         commit('setPins', pins)
       })
     },
+    async fetchComments({ getters, commit }) {
+      await getComments(getters.principal).then(comments => {
+        commit('setComments', comments)
+      })
+    }
   },
   modules: {
   }

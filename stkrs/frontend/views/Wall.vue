@@ -97,11 +97,14 @@
         <div class="tw-text-center tw-text-4xl tw-font-semibold tw-mb-4 tw-text-white">
           Comments
         </div>
-        <div class="tw-grid tw-grid-cols-3 tw-gap-4">
+        <div v-if="comments.length > 0" class="tw-grid tw-grid-cols-3 tw-gap-4">
           <Comment v-for="(comment, i) in comments" :key="i" :comment="comment" />
         </div>
-        <div class="tw-text-center tw-mt-5">
-          <CommentModal class="tw-mt-6"></CommentModal>
+        <div v-else class="tw-text-center tw-text-lg tw-text-white">
+          No comments yet!
+        </div>  
+        <div v-if="!isCurUser" class="tw-text-center tw-mt-5">
+          <CommentModal class="tw-mt-6" @submit="text => addComment(text)"></CommentModal>
         </div>
       </PaintDripSection>
 
@@ -122,7 +125,7 @@ import CommentModal from '../components/CommentModal.vue'
 import { Principal } from "@dfinity/principal";
 
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
-import { formatUser, formatStickers } from '../utils'
+import { formatUser, formatStickers, getComments } from '../utils'
 
 export default {
   name: 'Wall',
@@ -208,92 +211,93 @@ export default {
         'Fun': 'orange-500',
         'Communities': 'pink-500',
       },
-      comments: [
-        {
-          user: {
-            username: 'orangeBananaPeels',
-            profilePic:
-              'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
-          },
-          shared: [
-            {
-              name: 'Google Developer',
-              logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
-            },
-          ],
-          date: new Date(2022, 2, 14),
-          comment:
-            'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
-        },
-        {
-          user: {
-            username: 'orangeBananaPeels',
-            profilePic:
-              'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
-          },
-          shared: [
-            {
-              name: 'Google Developer',
-              logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
-            },
-            {
-              name: 'Intel Software Engineer',
-              logo: 'https://logos-world.net/wp-content/uploads/2021/09/Intel-Emblem.png',
-            },
-          ],
-          date: new Date(2022, 2, 14),
-          comment:
-            'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
-        },
-        {
-          user: {
-            username: 'orangeBananaPeels',
-            profilePic:
-              'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
-          },
-          shared: [
-            {
-              name: 'Google Developer',
-              logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
-            },
-          ],
-          date: new Date(2022, 2, 14),
-          comment:
-            'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
-        },
-        {
-          user: {
-            username: 'orangeBananaPeels',
-            profilePic:
-              'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
-          },
-          shared: [
-            {
-              name: 'Google Developer',
-              logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
-            },
-          ],
-          date: new Date(2022, 2, 14),
-          comment:
-            'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
-        },
-        {
-          user: {
-            username: 'orangeBananaPeels',
-            profilePic:
-              'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
-          },
-          shared: [
-            {
-              name: 'Google Developer',
-              logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
-            },
-          ],
-          date: new Date(2022, 2, 14),
-          comment:
-            'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
-        },
-      ],
+      comments: [],
+      // comments: [
+      //   {
+      //     user: {
+      //       username: 'orangeBananaPeels',
+      //       profilePic:
+      //         'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
+      //     },
+      //     shared: [
+      //       {
+      //         name: 'Google Developer',
+      //         logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+      //       },
+      //     ],
+      //     date: new Date(2022, 2, 14),
+      //     comment:
+      //       'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
+      //   },
+      //   {
+      //     user: {
+      //       username: 'orangeBananaPeels',
+      //       profilePic:
+      //         'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
+      //     },
+      //     shared: [
+      //       {
+      //         name: 'Google Developer',
+      //         logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+      //       },
+      //       {
+      //         name: 'Intel Software Engineer',
+      //         logo: 'https://logos-world.net/wp-content/uploads/2021/09/Intel-Emblem.png',
+      //       },
+      //     ],
+      //     date: new Date(2022, 2, 14),
+      //     comment:
+      //       'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
+      //   },
+      //   {
+      //     user: {
+      //       username: 'orangeBananaPeels',
+      //       profilePic:
+      //         'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
+      //     },
+      //     shared: [
+      //       {
+      //         name: 'Google Developer',
+      //         logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+      //       },
+      //     ],
+      //     date: new Date(2022, 2, 14),
+      //     comment:
+      //       'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
+      //   },
+      //   {
+      //     user: {
+      //       username: 'orangeBananaPeels',
+      //       profilePic:
+      //         'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
+      //     },
+      //     shared: [
+      //       {
+      //         name: 'Google Developer',
+      //         logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+      //       },
+      //     ],
+      //     date: new Date(2022, 2, 14),
+      //     comment:
+      //       'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
+      //   },
+      //   {
+      //     user: {
+      //       username: 'orangeBananaPeels',
+      //       profilePic:
+      //         'https://lh3.googleusercontent.com/mtOBxi8slFO8Wu2N4Qz-EsEM-eI4j3nK15Q1ZdypUoHy4JQ8CUJDsfIlpzMMhwR9tZvf7DOLdZSsnTyOxKzgn3DzYbDP5aJ-Xxf0gA=s550',
+      //     },
+      //     shared: [
+      //       {
+      //         name: 'Google Developer',
+      //         logo: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+      //       },
+      //     ],
+      //     date: new Date(2022, 2, 14),
+      //     comment:
+      //       'He was amazing to work with at Google. Is a great young talent that loves to learn! He picks up things extremely quickly and is always open to helping others as well.',
+      //   },
+      // ],
 
       user: null,
       stickers: [],
@@ -308,8 +312,9 @@ export default {
       curUser: 'user', 
       curUserStickers: 'stickers', 
       curUserPins: 'pins',
+      curUserComments: 'comments',
     }),
-    ...mapGetters({ curUserPrincipalString: 'principalString' }),
+    ...mapGetters({ curUserPrincipal: 'principal', curUserPrincipalString: 'principalString' }),
     categories() {
       const c = {}
       for (const stickerId of Object.keys(this.stickers)) {
@@ -334,6 +339,13 @@ export default {
   methods: {
     ...mapMutations(['addPin', 'removePin', 'setLoading']),
     ...mapActions(['fetchUser', 'fetchStickers', 'fetchPins']),
+    async addComment(text) {
+      const principal = Principal.fromText(this.id)
+      await this.stkr.addComment(principal, text)
+      getComments(principal).then(comments => {
+        this.comments = comments
+      })
+    },
     edit() {
       const { username, profilePic, bio } = this.user
       this.$router.push({ name: 'onboard', query: { username, profilePic, bio  } })
@@ -357,16 +369,19 @@ export default {
     setup() {
       this.setLoading(true)
 
-      let userP, stickersP, pinsP
+      let promises = []
       if (this.isCurUser) {
         if (this.user) this.setLoading(false)
         this.user = this.curUser
         this.stickers = this.curUserStickers
         this.pins = this.curUserPins
         this.principalString = this.curUserPrincipalString
-        userP = this.$store.dispatch('fetchUser').then(() => {this.user = this.curUser})
-        stickersP = this.$store.dispatch('fetchStickers').then(() => this.stickers = this.curUserStickers)
-        pinsP = this.$store.dispatch('fetchPins').then(() => this.pins = this.curUserPins)
+        promises = [
+          this.$store.dispatch('fetchUser').then(() => {this.user = this.curUser}),
+          this.$store.dispatch('fetchStickers').then(() => this.stickers = this.curUserStickers),
+          this.$store.dispatch('fetchPins').then(() => this.pins = this.curUserPins),
+          this.$store.dispatch('fetchComments').then(() => this.comments = this.curUserComments),
+        ]
       } else {
         this.user = null
         this.stickers = []
@@ -374,24 +389,36 @@ export default {
         this.principalString = ''
         const principal = Principal.fromText(this.id)
         this.principalString = principal.toString()
-        userP = this.stkr.getUser([principal]).then(user => {
-          this.user = formatUser(user)
-        })
-        stickersP = this.stkr.getStkrs([principal]).then(stickers => {
-          this.stickers = formatStickers(stickers)
-        })
-        pinsP = this.stkr.getPins([principal]).then(pins => {
-          this.pins = pins
-        })
+        promises = [
+          this.stkr.getUser([principal]).then(user => {
+            this.user = formatUser(user)
+          }),
+          this.stkr.getStkrs([principal]).then(stickers => {
+            this.stickers = formatStickers(stickers)
+          }),
+          this.stkr.getPins([principal]).then(pins => {
+            this.pins = pins
+          }),
+          new Promise((resolve, reject) => {
+            return getComments(principal).then(comments => {
+              this.comments = comments
+              resolve()
+            })
+          }) 
+        ]
       }
 
-      Promise.all([userP, stickersP, pinsP]).then(() => {
-        this.setLoading(false)
+      Promise.all(promises).then(() => {
+        if (this.user)
+          this.setLoading(false)
       })
     },
   },
 
   created() {
+    if (this.id === this.curUserPrincipalString) {
+      this.$router.replace({ name: 'my-wall' })
+    }
     this.setup()
   },
 
@@ -408,19 +435,29 @@ export default {
         this.setup()
       },
     },
+    user: {
+      handler() {
+        if (this.user) this.setLoading(false)
+      }
+    },
     curUser: {
       handler() {
-        this.user = this.curUser
+        if (this.isCurUser) this.user = this.curUser
       },
     },
     curUserStickers: {
       handler() {
-        this.stickers = this.curUserStickers
+        if (this.isCurUser) this.stickers = this.curUserStickers
       },
     },
     curUserPins: {
       handler() {
-        this.pins = this.curUserPins
+        if (this.isCurUser) this.pins = this.curUserPins
+      },
+    },
+    curUserComments: {
+      handler() {
+        if (this.isCurUser) this.comments = this.curUserComments
       },
     },
   },

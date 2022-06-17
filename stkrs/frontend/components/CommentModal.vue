@@ -13,15 +13,11 @@
                     <span>What would you like to comment?</span>
                 </v-card-title>
                 <v-card-text>
-                    <v-container>
-                        <v-row>
-                            <v-textarea auto-grow solo placeholder=""></v-textarea>
-                        </v-row>
-                    </v-container>
+                    <v-textarea v-model="text" hide-details auto-grow solo placeholder="Type a comment..."></v-textarea>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="purple lighten-1" text @click="dialog = false">
+                    <v-btn color="purple lighten-1" text @click="dialog = false; $emit('submit', text)">
                         Submit
                     </v-btn>
                 </v-card-actions>
@@ -33,8 +29,12 @@
 <script>
 export default {
     name: 'CommentModal',
+
+    emits: ['submit'],
+
     data: () => ({
         dialog: false,
+        text: '',
     }),
 }
 </script>

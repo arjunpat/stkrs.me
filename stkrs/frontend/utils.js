@@ -61,3 +61,32 @@ export const formatSticker = sticker => {
     category: sticker.category,
   }
 }
+
+export const formatComment = comment => {
+  const { creator, content, createdAt } = comment
+  return {
+    creator,
+    comment: content,
+    date: new Date(Number(createdAt / BigInt(1000000)))
+  }
+}
+
+export const getComments = async (principal) => {
+  const commentsFormatted = []
+
+  const promises = []
+  await store.state.stkr.getComments(principal).then(comments => {
+    for (const comment of comments) {
+      const promise = store.state.stkr.getUser([ comment.creator ]).then(user => {
+        commentsFormatted.push({
+          ...formatComment(comment),
+          user: formatUser(user),
+        })
+      })
+      promises.push(promise)
+    }
+  })
+  await Promise.all(promises)
+
+  return commentsFormatted
+}

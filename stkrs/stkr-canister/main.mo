@@ -86,7 +86,7 @@ actor {
       case (?c) c
     };
     let c: T.Comment = {
-      creator = u;
+      creator = msg.caller;
       content;
       createdAt = Time.now();
     };

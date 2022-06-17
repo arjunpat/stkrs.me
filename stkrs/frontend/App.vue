@@ -90,7 +90,7 @@ export default {
 
   methods: {
     ...mapMutations(['setUser', 'setStickers', 'setPins', 'setAuthClient','setAuthUserIdentity', 'setStkr']),
-    ...mapActions(['fetchStickers', 'fetchPins']),
+    ...mapActions(['fetchUser', 'fetchStickers', 'fetchPins', 'fetchComments']),
     navigate(name) {
       if (this.$route.name !== name)
         this.$router.push({ name: name })
@@ -106,6 +106,7 @@ export default {
           this.setUser(formatUser(user)) 
           this.fetchStickers()
           this.fetchPins()
+          this.fetchComments()
           this.$router.push({ name: 'wall' })
         }
         this.loadingSignIn = false
@@ -139,9 +140,10 @@ export default {
       })
       this.setStkr(stkr)
 
-      this.$store.dispatch('fetchUser')
-      this.$store.dispatch('fetchStickers')
-      this.$store.dispatch('fetchPins')
+      this.fetchUser()
+      this.fetchStickers()
+      this.fetchPins()
+      this.fetchComments()
     }
   },
 };
