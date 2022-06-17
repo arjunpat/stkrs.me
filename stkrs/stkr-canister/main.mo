@@ -196,5 +196,9 @@ actor {
       case (?s) s
     };
     TrieSet.toArray(TrieSet.intersect(u1stkrs, u2stkrs, Nat.equal))
+  };
+
+  public query func getUsers(): async [(Principal, T.UserData)] {
+    Iter.toArray(userToData.entries())
   }
 }
