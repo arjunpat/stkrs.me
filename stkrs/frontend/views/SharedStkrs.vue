@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <PaintDripSection color="blue-600">
+    <PaintDripSection color="blue-600" class="tw-min-h-screen">
     <div class="tw-grid tw-justify-center"> 
         <template>
             <h1 class="tw-text-white tw-text-6xl tw-font-bold text-center">StkrWalls With: </h1>

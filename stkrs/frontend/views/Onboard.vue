@@ -1,7 +1,7 @@
 
 <template>
   <div> 
-    <PaintDripSection color="blue-600">
+    <PaintDripSection color="blue-600" class="tw-min-h-screen">
       <div class="tw-grid tw-place-content-center tw-pb-3 -tw-my-20">
         <div>
           <img class="tw-object-scale-down tw-h-72 tw-w-96" src="../assets/logostkrs.png">
