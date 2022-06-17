@@ -54,10 +54,10 @@ actor {
     Debug.print("post-upgrade finished.");
   };
 
-  public shared(msg) func createStkr(title: Text, organization: Text, description: Text, category: Text, image: Text): async Nat {
+  public shared({ caller }) func createStkr(title: Text, organization: Text, description: Text, category: Text, image: Text): async Nat {
     let s: T.Stkr = {
       id = stkrEntries.size();
-      creator = msg.caller;
+      creator = caller;
       title;
       organization;
       description;
