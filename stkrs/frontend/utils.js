@@ -77,10 +77,20 @@ export const getComments = async (principal) => {
   const promises = []
   await store.state.stkr.getComments(principal).then(comments => {
     for (const comment of comments) {
-      const promise = store.state.stkr.getUser([ comment.creator ]).then(user => {
+      const promise = store.state.stkr.getUser([ comment.creator ]).then(async user => {
+        const shared = await store.state.stkr.getSharedStkrs(principal, comment.creator).then(async stickers => {
+          const shared = []
+          for (const stickerId of stickers) {
+            await store.state.stkr.getStkr(stickerId).then(sticker => {
+              shared.push(formatSticker(sticker))
+            }) 
+          }
+          return shared
+        })
         commentsFormatted.push({
           ...formatComment(comment),
           user: formatUser(user),
+          shared,
         })
       })
       promises.push(promise)

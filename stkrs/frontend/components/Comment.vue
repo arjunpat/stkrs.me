@@ -28,7 +28,7 @@
                   <v-tooltip top color="purple-600">
                     <template v-slot:activator="{ on, attrs }">
                       <img
-                        :src="community.logo"
+                        :src="community.src"
                         class="tw-rounded-full tw-object-cover"
                         style="height: 15px; width: 15px"
                         v-bind="attrs"
