@@ -4,24 +4,39 @@
       <h1
         class="tw-mb-10 tw-text-white tw-text-6xl tw-font-bold tw-place-content-center text-center tw-underline tw-decoration-8 tw-decoration-orange-400">
         Discover</h1>
-      <Search holder="Search StkrWalls..."></Search>
-      <div class="tw-flex">
-        <h1 class="tw-text-white tw-text-4xl tw-font-bold tw-mt-10 tw-mb-6">Popular Stkr Walls of the Day</h1>
-      </div>
-      <div class="tw-grid tw-grid-flow-col tw-justify-center tw-bg-orange-400 tw-p-5 tw-rounded-t-2xl tw-rounded-b-lg">
-        <ProfileImage class="tw-flex tw-mr-10 tw-text-white " v-for="item, i in popularSouls" :key="`popular-${i}`"
-          v-bind="item" />
-      </div>
-      <PaintDrip class="tw-h-20 tw-w-full" :color="`var(--color-orange-400)`" :numDrops="10"></PaintDrip>
+      <Search holder="Search StkrWalls..." @search="showFilteredProfiles"></Search>
+      <div v-if="!searching">
+        <div class="tw-flex">
+          <h1 class="tw-text-white tw-text-4xl tw-font-bold tw-mt-10 tw-mb-6">Popular Stkr Walls of the Day</h1>
+        </div>
+        <div class="tw-grid tw-grid-cols-4 tw-justify-center tw-bg-orange-400 tw-p-5 tw-rounded-t-2xl tw-rounded-b-lg">
+          <ProfileImage class="tw-flex tw-mr-10 tw-text-white " v-for="item, i in popularSouls" :key="`popular-${i}`"
+            v-bind="item" />
+        </div>
+        <PaintDrip class="tw-h-20 tw-w-full" :color="`var(--color-orange-400)`" :numDrops="10"></PaintDrip>
 
-      <div>
-        <h1 class="tw-text-white tw-text-4xl tw-font-bold tw-mt-10 tw-mb-6">Meet Someone New!</h1>
+        <div>
+          <h1 class="tw-text-white tw-text-4xl tw-font-bold tw-mt-10 tw-mb-6">Meet Someone New!</h1>
+        </div>
+        <div class="tw-grid tw-grid-cols-4 tw-justify-center tw-bg-orange-400 tw-p-5 tw-rounded-t-2xl tw-rounded-b-lg">
+          <ProfileImage class="tw-mr-10 tw-text-white" v-for="item, i in discover" :key="i" v-bind="item" />
+        </div>
+        <PaintDrip class="tw-h-20 tw-w-full" :color="`var(--color-orange-400)`" :numDrops="10"></PaintDrip>
       </div>
-      <div class="tw-grid tw-grid-flow-col tw-justify-center tw-bg-orange-400 tw-p-5 tw-rounded-t-2xl tw-rounded-b-lg">
-        <ProfileImage class="tw-mr-10 tw-text-white" v-for="item, i in discover" :key="i" v-bind="item" />
+      <div v-else>
+        <div class="tw-grid tw-grid-cols-4">
+          <v-fade-transition v-for="item, i in filteredProfiles" :key="i">
+            <div>
+              <div
+                class="tw-w-64 tw-flex tw-justify-center tw-bg-orange-400 tw-p-5 tw-rounded-t-2xl tw-rounded-b-lg tw-mt-10">
+                <ProfileImage class="tw-text-white" v-bind="item" />
+              </div>
+              <PaintDrip class="tw-h-10 tw-w-full tw-w-56" :color="`var(--color-orange-400)`" :numDrops="4"></PaintDrip>
+            </div>
+          </v-fade-transition>
+        </div>
 
       </div>
-      <PaintDrip class="tw-h-20 tw-w-full" :color="`var(--color-orange-400)`" :numDrops="10"></PaintDrip>
     </div>
   </div>
 </template>
@@ -42,6 +57,8 @@ export default {
   },
   data: () => ({
     placeHolder: "Search StkrWalls...",
+    searching: false,
+    filteredProfiles: [],
     popularSouls: [
       {
         name: "0xFamousUser",
@@ -93,6 +110,19 @@ export default {
       },
     ],
   }),
+  methods: {
+    showFilteredProfiles(searchString) {
+      if (searchString != '') {
+        this.searching = true
+        const regexp = new RegExp(searchString, 'i');
+        this.filteredProfiles = this.popularSouls.filter(x => regexp.test(x.name)) // replace this.popularSouls with profiles from backend
+      } else {
+        this.searching = false
+      }
+    }
+  },
+  computed: {
+  }
 }
 </script>
 
