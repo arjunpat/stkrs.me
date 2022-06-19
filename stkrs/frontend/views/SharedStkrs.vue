@@ -91,7 +91,7 @@
             this.setLoading(false)
           })
         })
-        
+
         publicStkr.getStkr(parseInt(this.id)).then(sticker => {
           this.sticker = formatSticker(sticker)
         })
@@ -99,7 +99,7 @@
     },
 
     created() {
-      console.log('created')
+      document.body.scrollTop = document.documentElement.scrollTop = 0
       this.setup()
     },
 

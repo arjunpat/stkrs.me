@@ -85,7 +85,10 @@ export const getComments = async (principal) => {
           const shared = []
           for (const stickerId of stickers) {
             await publicStkr.getStkr(stickerId).then(sticker => {
-              shared.push(formatSticker(sticker))
+              shared.push({
+                ...formatSticker(sticker),
+                id: stickerId,
+              })
             }) 
           }
           return shared
@@ -110,4 +113,8 @@ export const getComments = async (principal) => {
 
 export const goToWall = (principalString) => {
   router.push({ name: 'wall', params: { id: principalString }, })
+}
+
+export const goToSticker = (stickerId) => {
+  router.push({ name: 'stkr', params: { id: stickerId }, })
 }

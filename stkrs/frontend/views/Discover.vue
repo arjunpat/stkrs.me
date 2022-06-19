@@ -120,7 +120,6 @@ export default {
       goToWall(principalString)
     },
     showFilteredProfiles(searchString) {
-      console.log(this.users)
       if (searchString != '') {
         this.searching = true
         const regexp = new RegExp(searchString, 'i');
@@ -129,6 +128,10 @@ export default {
         this.searching = false
       }
     },
+  },
+
+  created() {
+    document.body.scrollTop = document.documentElement.scrollTop = 0
   },
 
   watch: {
