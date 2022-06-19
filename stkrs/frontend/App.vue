@@ -90,7 +90,7 @@ export default {
 
   methods: {
     ...mapMutations(['setUser', 'setStickers', 'setPins', 'setAuthClient','setAuthUserIdentity', 'setStkr']),
-    ...mapActions(['fetchUser', 'fetchStickers', 'fetchPins', 'fetchComments']),
+    ...mapActions(['fetchUser', 'fetchStickers', 'fetchPins', 'fetchComments', 'fetchUsers']),
     navigate(name) {
       if (this.$route.name !== name)
         this.$router.push({ name: name })
@@ -125,6 +125,8 @@ export default {
   },
 
   async created() {
+    this.fetchUsers()
+
     const authClient = await AuthClient.create()
     this.setAuthClient(authClient)
     const isAuthenticated = await authClient.isAuthenticated()

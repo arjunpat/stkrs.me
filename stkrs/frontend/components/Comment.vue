@@ -8,7 +8,7 @@
       >
         <div class="tw-flex">
           <div class="tw-flex-col tw-mr-2">
-            <ProfileImage :src="comment.user.profilePic" :width="45" />
+            <ProfileImage :src="comment.user.profilePic" :width="45" @click="goToWall(comment.user.principalString)" />
           </div>
           <div class="tw-flex-col">
             <h1 class="tw-text-sm tw-text-black">
@@ -65,6 +65,7 @@
 <script>
 import PaintDrip from '../components/PaintDrip.vue'
 import ProfileImage from '../components/ProfileImage.vue'
+import { goToWall } from '../utils'
 
 export default {
   name: 'Comment',
@@ -81,6 +82,12 @@ export default {
   data: () => ({}),
 
   computed: {},
+
+  methods: {
+    goToWall(principalString) {
+      goToWall(principalString)
+    },
+  },
 
   created() {},
 }

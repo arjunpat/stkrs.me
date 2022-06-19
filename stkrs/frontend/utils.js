@@ -1,5 +1,8 @@
 import store from './store'
+import router from './router'
 import { createActor } from 'canisters/stkr'
+import { stkr as publicStkr } from 'canisters/stkr'
+import Vue from 'vue'
 
 export const signIn = async () => {
   const days = BigInt(1)
@@ -75,13 +78,13 @@ export const getComments = async (principal) => {
   const commentsFormatted = []
 
   const promises = []
-  await store.state.stkr.getComments(principal).then(comments => {
+  await publicStkr.getComments(principal).then(comments => {
     for (const comment of comments) {
-      const promise = store.state.stkr.getUser([ comment.creator ]).then(async user => {
-        const shared = await store.state.stkr.getSharedStkrs(principal, comment.creator).then(async stickers => {
+      const promise = publicStkr.getUser([ comment.creator ]).then(async user => {
+        const shared = await publicStkr.getSharedStkrs(principal, comment.creator).then(async stickers => {
           const shared = []
           for (const stickerId of stickers) {
-            await store.state.stkr.getStkr(stickerId).then(sticker => {
+            await publicStkr.getStkr(stickerId).then(sticker => {
               shared.push(formatSticker(sticker))
             }) 
           }
@@ -89,7 +92,11 @@ export const getComments = async (principal) => {
         })
         commentsFormatted.push({
           ...formatComment(comment),
-          user: formatUser(user),
+          user: {
+            ...formatUser(user),
+            principal: comment.creator,
+            principalString: comment.creator.toString(),
+          },
           shared,
         })
       })
@@ -99,4 +106,8 @@ export const getComments = async (principal) => {
   await Promise.all(promises)
 
   return commentsFormatted
+}
+
+export const goToWall = (principalString) => {
+  router.push({ name: 'wall', params: { id: principalString }, })
 }

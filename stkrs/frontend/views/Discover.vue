@@ -9,17 +9,17 @@
         <div class="tw-flex">
           <h1 class="tw-text-white tw-text-4xl tw-font-bold tw-mt-10 tw-mb-6">Popular Stkr Walls of the Day</h1>
         </div>
-        <div class="tw-grid tw-grid-cols-4 tw-justify-center tw-bg-orange-400 tw-p-5 tw-rounded-t-2xl tw-rounded-b-lg">
+        <div class="tw-flex tw-flex-wrap tw-justify-center tw-bg-orange-400 tw-p-5 tw-rounded-t-2xl tw-rounded-b-lg">
           <ProfileImage class="tw-flex tw-mr-10 tw-text-white " v-for="item, i in popularSouls" :key="`popular-${i}`"
-            v-bind="item" />
+            :src="item.profilePic" :name="item.username" @click="goToWall(item.principalString)"/>
         </div>
         <PaintDrip class="tw-h-20 tw-w-full" :color="`var(--color-orange-400)`" :numDrops="10"></PaintDrip>
 
         <div>
           <h1 class="tw-text-white tw-text-4xl tw-font-bold tw-mt-10 tw-mb-6">Meet Someone New!</h1>
         </div>
-        <div class="tw-grid tw-grid-cols-4 tw-justify-center tw-bg-orange-400 tw-p-5 tw-rounded-t-2xl tw-rounded-b-lg">
-          <ProfileImage class="tw-mr-10 tw-text-white" v-for="item, i in discover" :key="i" v-bind="item" />
+        <div class="tw-flex tw-flex-wrap tw-justify-center tw-bg-orange-400 tw-p-5 tw-rounded-t-2xl tw-rounded-b-lg">
+          <ProfileImage class="tw-mr-10 tw-text-white" v-for="item, i in discover" :key="i" :src="item.profilePic" :name="item.username" @click="goToWall(item.principalString)" />
         </div>
         <PaintDrip class="tw-h-20 tw-w-full" :color="`var(--color-orange-400)`" :numDrops="10"></PaintDrip>
       </div>
@@ -29,7 +29,7 @@
             <div>
               <div
                 class="tw-w-64 tw-flex tw-justify-center tw-bg-orange-400 tw-p-5 tw-rounded-t-2xl tw-rounded-b-lg tw-mt-10">
-                <ProfileImage class="tw-text-white" v-bind="item" />
+                <ProfileImage class="tw-text-white" :src="item.profilePic" :name="item.username" @click="goToWall(item.principalString)" />
               </div>
               <PaintDrip class="tw-h-10 tw-w-full tw-w-56" :color="`var(--color-orange-400)`" :numDrops="4"></PaintDrip>
             </div>
@@ -46,6 +46,8 @@ import Sticker from '../components/Sticker.vue'
 import PaintDrip from '../components/PaintDrip.vue'
 import ProfileImage from '../components/ProfileImage.vue'
 import Search from '../components/Search.vue'
+import { mapState } from 'vuex'
+import { goToWall } from '../utils'
 
 export default {
   name: 'Discover',
@@ -110,19 +112,43 @@ export default {
       },
     ],
   }),
+  computed: {
+    ...mapState([ 'users' ]),
+  },
   methods: {
+    goToWall(principalString) {
+      goToWall(principalString)
+    },
     showFilteredProfiles(searchString) {
+      console.log(this.users)
       if (searchString != '') {
         this.searching = true
         const regexp = new RegExp(searchString, 'i');
-        this.filteredProfiles = this.popularSouls.filter(x => regexp.test(x.name)) // replace this.popularSouls with profiles from backend
+        this.filteredProfiles = this.users.filter(x => regexp.test(x.username)) // replace this.popularSouls with profiles from backend
       } else {
         this.searching = false
       }
+    },
+  },
+
+  watch: {
+    users: {
+      immediate: true,
+      handler() {
+        if (this.users) {
+          this.popularSouls = []
+          this.discover = []
+          for (let i = 0; i < this.users.length; ++i) {
+            if (i % 2 === 0) {
+              this.popularSouls.push(this.users[i])
+            } else {
+              this.discover.push(this.users[i])
+            }
+          }
+        }
+      },
     }
   },
-  computed: {
-  }
 }
 </script>
 

@@ -14,7 +14,7 @@
     </div>
     <div v-else class="tw-inline-block tw-items-center tw-drop-shadow-xl">
       <div>
-        <img :src="src" :style="style" />
+        <img @click="e => $emit('click', e)" :src="src" :style="style" class="tw-cursor-pointer" />
       </div>
       <div class="tw-text-sm tw-text-center tw-font-medium tw-my-3">
         <v-chip color="orange" class="tw-text-white" v-show="name !== ''">{{ name }}</v-chip>
