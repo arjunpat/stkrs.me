@@ -1,6 +1,7 @@
 import { formatStickers, formatUser, getComments } from '../utils'
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { stkr as publicStkr } from 'canisters/stkr'
 
 Vue.use(Vuex)
 
@@ -15,6 +16,8 @@ export default new Vuex.Store({
     stickers: [],
     pins: [],
     comments: [],
+
+    users: [],
 
     loading: false,
   },
@@ -58,6 +61,10 @@ export default new Vuex.Store({
       state.pins = state.pins.filter((id) => id !== stickerId)
     },
 
+    setUsers(state, users) {
+      state.users = users
+    },
+
     setLoading(state, loading) {
       state.loading = loading
     },
@@ -82,7 +89,20 @@ export default new Vuex.Store({
       await getComments(getters.principal).then(comments => {
         commit('setComments', comments)
       })
-    }
+    },
+    async fetchUsers({ state, commit }) {
+      await publicStkr.getUsers().then(users => {
+        const formattedUsers = users.map(([principal, user]) => {
+          return {
+            ...formatUser([user]),
+            principal,
+            principalString: principal.toString(),
+          }
+        })
+
+        commit('setUsers', formattedUsers)
+      })
+    }, 
   },
   modules: {
   }

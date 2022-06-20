@@ -34,6 +34,7 @@
   import PaintDrip from '../components/PaintDrip.vue'
   import { mapState, mapMutations } from 'vuex'
   import { formatSticker, formatUser } from '../utils'
+  import { stkr as publicStkr } from 'canisters/stkr'
 
 
   export default {
@@ -74,11 +75,11 @@
         this.users = []
         this.setLoading(true)
 
-        this.stkr.getUsersWStkr(parseInt(this.id)).then(users => {
+        publicStkr.getUsersWStkr(parseInt(this.id)).then(users => {
           const promises = []
           for (const principal of users) {
             promises.push(
-              this.stkr.getUser([ principal ]).then(user => {
+              publicStkr.getUser([ principal ]).then(user => {
                 this.users.push({
                   ...formatUser(user),
                   principal: principal.toString(),
@@ -91,15 +92,14 @@
           })
         })
 
-        // TODO: add logic for getting the details of the stkr with the given id
-        this.stkr.getStkr(parseInt(this.id)).then(sticker => {
+        publicStkr.getStkr(parseInt(this.id)).then(sticker => {
           this.sticker = formatSticker(sticker)
         })
       },
     },
 
     created() {
-      console.log('created')
+      document.body.scrollTop = document.documentElement.scrollTop = 0
       this.setup()
     },
 

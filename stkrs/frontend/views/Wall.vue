@@ -26,7 +26,7 @@
               </v-btn>
             </div>
             <div class="tw-text-white tw-font-extralight tw-text-md">{{ principalString }}</div>
-            <div class="tw-text-white tw-font-normal tw-my-4">
+            <div class="tw-text-white tw-font-normal tw-my-4 tw-max-w-3xl">
               {{ user.bio }}
             </div>
           </div>
@@ -102,7 +102,7 @@
         <div v-else class="tw-text-center tw-text-lg tw-text-white">
           No comments yet!
         </div>
-        <div v-if="!isCurUser" class="tw-text-center tw-mt-5">
+        <div v-if="isSignedIn && !isCurUser" class="tw-text-center tw-mt-5">
           <CommentModal class="tw-mt-6" @submit="text => addComment(text)"></CommentModal>
         </div>
       </PaintDripSection>
@@ -125,6 +125,7 @@ import { Principal } from "@dfinity/principal";
 
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 import { formatUser, formatStickers, getComments } from '../utils'
+import { stkr as publicStkr } from 'canisters/stkr'
 
 export default {
   name: 'Wall',
@@ -333,6 +334,9 @@ export default {
     isCurUser() {
       return this.id === ''
     },
+    isSignedIn() {
+      return Boolean(this.curUser)
+    },
   },
 
   methods: {
@@ -366,8 +370,14 @@ export default {
     },
 
     setup() {
+      // Scroll to top, set loading to true, correct id if necessary
+      document.body.scrollTop = document.documentElement.scrollTop = 0
       this.setLoading(true)
+      if (this.id === this.curUserPrincipalString) {
+        this.$router.replace({ name: 'my-wall' })
+      }
 
+      // Load user data
       let promises = []
       if (this.isCurUser) {
         if (this.user) this.setLoading(false)
@@ -389,13 +399,13 @@ export default {
         const principal = Principal.fromText(this.id)
         this.principalString = principal.toString()
         promises = [
-          this.stkr.getUser([principal]).then(user => {
+          publicStkr.getUser([principal]).then(user => {
             this.user = formatUser(user)
           }),
-          this.stkr.getStkrs([principal]).then(stickers => {
+          publicStkr.getStkrs([principal]).then(stickers => {
             this.stickers = formatStickers(stickers)
           }),
-          this.stkr.getPins([principal]).then(pins => {
+          publicStkr.getPins([principal]).then(pins => {
             this.pins = pins
           }),
           new Promise((resolve, reject) => {
@@ -415,9 +425,6 @@ export default {
   },
 
   created() {
-    if (this.id === this.curUserPrincipalString) {
-      this.$router.replace({ name: 'my-wall' })
-    }
     this.setup()
   },
 
@@ -427,6 +434,11 @@ export default {
       handler() {
         this.tabColor = Object.values(this.categories)[this.tab].color
       }
+    },
+    '$route.params.id': {
+      handler() {
+        this.setup()
+      },
     },
     $route: {
       immediate: true,

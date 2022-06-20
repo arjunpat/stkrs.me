@@ -9,12 +9,12 @@
             {{name}}
           </div>
           <div class="tw-text-white tw-font-extralight tw-text-md">{{principal}}</div>
-          <div class="tw-text-white tw-font-normal tw-my-4">{{bio}}</div>
+          <div class="tw-text-white tw-font-normal tw-my-4 tw-max-w-3xl">{{bio}}</div>
         </div>
     </div>
     <div v-else class="tw-inline-block tw-items-center tw-drop-shadow-xl">
       <div>
-        <img :src="src != '' ? src : defaultPicture" :style="style" />
+        <img @click="e => $emit('click', e)" :src="src != '' ? src : defaultPicture" :style="style" class="tw-cursor-pointer" />
       </div>
       <div class="tw-text-sm tw-text-center tw-font-medium tw-my-3">
         <v-chip color="orange" class="tw-text-white" v-show="name !== ''">{{ name }}</v-chip>
