@@ -2,7 +2,7 @@
   <div class="tw-flex tw-justify-center tw-items-center tw-h-screen tw-gap-12">
     <div class="tw-w-52">
       <v-text-field outlined hide-details class="tw-mb-2" dense v-model="title" label="Title" />
-      <v-text-field outlined hide-details class="tw-mb-2" dense v-model="description" label="Description" />
+      <v-textarea outlined hide-details class="tw-mb-2" dense v-model="description" label="Description" />
       <v-text-field outlined hide-details class="tw-mb-2" dense v-model="organization" label="Organization" />
       <v-text-field outlined hide-details class="tw-mb-2" dense v-model="category" label="Category" />
       <v-text-field outlined hide-details class="tw-mb-2" dense v-model="image" label="Image" />
