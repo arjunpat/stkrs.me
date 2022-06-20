@@ -53,6 +53,11 @@ const routes = [
     component: () => import('../views/Feed.vue'),
     meta: {showNavBar: true},
   },
+  {
+    path: '/internal/create-stkr',
+    component: () => import('../views/internal/CreateStkr.vue'),
+    meta: {showNavBar: false},
+  },
 ]
 
 const router = new VueRouter({
