@@ -26,7 +26,7 @@
               </v-btn>
             </div>
             <div class="tw-text-white tw-font-extralight tw-text-md">{{ principalString }}</div>
-            <div class="tw-text-white tw-font-normal tw-my-4">
+            <div class="tw-text-white tw-font-normal tw-my-4 tw-max-w-3xl">
               {{ user.bio }}
             </div>
           </div>

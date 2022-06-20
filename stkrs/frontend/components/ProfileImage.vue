@@ -9,7 +9,7 @@
             {{name}}
           </div>
           <div class="tw-text-white tw-font-extralight tw-text-md">{{principal}}</div>
-          <div class="tw-text-white tw-font-normal tw-my-4">{{bio}}</div>
+          <div class="tw-text-white tw-font-normal tw-my-4 tw-max-w-3xl">{{bio}}</div>
         </div>
     </div>
     <div v-else class="tw-inline-block tw-items-center tw-drop-shadow-xl">
