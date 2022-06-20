@@ -128,6 +128,7 @@ actor {
   };
 
   public shared({ caller }) func addComment(u: Principal, content: Text): () {
+    assert (await getSharedStkrs(caller, u)).size() > 0;
     let comments: Buffer.Buffer<T.Comment> = switch (userToComments.get(u)) {
       case null Buffer.Buffer<T.Comment>(0);
       case (?c) fromArray(c);
