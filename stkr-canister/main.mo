@@ -68,6 +68,22 @@ actor {
     return s.id;
   };
 
+  public shared({ caller }) func editStkr(stkr: Nat, title: Text, organization: Text, description: Text, category: Text, image: Text): () {
+    assert stkrEntries.size() > stkr;
+    assert stkrEntries.get(stkr).creator == caller;
+    let s: T.Stkr = {
+      id = stkr;
+      creator = caller;
+      title;
+      organization;
+      description;
+      category;
+      image;
+    };
+
+    stkrEntries.put(stkr, s);
+  };
+
   public query func getStkr(stkr: Nat): async T.Stkr {
     assert stkrEntries.size() > stkr;
     return stkrEntries.get(stkr);

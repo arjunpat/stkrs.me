@@ -1,3 +1,9 @@
 node_modules
 .DS_Store
 src/declarations/
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+.dfx
