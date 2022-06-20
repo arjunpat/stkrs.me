@@ -38,6 +38,23 @@ export default {
     selected: 'All',
     items: ['All', 'Gaming', 'Professional', 'Academic', 'Sports'],
     stickers: [
+      
+      {
+        ownerUsername: 'Erikatious938',
+        name: 'McDonalds Employee of the Month',
+        image:
+          'https://pbs.twimg.com/profile_images/1513918204325728257/5-R-x-P__400x400.jpg',
+        shared: ['Ignition Club', 'UPenn CS'],
+        category: 'Professional',
+      },
+      {
+        ownerUsername: 'Daniel382111',
+        name: 'Google Employee 10 Years',
+        image:
+          'https://blog.hubspot.com/hubfs/image8-2.jpg',
+        shared: ['Google', 'Berkeley EECS'],
+        category: 'Professional',
+      },
       {
         ownerUsername: 'TantalizingTickler',
         name: 'Challenger League',

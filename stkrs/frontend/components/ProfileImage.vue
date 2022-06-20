@@ -3,7 +3,7 @@
 <template>
   <div>
     <div v-if="horizontalDisplay" class="tw-flex"> 
-       <img @click="e => $emit('click', e)" :src="src" :style="style" class="tw-cursor-pointer" />
+       <img @click="e => $emit('click', e)" :src="src != '' ? src : defaultPicture" :style="style" class="tw-cursor-pointer" />
         <div class="tw-self-center tw-ml-8">
           <div class="tw-text-white tw-font-semibold tw-text-5xl tw-mb-2">
             {{name}}
@@ -14,7 +14,7 @@
     </div>
     <div v-else class="tw-inline-block tw-items-center tw-drop-shadow-xl">
       <div>
-        <img :src="src" :style="style" />
+        <img :src="src != '' ? src : defaultPicture" :style="style" />
       </div>
       <div class="tw-text-sm tw-text-center tw-font-medium tw-my-3">
         <v-chip color="orange" class="tw-text-white" v-show="name !== ''">{{ name }}</v-chip>
@@ -49,6 +49,7 @@ export default {
   data: () => ({
     a: 0,
     ar3: 0,
+    defaultPicture: 'https://i.imgur.com/AFlMnzq.png',
   }),
 
   computed: {
