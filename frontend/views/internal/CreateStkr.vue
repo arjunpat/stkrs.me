@@ -14,6 +14,18 @@
       <v-text-field outlined hide-details class="tw-mb-2" dense v-model="principal" label="Principal" />
       <v-btn block color="primary" @click="sendStkr" :loading="loading2" class="tw-mb-2" >Send stkr</v-btn>
     </div>  
+    <div class="tw-w-52">
+      <v-text-field outlined hide-details class="tw-mb-2" dense v-model="stickerId2" label="Sticker ID" />
+      <v-text-field outlined hide-details class="tw-mb-2" dense v-model="title2" label="Title" />
+      <v-textarea outlined hide-details class="tw-mb-2" dense v-model="description2" label="Description" />
+      <v-text-field outlined hide-details class="tw-mb-2" dense v-model="organization2" label="Organization" />
+      <v-text-field outlined hide-details class="tw-mb-2" dense v-model="category2" label="Category" />
+      <v-text-field outlined hide-details class="tw-mb-2" dense v-model="image2" label="Image" />
+      <v-btn block color="primary" @click="editStkr" :loading="loading3" class="tw-mb-2" >Edit Stkr</v-btn>
+    </div>
+    <div>
+
+    </div>
   </div>
 </template>
 
@@ -34,6 +46,14 @@ export default {
     loading2: false,
     stickerId: '',
     principal: '',
+
+    stickerId2: '',
+    title2: '',
+    description2: '',
+    organization2: '',
+    category2: '',
+    image2: '',
+    loading3: false,
   }),
   methods: {
     createStkr() {
@@ -48,6 +68,12 @@ export default {
       const principal = Principal.fromText(this.principal)
       this.stkr.sendStkr(BigInt(this.stickerId), principal).then(() => {
         this.loading2 = false
+      })
+    },
+    editStkr() {
+      this.loading3 = true
+      this.stkr.editStkr(BigInt(this.stickerId2), this.title2, this.organization2, this.description2, this.category2, this.image2).then(() => {
+        this.loading3 = false
       })
     },
   },
