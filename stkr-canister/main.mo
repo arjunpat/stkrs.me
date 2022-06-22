@@ -105,6 +105,8 @@ actor {
 
   public shared({ caller }) func setUser(user: T.UserData): () {
     userToData.put(caller, user);
+    // add supernova stkr by default
+    userToStkr.put(caller, TrieSet.put(TrieSet.empty(), 32, Int.hash(32), Nat.equal));
   };
 
   public query({ caller }) func getUser(user: ?Principal): async ?T.UserData {
