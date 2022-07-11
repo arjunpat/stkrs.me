@@ -2,6 +2,32 @@ import store from './store'
 import router from './router'
 import Vue from 'vue'
 
+export async function setLibraryContract() {
+  window.bookRentContract = await window.tronWeb.contract().at('TPxKfxdLkqcuPZrLNUQX49Y2STmAksdQkb')
+}
+
+export async function fetchAllBooks() {
+  // TODO: call bookId func of library contract to abtain total books number
+  // iterate till book Id
+  // push each object to books array
+  const books = [];
+
+  const bookId  = await window.bookRentContract.bookId().call();
+  //iterate from 0 till bookId
+  for (let i = 0; i < bookId; i++){
+    const book = await window.bookRentContract.books(i).call()
+    if(book.name!="") // filter the deleted books
+    {
+      books.push(
+        {id: i,name: book.name,description: book.description,price: window.tronWeb.fromSun(book.price)}
+      )
+    }
+    
+  }
+  return books
+
+}
+
 export const signIn = async () => {
   // const days = BigInt(1)
   // const hours = BigInt(24)

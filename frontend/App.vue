@@ -64,7 +64,7 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 import BlobButton from './components/BlobButton.vue'
-import { signIn, signOut, formatUser } from './utils'
+import { signIn, signOut, formatUser, setLibraryContract, fetchAllBooks } from './utils'
 
 export default {
   name: 'App',
@@ -146,6 +146,13 @@ export default {
     //   this.fetchComments()
     // }
   },
+  
+  async mounted() {
+    await setLibraryContract()
+
+    const books = await fetchAllBooks()
+    console.log(books)
+  }
 };
 </script>
 
