@@ -31,7 +31,6 @@
 
 <script>
 import { Principal } from "@dfinity/principal";
-import { stkr as publicStkr } from 'canisters/stkr'
 import { mapState, mapMutations } from 'vuex'
 
 export default {
