@@ -121,11 +121,9 @@ import PaintDrip from '../components/PaintDrip.vue'
 import Comment from '../components/Comment.vue'
 import BlobButton from '../components/BlobButton.vue'
 import CommentModal from '../components/CommentModal.vue'
-import { Principal } from "@dfinity/principal";
 
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 import { formatUser, formatStickers, getComments } from '../utils'
-import { stkr as publicStkr } from 'canisters/stkr'
 
 export default {
   name: 'Wall',
@@ -214,11 +212,13 @@ export default {
     ...mapMutations(['addPin', 'removePin', 'setLoading']),
     ...mapActions(['fetchUser', 'fetchStickers', 'fetchPins']),
     async addComment(text) {
-      const principal = Principal.fromText(this.id)
-      await this.stkr.addComment(principal, text)
-      getComments(principal).then(comments => {
-        this.comments = comments
-      })
+      // TODO: reimplement
+
+      // const principal = Principal.fromText(this.id)
+      // await this.stkr.addComment(principal, text)
+      // getComments(principal).then(comments => {
+      //   this.comments = comments
+      // })
     },
     edit() {
       const { username, profilePic, bio } = this.user
@@ -227,9 +227,9 @@ export default {
     togglePin(stickerId) {
       if (this.isPinned(stickerId)) {
         this.removePin(stickerId)
-        this.stkr.removePin(parseInt(stickerId))
+        // this.stkr.removePin(parseInt(stickerId))
       } else {
-        this.stkr.addPin(parseInt(stickerId))
+        // this.stkr.addPin(parseInt(stickerId))
         this.addPin(stickerId)
       }
     },
@@ -241,64 +241,64 @@ export default {
     },
 
     setup() {
-      // Scroll to top, set loading to true, correct id if necessary
-      document.body.scrollTop = document.documentElement.scrollTop = 0
-      this.setLoading(true)
-      if (this.id === this.curUserPrincipalString) {
-        this.$router.replace({ name: 'my-wall' })
-      }
+    //   // scroll to top, set loading to true, correct id if necessary
+    //   document.body.scrolltop = document.documentelement.scrolltop = 0
+    //   this.setloading(true)
+    //   if (this.id === this.curuserprincipalstring) {
+    //     this.$router.replace({ name: 'my-wall' })
+    //   }
 
-      // Reset everything
-      this.comments = []
-      this.user = null
-      this.stickers = []
-      this.pins = []
-      this.principalString = ''
+    //   // reset everything
+    //   this.comments = []
+    //   this.user = null
+    //   this.stickers = []
+    //   this.pins = []
+    //   this.principalstring = ''
 
-      // Load user data
-      let promises = []
-      if (this.isCurUser) {
-        if (this.user) this.setLoading(false)
-        this.user = this.curUser
-        this.stickers = this.curUserStickers
-        this.pins = this.curUserPins
-        this.principalString = this.curUserPrincipalString
-        promises = [
-          this.$store.dispatch('fetchUser').then(() => { this.user = this.curUser }),
-          this.$store.dispatch('fetchStickers').then(() => this.stickers = this.curUserStickers),
-          this.$store.dispatch('fetchPins').then(() => this.pins = this.curUserPins),
-          this.$store.dispatch('fetchComments').then(() => this.comments = this.curUserComments),
-        ]
-      } else {
-        this.user = null
-        this.stickers = []
-        this.pins = []
-        this.principalString = ''
-        const principal = Principal.fromText(this.id)
-        this.principalString = principal.toString()
-        promises = [
-          publicStkr.getUser([principal]).then(user => {
-            this.user = formatUser(user)
-          }),
-          publicStkr.getStkrs([principal]).then(stickers => {
-            this.stickers = formatStickers(stickers)
-          }),
-          publicStkr.getPins([principal]).then(pins => {
-            this.pins = pins
-          }),
-          new Promise((resolve, reject) => {
-            return getComments(principal).then(comments => {
-              this.comments = comments
-              resolve()
-            })
-          })
-        ]
-      }
+    //   // load user data
+    //   let promises = []
+    //   if (this.iscuruser) {
+    //     if (this.user) this.setloading(false)
+    //     this.user = this.curuser
+    //     this.stickers = this.curuserstickers
+    //     this.pins = this.curuserpins
+    //     this.principalstring = this.curuserprincipalstring
+    //     promises = [
+    //       this.$store.dispatch('fetchuser').then(() => { this.user = this.curuser }),
+    //       this.$store.dispatch('fetchstickers').then(() => this.stickers = this.curuserstickers),
+    //       this.$store.dispatch('fetchpins').then(() => this.pins = this.curuserpins),
+    //       this.$store.dispatch('fetchcomments').then(() => this.comments = this.curusercomments),
+    //     ]
+    //   } else {
+    //     this.user = null
+    //     this.stickers = []
+    //     this.pins = []
+    //     this.principalstring = ''
+    //     const principal = principal.fromtext(this.id)
+    //     this.principalstring = principal.tostring()
+    //     promises = [
+    //       publicstkr.getuser([principal]).then(user => {
+    //         this.user = formatuser(user)
+    //       }),
+    //       publicstkr.getstkrs([principal]).then(stickers => {
+    //         this.stickers = formatstickers(stickers)
+    //       }),
+    //       publicstkr.getpins([principal]).then(pins => {
+    //         this.pins = pins
+    //       }),
+    //       new promise((resolve, reject) => {
+    //         return getcomments(principal).then(comments => {
+    //           this.comments = comments
+    //           resolve()
+    //         })
+    //       })
+    //     ]
+    //   }
 
-      Promise.all(promises).then(() => {
-        if (this.user)
-          this.setLoading(false)
-      })
+    //   promise.all(promises).then(() => {
+    //     if (this.user)
+    //       this.setloading(false)
+    //   })
     },
   },
 

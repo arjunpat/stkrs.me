@@ -34,7 +34,7 @@
   import PaintDrip from '../components/PaintDrip.vue'
   import { mapState, mapMutations } from 'vuex'
   import { formatSticker, formatUser } from '../utils'
-  import { stkr as publicStkr } from 'canisters/stkr'
+  // import { stkr as publicStkr } from 'canisters/stkr'
 
 
   export default {
@@ -73,28 +73,28 @@
       },
       setup() {
         this.users = []
-        this.setLoading(true)
+        // this.setLoading(true)
 
-        publicStkr.getUsersWStkr(parseInt(this.id)).then(users => {
-          const promises = []
-          for (const principal of users) {
-            promises.push(
-              publicStkr.getUser([ principal ]).then(user => {
-                this.users.push({
-                  ...formatUser(user),
-                  principal: principal.toString(),
-                })
-              })
-            )
-          }
-          Promise.all(promises).then(() => {
-            this.setLoading(false)
-          })
-        })
+        // publicStkr.getUsersWStkr(parseInt(this.id)).then(users => {
+        //   const promises = []
+        //   for (const principal of users) {
+        //     promises.push(
+        //       publicStkr.getUser([ principal ]).then(user => {
+        //         this.users.push({
+        //           ...formatUser(user),
+        //           principal: principal.toString(),
+        //         })
+        //       })
+        //     )
+        //   }
+        //   Promise.all(promises).then(() => {
+        //     this.setLoading(false)
+        //   })
+        // })
 
-        publicStkr.getStkr(parseInt(this.id)).then(sticker => {
-          this.sticker = formatSticker(sticker)
-        })
+        // publicStkr.getStkr(parseInt(this.id)).then(sticker => {
+        //   this.sticker = formatSticker(sticker)
+        // })
       },
     },
 

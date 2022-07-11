@@ -62,9 +62,7 @@
 </template>
 
 <script>
-import { AuthClient } from '@dfinity/auth-client';
 import { mapState, mapMutations, mapActions } from 'vuex'
-import { createActor } from 'canisters/stkr'
 import BlobButton from './components/BlobButton.vue'
 import { signIn, signOut, formatUser } from './utils'
 
@@ -96,57 +94,57 @@ export default {
         this.$router.push({ name: name })
     },
     async signIn() {
-      try {
-        this.loadingSignIn = true
-        await signIn()
-        const user = await this.stkr.getUser([])
-        if (user.length === 0) {
-          this.$router.push({ name: 'onboard' })
-        } else {
-          this.setUser(formatUser(user)) 
-          this.fetchStickers()
-          this.fetchPins()
-          this.fetchComments()
-          this.$router.push({ name: 'wall' })
-        }
-        this.loadingSignIn = false
-        this.signInDialog = false
-      } catch (err) {
-        console.error(err)
-      }
+      // try {
+      //   this.loadingSignIn = true
+      //   await signIn()
+      //   const user = await this.stkr.getUser([])
+      //   if (user.length === 0) {
+      //     this.$router.push({ name: 'onboard' })
+      //   } else {
+      //     this.setUser(formatUser(user)) 
+      //     this.fetchStickers()
+      //     this.fetchPins()
+      //     this.fetchComments()
+      //     this.$router.push({ name: 'wall' })
+      //   }
+      //   this.loadingSignIn = false
+      //   this.signInDialog = false
+      // } catch (err) {
+      //   console.error(err)
+      // }
     },
     async signOut() {
-      await signOut()
-      this.setUser(null)
-      this.setStickers([])
-      this.setPins([])
-      this.$router.push({ name: 'discover' })
+      // await signOut()
+      // this.setUser(null)
+      // this.setStickers([])
+      // this.setPins([])
+      // this.$router.push({ name: 'discover' })
     },
   },
 
   async created() {
-    this.fetchUsers()
+    // this.fetchUsers()
 
-    const authClient = await AuthClient.create()
-    this.setAuthClient(authClient)
-    const isAuthenticated = await authClient.isAuthenticated()
+    // const authClient = await AuthClient.create()
+    // this.setAuthClient(authClient)
+    // const isAuthenticated = await authClient.isAuthenticated()
 
-    if (isAuthenticated) {
-      const identity = authClient.getIdentity()
-      this.setAuthUserIdentity(identity)
+    // if (isAuthenticated) {
+    //   const identity = authClient.getIdentity()
+    //   this.setAuthUserIdentity(identity)
 
-      const stkr = createActor(process.env.STKR_CANISTER_ID, {
-        agentOptions: {
-          identity,
-        },
-      })
-      this.setStkr(stkr)
+    //   const stkr = createActor(process.env.STKR_CANISTER_ID, {
+    //     agentOptions: {
+    //       identity,
+    //     },
+    //   })
+    //   this.setStkr(stkr)
 
-      this.fetchUser()
-      this.fetchStickers()
-      this.fetchPins()
-      this.fetchComments()
-    }
+    //   this.fetchUser()
+    //   this.fetchStickers()
+    //   this.fetchPins()
+    //   this.fetchComments()
+    // }
   },
 };
 </script>
