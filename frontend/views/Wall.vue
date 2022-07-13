@@ -24,6 +24,51 @@
               <v-btn v-if="isCurUser" @click="edit" icon class="tw-text-white">
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
+              <template> 
+                <v-btn
+                depressed
+                @click="toggleFriend"
+                color = "primary"
+                small
+                > 
+                {{text}}
+                  <v-icon class="tw-pl-2">
+                    mdi-{{mdi}}
+                  </v-icon>   
+                </v-btn>
+              </template>
+              
+            <v-dialog
+              v-model="dialog"
+              max-width="290"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon color="white"
+                  v-bind="attrs"
+                  v-on="on">
+                  mdi-dots-vertical
+                </v-icon>
+              </template>
+              <v-card>
+                  <v-btn 
+                    color="red darken-1"
+                    text
+                    @click="removeFriend"
+                    class="tw-w-full"
+                  >
+                    Unfriend
+                  </v-btn>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="default darken-1"
+                    text
+                    @click="dialog = false"
+                    class="tw-w-full"
+                  >
+                    Cancel
+                  </v-btn>
+              </v-card>
+            </v-dialog>
             </div>
             <div class="tw-text-white tw-font-extralight tw-text-md">{{ principalString }}</div>
             <div class="tw-text-white tw-font-normal tw-my-4 tw-max-w-3xl">
@@ -146,6 +191,10 @@ export default {
     return {
       tabColor: 'red-600',
       tab: null,
+      mdi: "account-add",
+      text: "Friend",
+      dialog: "false",
+
 
       categoryOrders: {
         category1: 'Professional',
@@ -163,7 +212,12 @@ export default {
         'Communities': 'pink-500',
       },
       comments: [],
-      user: null,
+      user: {
+        username: 'minisounds',
+        bio: 'very cool person',
+        profilePic: 'https://thumbor.forbes.com/thumbor/fit-in/900x510/https://www.forbes.com/advisor/in/wp-content/uploads/2022/03/monkey-g412399084_1280.jpg',
+
+      },
       stickers: [],
       pins: [],
       principalString: '',
@@ -219,6 +273,14 @@ export default {
       // getComments(principal).then(comments => {
       //   this.comments = comments
       // })
+    },
+    removeFriend() {
+      this.text = "Friended" ? "Friend" : "Friended"
+      this.mdi = "account-multiple-check" ? "account-plus" : "account-multiple-check"
+    },
+    toggleFriend() {
+      this.text = "Friend" ? "Friended" : "Friend"
+      this.mdi = "account-plus" ? "account-multiple-check" : "account-plus"
     },
     edit() {
       const { username, profilePic, bio } = this.user
