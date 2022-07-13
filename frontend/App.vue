@@ -8,6 +8,7 @@
 
       <template v-if="authUserIdentity">
         <BlobButton @click="navigate('my-wall')" text="Wall" :variant="2" fill="var(--color-blue-500)" expand-on-click />
+        <BlobButton @click="navigate('friends')" text="Friends" :variant="3" fill="var(--color-yellow-500)" expand-on-click />
         <BlobButton @click="navigate('feed')" text="Feed" :variant="1" fill="var(--color-green-500)" expand-on-click />
       </template>
       <BlobButton @click="navigate('discover')" text="Discover" :variant="0" fill="var(--color-orange-500)"
