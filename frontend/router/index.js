@@ -54,6 +54,12 @@ const routes = [
     meta: {showNavBar: true},
   },
   {
+    path: '/friends',
+    name: 'friends',
+    component: () => import('../views/Friends.vue'),
+    meta: {showNavBar: true},
+  },
+  {
     path: '/internal/create-stkr',
     component: () => import('../views/internal/CreateStkr.vue'),
     meta: {showNavBar: false},
