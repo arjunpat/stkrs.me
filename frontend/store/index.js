@@ -1,7 +1,6 @@
 import { formatStickers, formatUser, getComments } from '../utils'
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { stkr as publicStkr } from 'canisters/stkr'
 
 Vue.use(Vuex)
 

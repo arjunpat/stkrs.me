@@ -1,3 +1,3 @@
 # stkrs.me
 
-Soulbound tokens on the ICP!
+Tron version! Soulbound tokens on the ICP!
