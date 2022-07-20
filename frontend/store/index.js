@@ -1,4 +1,4 @@
-import { formatStickers, formatUser, getComments } from '../utils'
+import { formatStickers, formatUser, getComments, getCurAddress, getStkrs } from '../utils'
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -21,24 +21,11 @@ export default new Vuex.Store({
     loading: false,
   },
   getters: {
-    principal(state) {
-      if (!state.authUserIdentity) return ''
-      return state.authUserIdentity.getPrincipal()
-    },
-    principalString(state, getters) {
-      return getters.principal.toString()
+    userAddress(state) {
+      return window.tronWeb.defaultAddress.base58
     },
   },
   mutations: {
-    setAuthUserIdentity(state, authUserIdentity) {
-      state.authUserIdentity = authUserIdentity
-    },
-    setAuthClient(state, authClient) {
-      state.authClient = authClient
-    },
-    setStkr(state, stkr) {
-      state.stkr = stkr
-    },
     setComments(state, comments) {
       state.comments = comments
     },
@@ -69,6 +56,11 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    async init({ commit }) {
+      await getStkrs(getCurAddress()).then(stickers => {
+        commit('setStickers', stickers)
+      })
+    },
     async fetchUser({ state, commit }) {
       await state.stkr.getUser([]).then(user => {
         commit('setUser', formatUser(user))
@@ -90,7 +82,7 @@ export default new Vuex.Store({
       })
     },
     async fetchUsers({ state, commit }) {
-      await publicStkr.getUsers().then(users => {
+      await window.contract.getUsers().then(users => {
         const formattedUsers = users.map(([principal, user]) => {
           return {
             ...formatUser([user]),

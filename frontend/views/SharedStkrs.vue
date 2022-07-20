@@ -33,7 +33,7 @@
   import PaintDripSection from '../components/PaintDripSection.vue'
   import PaintDrip from '../components/PaintDrip.vue'
   import { mapState, mapMutations } from 'vuex'
-  import { formatSticker, formatUser } from '../utils'
+  import { formatSticker, formatUser, getStkr, getUsersWStkr, waitUntilContractReady } from '../utils'
   // import { stkr as publicStkr } from 'canisters/stkr'
 
 
@@ -71,10 +71,20 @@
       viewWall(principal) {
         this.$router.push({ name: 'wall', params: { id: principal } })
       },
-      setup() {
+      async setup() {
         this.users = []
-        // this.setLoading(true)
+        this.setLoading(true)
 
+        await waitUntilContractReady()
+
+        getUsersWStkr(parseInt(this.id)).then(users => {
+          this.users = users
+          this.setLoading(false)
+        })
+        
+        getStkr(parseInt(this.id)).then(sticker => {
+          this.sticker = sticker
+        })
         // publicStkr.getUsersWStkr(parseInt(this.id)).then(users => {
         //   const promises = []
         //   for (const principal of users) {

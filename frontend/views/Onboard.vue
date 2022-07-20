@@ -58,7 +58,8 @@
 <script>
   import BlobButton from '../components/BlobButton.vue'
   import { mapState, mapActions, } from 'vuex'
-    import PaintDripSection from '../components/PaintDripSection.vue'
+  import PaintDripSection from '../components/PaintDripSection.vue'
+  import { setCurUser } from '../utils'
 
   export default {
     name: "Onboard",
@@ -87,16 +88,12 @@
     methods: {
       ...mapActions([ 'fetchUser', 'fetchStickers', 'fetchPins', 'fetchComments' ]),
       async submit() {
-        this.$router.push({ name: 'my-wall' })
-        await this.stkr.setUser({
-          name: this._username,
-          bio: this._bio,
-          profile_image: this._profilePic,
-        })
-        this.fetchUser()
-        this.fetchStickers()
-        this.fetchPins()
-        this.fetchComments()
+        try {
+          await setCurUser(this._username, this._bio, this._profilePic)
+          this.$router.push({ name: 'my-wall' })
+        } catch (e) {
+          console.error(e)
+        }
       },
     },
 

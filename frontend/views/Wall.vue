@@ -70,7 +70,7 @@
               </v-card>
             </v-dialog>
             </div>
-            <div class="tw-text-white tw-font-extralight tw-text-md">{{ principalString }}</div>
+            <div class="tw-text-white tw-font-extralight tw-text-md">{{ address }}</div>
             <div class="tw-text-white tw-font-normal tw-my-4 tw-max-w-3xl">
               {{ user.bio }}
             </div>
@@ -168,7 +168,7 @@ import BlobButton from '../components/BlobButton.vue'
 import CommentModal from '../components/CommentModal.vue'
 
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
-import { formatUser, formatStickers, getComments } from '../utils'
+import { formatUser, formatStickers, getComments, getCurAddress, getUser, sleep, getStkrs, getPins, removePin, addPin, waitUntilContractReady } from '../utils'
 
 export default {
   name: 'Wall',
@@ -193,7 +193,7 @@ export default {
       tab: null,
       mdi: "account-add",
       text: "Friend",
-      dialog: "false",
+      dialog: false,
 
 
       categoryOrders: {
@@ -220,19 +220,14 @@ export default {
       },
       stickers: [],
       pins: [],
-      principalString: '',
+      address: '',
     }
   },
 
   computed: {
-    ...mapState(['stkr', 'authUserIdentity']),
     ...mapState({
-      curUser: 'user',
       curUserStickers: 'stickers',
-      curUserPins: 'pins',
-      curUserComments: 'comments',
     }),
-    ...mapGetters({ curUserPrincipal: 'principal', curUserPrincipalString: 'principalString' }),
     categories() {
       const c = {}
       for (const stickerId of Object.keys(this.stickers)) {
@@ -256,6 +251,8 @@ export default {
       return Boolean(this.curUser)
     },
     allowCommenting() {
+      if (this.isCurUser) return false
+
       const stickerOverlap = Object.keys(this.curUserStickers).filter(value => Object.keys(this.stickers).includes(value));
 
       return this.isSignedIn && !this.isCurUser && stickerOverlap.length > 0
@@ -263,8 +260,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['addPin', 'removePin', 'setLoading']),
-    ...mapActions(['fetchUser', 'fetchStickers', 'fetchPins']),
+    ...mapMutations(['setLoading']),
     async addComment(text) {
       // TODO: reimplement
 
@@ -286,13 +282,23 @@ export default {
       const { username, profilePic, bio } = this.user
       this.$router.push({ name: 'onboard', query: { username, profilePic, bio } })
     },
-    togglePin(stickerId) {
+    addPin(stickerId) {
+      this.pins.push(stickerId)
+    },
+    removePin(stickerId) {
+      this.pins = this.pins.filter((id) => id !== stickerId)
+    },
+    async togglePin(stickerId) {
       if (this.isPinned(stickerId)) {
-        this.removePin(stickerId)
-        // this.stkr.removePin(parseInt(stickerId))
+        try {
+          await removePin(stickerId)
+          this.removePin(stickerId)
+        } catch (e) {}
       } else {
-        // this.stkr.addPin(parseInt(stickerId))
-        this.addPin(stickerId)
+        try {
+          await addPin(stickerId)
+          this.addPin(stickerId)
+        } catch (e) {}
       }
     },
     isPinned(stickerId) {
@@ -302,7 +308,35 @@ export default {
       this.$router.push({ name: 'stkr', params: { id: stickerId } })
     },
 
-    setup() {
+    async setup() {
+      // scroll to top, set loading to true, correct id if necessary
+      document.body.scrollTop = document.documentElement.scrollTop = 0
+      this.setLoading(true)
+      if (this.id === getCurAddress()) {
+        this.$router.replace({ name: 'my-wall' })
+      }
+
+      await waitUntilContractReady()
+      
+      if (this.isCurUser) {
+        this.address = getCurAddress()
+      } else {
+        this.address = this.id
+      }
+      
+      const promises = [
+        getUser(this.address),
+        getStkrs(this.address),
+        getPins(this.address),
+        getComments(this.address),
+      ]
+      Promise.all(promises).then(([user, stkrs, pins, comments]) => {
+        this.user = user
+        this.stickers = stkrs
+        this.pins = pins
+        this.comments = comments
+        this.setLoading(false)
+      })
     //   // scroll to top, set loading to true, correct id if necessary
     //   document.body.scrolltop = document.documentelement.scrolltop = 0
     //   this.setloading(true)
@@ -364,7 +398,7 @@ export default {
     },
   },
 
-  created() {
+  mounted() {
     this.setup()
   },
 
@@ -381,7 +415,7 @@ export default {
       },
     },
     $route: {
-      immediate: true,
+      // immediate: true,
       handler() {
         this.setup()
       },
