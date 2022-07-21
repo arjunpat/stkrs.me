@@ -4,15 +4,26 @@ pragma solidity ^0.8.6;
 contract Stkrs {
   address[] public stkrCreator;
   mapping(address => uint[]) public pins;
+  mapping(address => UserData) public users;
 
-  event UserUpdated(address addr, string name, string bio, string profile_image, string telegram_username);
+  struct UserData {
+    string name;
+    string bio;
+    string profile_image;
+    string telegram_username;
+  }
+
+  event UserCreated(address addr);
   event StkrCreated(uint id, string title, string organization, string description, string category, string image);
   event FriendRequest(address from, address to);
   event StkrSent(address to, uint stkr);
   event Comment(address to, address creator, string content);
 
   function updateUser(string memory name, string memory bio, string memory profile_image, string memory telegram_username) public {
-    emit UserUpdated(msg.sender, name, bio, profile_image, telegram_username);
+    if (bytes(users[msg.sender].name).length == 0) {
+      emit UserCreated(msg.sender);
+    }
+    users[msg.sender] = UserData(name, bio, profile_image, telegram_username);
   }
 
   function createStkr(string memory title, string memory organization, string memory description, string memory category, string memory image) public returns (uint) {
@@ -23,7 +34,7 @@ contract Stkrs {
   }
 
   function sendFriendRequest(address to) public {
-    require(msg.sender != to, "Cannot friend yourself");
+    require(msg.sender != to , "Cannot friend yourself");
     emit FriendRequest(msg.sender, to);
   }
 
