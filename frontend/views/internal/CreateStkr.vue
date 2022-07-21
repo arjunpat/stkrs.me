@@ -11,7 +11,7 @@
     </div>
     <div>
       <v-text-field outlined hide-details class="tw-mb-2" dense v-model="stickerId" label="Sticker ID" />
-      <v-text-field outlined hide-details class="tw-mb-2" dense v-model="principal" label="Principal" />
+      <v-text-field outlined hide-details class="tw-mb-2" dense v-model="address" label="Address" />
       <v-btn block color="primary" @click="sendStkr" :loading="loading2" class="tw-mb-2" >Send stkr</v-btn>
     </div>  
     <div class="tw-w-52">
@@ -44,7 +44,7 @@ export default {
     loading1: false,
     loading2: false,
     stickerId: '',
-    principal: '',
+    address: '',
 
     stickerId2: '',
     title2: '',
@@ -57,15 +57,15 @@ export default {
   methods: {
     createStkr() {
       this.loading1 = true
-      this.stkr.createStkr(this.title, this.organization, this.description, this.category, this.image).then(result => {
+      window.contract.createStkr(this.title, this.organization, this.description, this.category, this.image).send().then(result => {
+        console.log('RESULT:', result)
         this.loading1 = false
         this.result = parseInt(result)
       })
     },
     sendStkr() {
       this.loading2 = true
-      const principal = Principal.fromText(this.principal)
-      this.stkr.sendStkr(BigInt(this.stickerId), principal).then(() => {
+      window.contract.sendStkr(this.stickerId, this.address).send().then(() => {
         this.loading2 = false
       })
     },
@@ -75,9 +75,6 @@ export default {
         this.loading3 = false
       })
     },
-  },
-  computed: {
-    ...mapState([ 'stkr' ]),
   },
 }
 </script>
