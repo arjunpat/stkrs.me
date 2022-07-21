@@ -117,6 +117,65 @@ export async function getComments(address) {
   return commentsFormatted
 }
 
+export async function getFriends(address) {
+  const friendAddresses = []
+  const friendRequestAddresses = []
+  const sentFriendRequestAddresses = []
+
+  const friendEvents = await window.tronWeb.getEventResult(contractAddress, { eventName: 'FriendRequest' })
+  console.log(friendEvents)
+  for (let i = 0; i < friendEvents.length; ++i) {
+    const eventI = friendEvents[i].result
+    if (getAddressFromHex(eventI.to) === address || getAddressFromHex(eventI.from) === address) {
+      let toIsCur = getAddressFromHex(eventI.to) === address;
+      if (toIsCur) {
+        friendRequestAddresses.push(getAddressFromHex(eventI.from))
+      } else {
+        sentFriendRequestAddresses.push(getAddressFromHex(eventI.to))
+      }
+      
+      for (let j = i+1; j < friendEvents.length; ++j) {
+        const eventJ = friendEvents[j].result
+        if (
+          getAddressFromHex(eventI.to) === getAddressFromHex(eventJ.from) && 
+          getAddressFromHex(eventJ.to) === getAddressFromHex(eventI.from)
+        ) {
+          if (toIsCur) {
+            friendAddresses.push(getAddressFromHex(eventI.from)) 
+            friendRequestAddresses.pop()
+          } else {
+            friendAddresses.push(getAddressFromHex(eventI.to))
+            sentFriendRequestAddresses.pop()
+          }
+        }
+      }
+    }
+  }
+
+  const friends = []
+  for (const addr of friendAddresses) {
+    const user = await getUser(addr)
+    const shared = getSharedStkrs(address, addr)
+    friends.push({ user, shared })
+  }
+
+  const friendRequests = []
+  for (const addr of friendRequestAddresses) {
+    const user = await getUser(addr)
+    const shared = getSharedStkrs(address, addr)
+    friendRequests.push({ user, shared })
+  }
+
+  const sentFriendRequests = []
+  for (const addr of sentFriendRequests) {
+    const user = await getUser(addr)
+    const shared = getSharedStkrs(address, addr)
+    sentFriendRequests.push({ user, shared })
+  }
+
+  return { friends, friendRequests, sentFriendRequests }
+}
+
 export async function getSharedStkrs(address1, address2) {
   const stkrEvents = await window.tronWeb.getEventResult(contractAddress, { eventName: 'StkrSent' })
   const stkrIds1 = []

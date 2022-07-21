@@ -24,51 +24,20 @@
               <v-btn v-if="isCurUser" @click="edit" icon class="tw-text-white">
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
-              <template> 
-                <v-btn
+              <v-btn
+                v-else
                 depressed
-                @click="toggleFriend"
+                @click="addFriend"
                 color = "primary"
                 small
-                > 
-                {{text}}
-                  <v-icon class="tw-pl-2">
-                    mdi-{{mdi}}
-                  </v-icon>   
-                </v-btn>
-              </template>
+                :outlined="friendBtnDisabled"
+              > 
+                <v-icon class="tw-pr-2">
+                  {{ friendIcon }}
+                </v-icon>   
+                {{ friendBtnText }}
+              </v-btn>
               
-            <v-dialog
-              v-model="dialog"
-              max-width="290"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon color="white"
-                  v-bind="attrs"
-                  v-on="on">
-                  mdi-dots-vertical
-                </v-icon>
-              </template>
-              <v-card>
-                  <v-btn 
-                    color="red darken-1"
-                    text
-                    @click="removeFriend"
-                    class="tw-w-full"
-                  >
-                    Unfriend
-                  </v-btn>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="default darken-1"
-                    text
-                    @click="dialog = false"
-                    class="tw-w-full"
-                  >
-                    Cancel
-                  </v-btn>
-              </v-card>
-            </v-dialog>
             </div>
             <div class="tw-text-white tw-font-extralight tw-text-md">{{ address }}</div>
             <div class="tw-text-white tw-font-normal tw-my-4 tw-max-w-3xl">
@@ -225,6 +194,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters(['isFriend', 'isFriendRequestSent']),
     ...mapState({
       curUserStickers: 'stickers',
     }),
@@ -256,31 +226,53 @@ export default {
       const stickerOverlap = Object.keys(this.curUserStickers).filter(value => Object.keys(this.stickers).includes(value));
 
       return this.isSignedIn && !this.isCurUser && stickerOverlap.length > 0
+    },
+    friendIcon() {
+      if (this.isFriend(this.id)) {
+        return 'mdi-account-check'
+      } else if (this.isFriendRequestSent(this.id)) {
+        return 'mdi-account-arrow-right'
+      } 
+      return 'mdi-account-plus'
+    },
+    friendBtnText() {
+      if (this.isFriend(this.id)) {
+        return 'Friends'
+      } else if (this.isFriendRequestSent(this.id)) {
+        return 'Request sent'
+      } 
+      return 'Add friend'
+    },
+    friendBtnDisabled() {
+      return this.isFriendRequestSent(this.id) || this.isFriend(this.id)
     }
   },
 
   methods: {
     ...mapMutations(['setLoading']),
+    ...mapActions(['init']),
     async addComment(text) {
-      // TODO: reimplement
+      try {
+        await window.contract.addComment(this.id, text).send()
+        this.comments = await getComments(this.id)
+      } catch(e) {
+        console.error(e)
+      }
+    },
+    async addFriend() {
+      if (this.isFriend(this.id)) return 
 
-      // const principal = Principal.fromText(this.id)
-      // await this.stkr.addComment(principal, text)
-      // getComments(principal).then(comments => {
-      //   this.comments = comments
-      // })
-    },
-    removeFriend() {
-      this.text = "Friended" ? "Friend" : "Friended"
-      this.mdi = "account-multiple-check" ? "account-plus" : "account-multiple-check"
-    },
-    toggleFriend() {
-      this.text = "Friend" ? "Friended" : "Friend"
-      this.mdi = "account-plus" ? "account-multiple-check" : "account-plus"
+      try {
+        console.log(this.id)
+        await window.contract.sendFriendRequest(this.id).send()
+        this.init()
+      } catch (e) {
+        console.error(e)
+      }
     },
     edit() {
-      const { username, profilePic, bio } = this.user
-      this.$router.push({ name: 'onboard', query: { username, profilePic, bio } })
+      const { username, profilePic, bio, telegramUsername } = this.user
+      this.$router.push({ name: 'onboard', query: { username, profilePic, bio, telegramUsername } })
     },
     addPin(stickerId) {
       this.pins.push(stickerId)

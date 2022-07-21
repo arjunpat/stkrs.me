@@ -1,4 +1,4 @@
-import { formatStickers, formatUser, getComments, getCurAddress, getStkrs } from '../utils'
+import { formatStickers, formatUser, getComments, getCurAddress, getFriends, getStkrs } from '../utils'
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -6,49 +6,34 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    authClient: null,
-    authUserIdentity: null,
-    stkr: null,
-
     // Current user data
-    user: null,
     stickers: [],
-    pins: [],
-    comments: [],
-
-    users: [],
+    friends: [],
+    friendRequests: [],
+    sentFriendRequests: [],
 
     loading: false,
   },
   getters: {
-    userAddress(state) {
-      return window.tronWeb.defaultAddress.base58
+    isFriend(state) {
+      return (address) => state.friends.some(user => user.address === address)
+    },
+    isFriendRequestSent(state) {
+      return (address) => state.sentFriendRequests.some(user => user.address === address)
     },
   },
   mutations: {
-    setComments(state, comments) {
-      state.comments = comments
-    },
-
-    setUser(state, user) {
-      state.user = user
-    },
     setStickers(state, stickers) {
       state.stickers = stickers
     },
-    setPins(state, pins) {
-      state.pins = pins
-    }, 
-
-    addPin(state, stickerId) {
-      state.pins.push(stickerId)
+    setFriends(state, friends) {
+      state.friends = friends
     },
-    removePin(state, stickerId) {
-      state.pins = state.pins.filter((id) => id !== stickerId)
+    setFriendRequests(state, friendRequests) {
+      state.friendRequests = friendRequests
     },
-
-    setUsers(state, users) {
-      state.users = users
+    setSentFriendRequests(state, sentFriendRequests) {
+      state.sentFriendRequests = sentFriendRequests
     },
 
     setLoading(state, loading) {
@@ -60,25 +45,11 @@ export default new Vuex.Store({
       await getStkrs(getCurAddress()).then(stickers => {
         commit('setStickers', stickers)
       })
-    },
-    async fetchUser({ state, commit }) {
-      await state.stkr.getUser([]).then(user => {
-        commit('setUser', formatUser(user))
-      })
-    },
-    async fetchStickers({ state, commit }) {
-      await state.stkr.getStkrs([]).then(stickers => {
-        commit('setStickers', formatStickers(stickers))
-      })
-    },
-    async fetchPins({ state, commit }) {
-      await state.stkr.getPins([]).then(pins => {
-        commit('setPins', pins)
-      })
-    },
-    async fetchComments({ getters, commit }) {
-      await getComments(getters.principal).then(comments => {
-        commit('setComments', comments)
+
+      await getFriends(getCurAddress()).then(({ friends, friendRequests, sentFriendRequests }) => {
+        commit('setFriends', friends)
+        commit('setFriendRequests', friendRequests)
+        commit('setSentFriendRequests', sentFriendRequests)
       })
     },
     async fetchUsers({ state, commit }) {

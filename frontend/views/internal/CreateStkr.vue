@@ -57,7 +57,8 @@ export default {
   methods: {
     createStkr() {
       this.loading1 = true
-      window.contract.createStkr(this.title, this.organization, this.description, this.category, this.image).send().then(result => {
+      window.contract.createStkr(this.title, this.organization, this.description, this.category, this.image).send()
+      .then(result => {
         console.log('RESULT:', result)
         this.loading1 = false
         this.result = parseInt(result)

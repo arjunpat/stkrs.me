@@ -75,31 +75,13 @@ export default {
 
   data: () => ({
     hasAccount: false,
-    friendRequests: [
-      {
-        profileImage: "https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg",
-        username: "awiwef823jf",
-        principalId: "awopiejf2893j9jawp9ef8japj"
-      },
-      {
-        profileImage: "https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg",
-        username: "awiwef823jf",
-        principalId: "awopiejf2893j9jawp9ef8japj"
-      },
-      {
-        profileImage: "https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg",
-        username: "awiwef823jf",
-        principalId: "awopiejf2893j9jawp9ef8japj"
-      }
-    ]
   }),
 
   computed: {
-    ...mapState(['authClient', 'authUserIdentity', 'stkr', 'loading']),
+    ...mapState(['loading', 'friendRequests']),
   },
 
   methods: {
-    ...mapMutations(['setUser', 'setStickers', 'setPins', 'setAuthClient', 'setAuthUserIdentity', 'setStkr']),
     ...mapActions(['init']),
     navigate(name) {
       if (this.$route.name !== name)

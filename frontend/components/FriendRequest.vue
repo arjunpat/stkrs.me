@@ -2,10 +2,10 @@
 <template>
     <v-banner>
         <div class="tw-flex tw-flex-row">
-            <ProfileImage :src="friendRequest.profileImage" :width="30" class="tw-mr-2"></ProfileImage>
+            <ProfileImage :src="friendRequest.profilePic" :width="30" class="tw-mr-2"></ProfileImage>
             <div>
             <h1>{{ friendRequest.username }}</h1>
-            <h1 class="tw-text-xs tw-text-gray-400">{{ friendRequest.principalId }}</h1>
+            <h1 class="tw-text-xs tw-text-gray-400">{{ friendRequest.address }}</h1>
             </div>
             <v-spacer></v-spacer>
             <v-btn color="success" dark fab small class="tw-mr-2"><v-icon>mdi-check</v-icon></v-btn>

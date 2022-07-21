@@ -36,6 +36,14 @@
                   class="tw-outline-none tw-ring-2 tw-ring-zinc-200 tw-focus:ring-blue-300 tw-rounded-lg tw-p-6 tw-bg-white"
                   />
               </div>
+              <div class="tw-flex tw-flex-col tw-space-y-3">
+                <label class="tw-text-white">What's your telegram username?</label>
+                <input 
+                  v-model="_telegramUsername"
+                  placeholder="john.doe"
+                  class="tw-outline-none tw-ring-2 tw-ring-zinc-200 tw-focus:ring-blue-300 tw-rounded-lg tw-p-6 tw-bg-white"
+                />
+              </div>
           </form>   
         </div>
         <div class="tw-flex tw-flex-col tw-place-items-center tw-space-y-3">
@@ -68,6 +76,7 @@
       username: { type: String, default: '' },
       profilePic: { type: String, default: '' },
       bio: { type: String, default: '' },
+      telegramUsername: { type: String, default: '' },
     },
 
     components: {
@@ -79,6 +88,7 @@
       _username: '',
       _profilePic: '',
       _bio: '',
+      _telegramUsername: '',
     }),
 
     computed: {
