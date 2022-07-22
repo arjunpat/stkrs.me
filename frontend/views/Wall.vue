@@ -25,12 +25,11 @@
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
               <v-btn
-                v-else
+                v-else-if="hasAccount"
                 depressed
                 @click="addFriend"
                 color = "primary"
                 small
-                :outlined="friendBtnDisabled"
               > 
                 <v-icon class="tw-pr-2">
                   {{ friendIcon }}
@@ -194,7 +193,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['isFriend', 'isFriendRequestSent']),
+    ...mapGetters(['isFriend', 'isFriendRequestSent', 'hasAccount']),
     ...mapState({
       curUserStickers: 'stickers',
     }),
@@ -250,7 +249,7 @@ export default {
 
   methods: {
     ...mapMutations(['setLoading']),
-    ...mapActions(['init']),
+    ...mapActions(['init', 'getFriendsData']),
     async addComment(text) {
       try {
         await window.contract.addComment(this.id, text).send()
@@ -260,12 +259,11 @@ export default {
       }
     },
     async addFriend() {
-      if (this.isFriend(this.id)) return 
+      if (this.isFriend(this.id) || this.isFriendRequestSent(this.id)) return 
 
       try {
-        console.log(this.id)
         await window.contract.sendFriendRequest(this.id).send()
-        this.init()
+        this.getFriendsData()
       } catch (e) {
         console.error(e)
       }
@@ -329,64 +327,6 @@ export default {
         this.comments = comments
         this.setLoading(false)
       })
-    //   // scroll to top, set loading to true, correct id if necessary
-    //   document.body.scrolltop = document.documentelement.scrolltop = 0
-    //   this.setloading(true)
-    //   if (this.id === this.curuserprincipalstring) {
-    //     this.$router.replace({ name: 'my-wall' })
-    //   }
-
-    //   // reset everything
-    //   this.comments = []
-    //   this.user = null
-    //   this.stickers = []
-    //   this.pins = []
-    //   this.principalstring = ''
-
-    //   // load user data
-    //   let promises = []
-    //   if (this.iscuruser) {
-    //     if (this.user) this.setloading(false)
-    //     this.user = this.curuser
-    //     this.stickers = this.curuserstickers
-    //     this.pins = this.curuserpins
-    //     this.principalstring = this.curuserprincipalstring
-    //     promises = [
-    //       this.$store.dispatch('fetchuser').then(() => { this.user = this.curuser }),
-    //       this.$store.dispatch('fetchstickers').then(() => this.stickers = this.curuserstickers),
-    //       this.$store.dispatch('fetchpins').then(() => this.pins = this.curuserpins),
-    //       this.$store.dispatch('fetchcomments').then(() => this.comments = this.curusercomments),
-    //     ]
-    //   } else {
-    //     this.user = null
-    //     this.stickers = []
-    //     this.pins = []
-    //     this.principalstring = ''
-    //     const principal = principal.fromtext(this.id)
-    //     this.principalstring = principal.tostring()
-    //     promises = [
-    //       publicstkr.getuser([principal]).then(user => {
-    //         this.user = formatuser(user)
-    //       }),
-    //       publicstkr.getstkrs([principal]).then(stickers => {
-    //         this.stickers = formatstickers(stickers)
-    //       }),
-    //       publicstkr.getpins([principal]).then(pins => {
-    //         this.pins = pins
-    //       }),
-    //       new promise((resolve, reject) => {
-    //         return getcomments(principal).then(comments => {
-    //           this.comments = comments
-    //           resolve()
-    //         })
-    //       })
-    //     ]
-    //   }
-
-    //   promise.all(promises).then(() => {
-    //     if (this.user)
-    //       this.setloading(false)
-    //   })
     },
   },
 

@@ -56,10 +56,10 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 import BlobButton from './components/BlobButton.vue'
 import Notifications from './components/Notifications.vue'
-import { signIn, signOut, formatUser, connectToContract, getUser, getCurAddress } from './utils'
+import { formatUser, connectToContract, getUser, getCurAddress } from './utils'
 
 export default {
   name: 'App',
@@ -74,15 +74,15 @@ export default {
   // },
 
   data: () => ({
-    hasAccount: false,
   }),
 
   computed: {
     ...mapState(['loading', 'friendRequests']),
+    ...mapGetters(['hasAccount']),
   },
 
   methods: {
-    ...mapActions(['init']),
+    ...mapActions(['init', 'getCurUser']),
     navigate(name) {
       if (this.$route.name !== name)
         this.$router.push({ name: name })
@@ -143,12 +143,8 @@ export default {
   
   async mounted() {
     await connectToContract()
-    
-    // TODO: Implement once arjun creates the event log
-    // this.fetchUsers()
+    await this.getCurUser()
 
-    const user = await getUser(getCurAddress())
-    this.hasAccount = user.username.length > 0
     if (this.hasAccount) this.init()
   }
 };

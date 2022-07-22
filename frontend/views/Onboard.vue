@@ -96,10 +96,11 @@
     },
     
     methods: {
-      ...mapActions([ 'fetchUser', 'fetchStickers', 'fetchPins', 'fetchComments' ]),
+      ...mapActions(['getCurUser']),
       async submit() {
         try {
-          await setCurUser(this._username, this._bio, this._profilePic)
+          await setCurUser(this._username, this._bio, this._profilePic, this._telegramUsername)
+          this.getCurUser()
           this.$router.push({ name: 'my-wall' })
         } catch (e) {
           console.error(e)
@@ -111,6 +112,7 @@
       this._username = this.username
       this._profilePic = this.profilePic
       this._bio = this.bio
+      this._telegramUsername = this.telegramUsername
     },
     
   }

@@ -6,7 +6,7 @@ export function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-const contractAddress = '411980ef5eb251d3307fa148146c169b1662d0d724'
+const contractAddress = 'TJWxRgo9pb76i1H3kDuTQB3N5aENWNf2Qt'
 
 export async function connectToContract() {
   window.contract = await window.tronWeb.contract().at(contractAddress)
@@ -27,8 +27,8 @@ export function getAddressFromHex(hex) {
   return window.tronWeb.address.fromHex(hex)
 }
 
-export async function setCurUser(name, bio, profileImage) {
-  await window.contract.setUser(name, bio, profileImage).send()
+export async function setCurUser(name, bio, profileImage, telegramUsername) {
+  await window.contract.updateUser(name, bio, profileImage, telegramUsername).send()
 }
 
 export async function getUser(address) {
@@ -40,6 +40,16 @@ export async function getUser(address) {
     }
   })
   return user
+}
+
+export async function getAllUsers() {
+  const users = []
+  const userEvents = await window.tronWeb.getEventResult(contractAddress, { eventName: 'UserCreated' })
+  for (const event of userEvents) {
+    const user = await getUser(getAddressFromHex(event.result.addr))
+    users.push(user)
+  }
+  return users
 }
 
 export async function getStkr(stickerId) {
@@ -62,6 +72,28 @@ export async function getStkrs(address) {
   }
 
   return formatStickers(stkrs)
+}
+
+export async function getRecentStkrId(_title, _organization, _description, _category, _image) {
+  const d = new Date()
+  d.setMinutes(d.getMinutes() - 5)
+  const stkrCreatedEvents = await window.tronWeb.getEventResult(contractAddress, 
+    { 
+      eventName: 'StkrCreated',  
+      sinceTimestamp: d.getTime(),
+      sort: '-block_timestamp',
+    }
+  )
+  for (const event of stkrCreatedEvents) {
+    const { id, title, organization, description, category, image } = event.result
+    if (
+      title === _title && organization === _organization && description === _description &&
+      category === _category && image === _image
+    ) {
+      return id
+    }
+  }
+  return null
 }
 
 export async function getPins(address) {
@@ -123,7 +155,7 @@ export async function getFriends(address) {
   const sentFriendRequestAddresses = []
 
   const friendEvents = await window.tronWeb.getEventResult(contractAddress, { eventName: 'FriendRequest' })
-  console.log(friendEvents)
+  // console.log(friendEvents)
   for (let i = 0; i < friendEvents.length; ++i) {
     const eventI = friendEvents[i].result
     if (getAddressFromHex(eventI.to) === address || getAddressFromHex(eventI.from) === address) {
@@ -147,6 +179,8 @@ export async function getFriends(address) {
             friendAddresses.push(getAddressFromHex(eventI.to))
             sentFriendRequestAddresses.pop()
           }
+          friendEvents.splice(j, 1)
+          break
         }
       }
     }
@@ -167,7 +201,7 @@ export async function getFriends(address) {
   }
 
   const sentFriendRequests = []
-  for (const addr of sentFriendRequests) {
+  for (const addr of sentFriendRequestAddresses) {
     const user = await getUser(addr)
     const shared = getSharedStkrs(address, addr)
     sentFriendRequests.push({ user, shared })
@@ -218,20 +252,16 @@ export async function getUsersWStkr(stickerId) {
   return users
 }
 
-export const signIn = async () => {
-}
-
-export const signOut = async () => {
-}
-
 export const formatUser = (user) => {
   if (!user) return null
 
-  const { bio, name, profile_image } = user
+  console.log('USER: ', user)
+  const { bio, name, profile_image, telegram_username } = user
   return {
     username: name,
     profilePic: profile_image,
     bio,
+    telegramLink: `https://t.me/${telegram_username}`,
   }
 }
 
