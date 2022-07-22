@@ -2,7 +2,7 @@
 pragma solidity ^0.8.6;
 
 contract Stkrs {
-  address[] public stkrCreator;
+  Stkr[] public stkrs;
   mapping(address => uint[]) public pins;
   mapping(address => UserData) public users;
 
@@ -13,8 +13,17 @@ contract Stkrs {
     string telegram_username;
   }
 
+  struct Stkr {
+    address creator;
+    string title;
+    string organization;
+    string description;
+    string category;
+    string image;
+  }
+
   event UserCreated(address addr);
-  event StkrCreated(uint id, string title, string organization, string description, string category, string image);
+  event StkrCreated(uint id);
   event FriendRequest(address from, address to);
   event StkrSent(address to, uint stkr);
   event Comment(address to, address creator, string content);
@@ -27,10 +36,10 @@ contract Stkrs {
   }
 
   function createStkr(string memory title, string memory organization, string memory description, string memory category, string memory image) public returns (uint) {
-    uint id = stkrCreator.length;
-    emit StkrCreated(id, title, organization, description, category, image);
-    stkrCreator.push(msg.sender);
-    return id;
+    Stkr memory s = Stkr(msg.sender, title, organization, description, category, image);
+    stkrs.push(s);
+    emit StkrCreated(stkrs.length - 1);
+    return stkrs.length - 1;
   }
 
   function sendFriendRequest(address to) public {
@@ -39,8 +48,8 @@ contract Stkrs {
   }
 
   function sendStkr(uint stkr, address to) public {
-    require(stkrCreator.length > stkr, "Stkr does not exist");
-    require(stkrCreator[stkr] == msg.sender, "Not creator of stkr");
+    require(stkrs.length > stkr, "Stkr does not exist");
+    require(stkrs[stkr].creator == msg.sender, "Not creator of stkr");
 
     emit StkrSent(to, stkr);
   }
@@ -51,13 +60,13 @@ contract Stkrs {
 
   function addPin(uint stkr) public {
     require(pins[msg.sender].length < 5, "Too many pins");
-    require(stkrCreator.length > stkr, "Invalid stkr");
+    require(stkrs.length > stkr, "Invalid stkr");
     pins[msg.sender].push(stkr);
   }
 
   function removePin(uint stkr) public {
     require(pins[msg.sender].length > 0, "No pins");
-    require(stkrCreator.length > stkr, "Invalid stkr");
+    require(stkrs.length > stkr, "Invalid stkr");
 
     for (uint i = 0; i < pins[msg.sender].length; i++) {
       if (pins[msg.sender][i] == stkr) {
