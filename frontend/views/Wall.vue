@@ -250,7 +250,7 @@ export default {
     async addComment(text) {
       try {
         await window.contract.addComment(this.id, text).send()
-        await sleep(4000)
+        await sleep(2000)
         this.comments = await getComments(this.id)
       } catch(e) {
         console.error(e)
@@ -261,7 +261,7 @@ export default {
 
       try {
         await window.contract.sendFriendRequest(this.id).send()
-        await sleep(4000)
+        await sleep(2000)
         this.getFriendsData()
       } catch (e) {
         console.error(e)
