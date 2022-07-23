@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { Principal } from "@dfinity/principal";
+import { getRecentStkrId, sleep } from "../../utils";
 import { mapState, mapMutations } from 'vuex'
 
 export default {
@@ -40,7 +40,7 @@ export default {
     organization: "",
     category: "",
     image: "",
-    result: "",
+    result: '',
     loading1: false,
     loading2: false,
     stickerId: '',
@@ -55,14 +55,25 @@ export default {
     loading3: false,
   }),
   methods: {
-    createStkr() {
+    async createStkr() {
+      // this.result = await getRecentStkrId('asdf', 'asdf', 'asdf', 'asdf', 'asdf')
+      // return 
+
+      this.result = '' 
       this.loading1 = true
-      window.contract.createStkr(this.title, this.organization, this.description, this.category, this.image).send()
-      .then(result => {
-        console.log('RESULT:', result)
+      try {
+        await window.contract.createStkr(this.title, this.organization, this.description, this.category, this.image).send()
+      } catch (e) {
         this.loading1 = false
-        this.result = parseInt(result)
-      })
+        return
+      }
+      await sleep(1000)
+
+      while (this.result.length === 0) {
+        this.result = await getRecentStkrId(this.title, this.organization, this.description, this.category, this.image)
+        await sleep(1000)
+      }
+      this.loading1 = false
     },
     sendStkr() {
       this.loading2 = true

@@ -8,16 +8,11 @@
       >
         <div class="tw-flex">
           <div class="tw-flex-col tw-mr-2">
-            <ProfileImage :src="comment.user.profilePic" :width="45" @click="goToWall(comment.user.principalString)" />
+            <ProfileImage :src="comment.user.profilePic" :width="45" @click="goToWall(comment.user.address)" />
           </div>
           <div class="tw-flex-col">
             <h1 class="tw-text-sm tw-text-black">
               {{ comment.user.username }}
-            </h1>
-            <h1 style="fontSize: 10px" class="tw-text-gray-600">
-              {{
-                `${comment.date.getMonth()}/${comment.date.getDate()}/${comment.date.getFullYear()}`
-              }}
             </h1>
             <div class="tw-flex tw-flex-row">
               <div v-for="(community, i) in comment.shared" :key="i">

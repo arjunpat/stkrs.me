@@ -9,7 +9,7 @@
         <div class="tw-text-white tw-font-semibold tw-text-5xl tw-mb-2">
           {{ name }}
         </div>
-        <div class="tw-text-white tw-font-extralight tw-text-md">{{ principal }}</div>
+        <div class="tw-text-white tw-font-extralight tw-text-md">{{ address }}</div>
         <div class="tw-text-white tw-font-normal tw-my-4 tw-max-w-3xl">{{ bio }}</div>
       </div>
     </div>
@@ -50,7 +50,7 @@ export default {
 
     horizontalDisplay: { type: Boolean, default: false },
 
-    principal: { type: String, default: "" },
+    address: { type: String, default: "" },
 
     bio: { type: String, default: "" },
 

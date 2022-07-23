@@ -216,15 +216,12 @@ export default {
     isCurUser() {
       return this.id === ''
     },
-    isSignedIn() {
-      return Boolean(this.curUser)
-    },
     allowCommenting() {
       if (this.isCurUser) return false
 
       const stickerOverlap = Object.keys(this.curUserStickers).filter(value => Object.keys(this.stickers).includes(value));
 
-      return this.isSignedIn && !this.isCurUser && stickerOverlap.length > 0
+      return this.hasAccount && !this.isCurUser && stickerOverlap.length > 0
     },
     friendIcon() {
       if (this.isFriend(this.id)) {
@@ -253,6 +250,7 @@ export default {
     async addComment(text) {
       try {
         await window.contract.addComment(this.id, text).send()
+        await sleep(4000)
         this.comments = await getComments(this.id)
       } catch(e) {
         console.error(e)
@@ -263,6 +261,7 @@ export default {
 
       try {
         await window.contract.sendFriendRequest(this.id).send()
+        await sleep(4000)
         this.getFriendsData()
       } catch (e) {
         console.error(e)

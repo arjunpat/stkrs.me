@@ -6,7 +6,7 @@ export function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-const contractAddress = 'TJWxRgo9pb76i1H3kDuTQB3N5aENWNf2Qt'
+const contractAddress = 'TLyeCkaThZsKdAXwcvBfMFe9DJwiDCRvn9'
 
 export async function connectToContract() {
   window.contract = await window.tronWeb.contract().at(contractAddress)
@@ -54,7 +54,10 @@ export async function getAllUsers() {
 
 export async function getStkr(stickerId) {
   const stkr = await window.contract.stkrs(stickerId).call()
-  return formatSticker(stkr)
+  return formatSticker({
+    ...stkr,
+    id: stickerId, 
+  })
 }
 
 export async function getStkrs(address) {
@@ -68,7 +71,7 @@ export async function getStkrs(address) {
   const stkrs = []
   for (const id of stkrIds) {
     const stkr = await window.contract.stkrs(id).call()
-    stkrs.push(stkr)
+    stkrs.push({...stkr, id})
   }
 
   return formatStickers(stkrs)
@@ -85,15 +88,17 @@ export async function getRecentStkrId(_title, _organization, _description, _cate
     }
   )
   for (const event of stkrCreatedEvents) {
-    const { id, title, organization, description, category, image } = event.result
+    const stkr = await getStkr(event.result.id)
+    const { id, name, organization, description, category, src } = stkr
     if (
-      title === _title && organization === _organization && description === _description &&
-      category === _category && image === _image
+      name === _title && organization === _organization && description === _description &&
+      category === _category && src === _image
     ) {
-      return id
+      console.log('YES', event.result.id)
+      return event.result.id
     }
   }
-  return null
+  return ''
 }
 
 export async function getPins(address) {
@@ -138,7 +143,7 @@ export async function getComments(address) {
   for (const comment of comments) {
     const creatorAddress = getAddressFromHex(comment.creator)
     const user = await getUser(creatorAddress)
-    const shared = getSharedStkrs(address, creatorAddress)
+    const shared = await getSharedStkrs(address, creatorAddress)
     commentsFormatted.push({
       ...formatComment(comment),
       user,
@@ -189,21 +194,21 @@ export async function getFriends(address) {
   const friends = []
   for (const addr of friendAddresses) {
     const user = await getUser(addr)
-    const shared = getSharedStkrs(address, addr)
+    const shared = await getSharedStkrs(address, addr)
     friends.push({ user, shared })
   }
 
   const friendRequests = []
   for (const addr of friendRequestAddresses) {
     const user = await getUser(addr)
-    const shared = getSharedStkrs(address, addr)
+    const shared = await getSharedStkrs(address, addr)
     friendRequests.push({ user, shared })
   }
 
   const sentFriendRequests = []
   for (const addr of sentFriendRequestAddresses) {
     const user = await getUser(addr)
-    const shared = getSharedStkrs(address, addr)
+    const shared = await getSharedStkrs(address, addr)
     sentFriendRequests.push({ user, shared })
   }
 
@@ -224,12 +229,12 @@ export async function getSharedStkrs(address1, address2) {
     }
   }
   
-  const stkrIds = stkrIds1.filter(stkr1 => stkrIds2.some(stkr2 => stkr1.stkr === stkr2.stkr))
+  const stkrIds = stkrIds1.filter(stkr1 => stkrIds2.some(stkr2 => stkr1.stkr === stkr2.stkr)).map(s => s.stkr)
 
   const stkrs = []
   for (const id of stkrIds) {
     const stkr = await window.contract.stkrs(id).call()
-    stkrs.push(stkr)
+    stkrs.push({...stkr, id})
   }
 
   return formatStickers(stkrs)
@@ -255,7 +260,6 @@ export async function getUsersWStkr(stickerId) {
 export const formatUser = (user) => {
   if (!user) return null
 
-  console.log('USER: ', user)
   const { bio, name, profile_image, telegram_username } = user
   return {
     username: name,
@@ -275,6 +279,7 @@ export const formatStickers = stickers => {
 
 export const formatSticker = sticker => {
   return {
+    id: sticker.id,
     name: sticker.title,
     organization: sticker.organization,
     description: sticker.description,
@@ -284,49 +289,11 @@ export const formatSticker = sticker => {
 }
 
 export const formatComment = comment => {
-  const { creator, content, createdAt } = comment
+  const { creator, content } = comment
   return {
     creator,
     comment: content,
-    date: new Date(Number(createdAt / BigInt(1000000)))
   }
-}
-
-export const getCommentsOld = async (principal) => {
-  const commentsFormatted = []
-
-  const promises = []
-  await publicStkr.getComments(principal).then(comments => {
-    for (const comment of comments) {
-      const promise = publicStkr.getUser([comment.creator]).then(async user => {
-        const shared = await publicStkr.getSharedStkrs(principal, comment.creator).then(async stickers => {
-          const shared = []
-          for (const stickerId of stickers) {
-            await publicStkr.getStkr(stickerId).then(sticker => {
-              shared.push({
-                ...formatSticker(sticker),
-                id: stickerId,
-              })
-            })
-          }
-          return shared
-        })
-        commentsFormatted.push({
-          ...formatComment(comment),
-          user: {
-            ...formatUser(user),
-            principal: comment.creator,
-            principalString: comment.creator.toString(),
-          },
-          shared,
-        })
-      })
-      promises.push(promise)
-    }
-  })
-  await Promise.all(promises)
-
-  return commentsFormatted
 }
 
 export const goToWall = (principalString) => {

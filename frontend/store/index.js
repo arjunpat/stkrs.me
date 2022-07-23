@@ -1,4 +1,4 @@
-import { formatStickers, formatUser, getComments, getCurAddress, getFriends, getStkrs, getUser } from '../utils'
+import { formatStickers, formatUser, getComments, getCurAddress, getFriends, getStkrs, getUser, sleep } from '../utils'
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -56,6 +56,7 @@ export default new Vuex.Store({
       commit('setCurUser', user)
     },
     async getFriendsData({ commit }) {
+      await sleep(1000)
       await getFriends(getCurAddress()).then(({ friends, friendRequests, sentFriendRequests }) => {
         commit('setFriends', friends)
         commit('setFriendRequests', friendRequests)
