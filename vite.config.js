@@ -26,5 +26,4 @@ export default defineConfig({
   },
   define: {
   },
-  base: '/stkrs.me/',
 })
