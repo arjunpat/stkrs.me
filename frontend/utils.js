@@ -6,7 +6,7 @@ export function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-const contractAddress = 'TLyeCkaThZsKdAXwcvBfMFe9DJwiDCRvn9'
+const contractAddress = 'TJwuEKa8SDLxNAdrknHXCWEudCqhodzW6a'
 
 export async function connectToContract() {
   window.contract = await window.tronWeb.contract().at(contractAddress)

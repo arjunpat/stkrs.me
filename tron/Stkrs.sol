@@ -31,6 +31,7 @@ contract Stkrs {
   function updateUser(string memory name, string memory bio, string memory profile_image, string memory telegram_username) public {
     if (bytes(users[msg.sender].name).length == 0) {
       emit UserCreated(msg.sender);
+      emit StkrSent(msg.sender, 0);
     }
     users[msg.sender] = UserData(name, bio, profile_image, telegram_username);
   }
