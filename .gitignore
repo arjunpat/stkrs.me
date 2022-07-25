@@ -6,3 +6,4 @@ node_modules
 dist-ssr
 *.local
 .dfx
+dist

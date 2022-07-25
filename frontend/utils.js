@@ -49,7 +49,7 @@ export async function getUser(address) {
 
 export async function getAllUsers() {
   const users = []
-  const userEvents = await window.tronWeb.getEventResult(contractAddress, { eventName: 'UserCreated' })
+  const userEvents = await window.tronWeb.getEventResult(contractAddress, { eventName: 'UserCreated', size: 1000000000000000000000000000000000000000 })
   for (const event of userEvents) {
     const user = await getUser(getAddressFromHex(event.result.addr))
     users.push(user)
@@ -66,7 +66,8 @@ export async function getStkr(stickerId) {
 }
 
 export async function getStkrs(address) {
-  const stkrEvents = await window.tronWeb.getEventResult(contractAddress, { eventName: 'StkrSent' })
+  const stkrEvents = await window.tronWeb.getEventResult(contractAddress, { eventName: 'StkrSent', size: 1000000000000000000000000000000000000000 })
+  console.log(stkrEvents)
   const stkrIds = stkrEvents
     .filter(stkr => (
       getAddressFromHex(stkr.result.to) === address
@@ -140,7 +141,7 @@ export async function removePin(stickerId) {
 export async function getComments(address) {
   const commentsFormatted = []
 
-  const commentEvents = await window.tronWeb.getEventResult(contractAddress, { eventName: 'Comment' })
+  const commentEvents = await window.tronWeb.getEventResult(contractAddress, { eventName: 'Comment', size: 1000000000000000000000000000000000000000 })
   const comments = commentEvents.filter(comment => (
     getAddressFromHex(comment.result.to) === address
   )).map(comment => comment.result)
@@ -164,7 +165,7 @@ export async function getFriends(address) {
   const friendRequestAddresses = []
   const sentFriendRequestAddresses = []
 
-  const friendEvents = await window.tronWeb.getEventResult(contractAddress, { eventName: 'FriendRequest' })
+  const friendEvents = await window.tronWeb.getEventResult(contractAddress, { eventName: 'FriendRequest', size: 1000000000000000000000000000000000000000 })
   // console.log(friendEvents)
   for (let i = 0; i < friendEvents.length; ++i) {
     const eventI = friendEvents[i].result
@@ -221,7 +222,7 @@ export async function getFriends(address) {
 }
 
 export async function getSharedStkrs(address1, address2) {
-  const stkrEvents = await window.tronWeb.getEventResult(contractAddress, { eventName: 'StkrSent' })
+  const stkrEvents = await window.tronWeb.getEventResult(contractAddress, { eventName: 'StkrSent', size: 1000000000000000000000000000000000000000 })
   const stkrIds1 = []
   const stkrIds2 = []
   
@@ -246,7 +247,7 @@ export async function getSharedStkrs(address1, address2) {
 }
 
 export async function getUsersWStkr(stickerId) {
-  const stkrEvents = await window.tronWeb.getEventResult(contractAddress, { eventName: 'StkrSent' })
+  const stkrEvents = await window.tronWeb.getEventResult(contractAddress, { eventName: 'StkrSent', size: 1000000000000000000000000000000000000000 })
   const userAddresses = stkrEvents
     .filter(stkr => (
       stkr.result.stkr == stickerId
