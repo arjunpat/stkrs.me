@@ -12,6 +12,7 @@ export async function connectToContract() {
   while (!window.tronWeb) {
     await sleep(500)
   }
+  console.log('Requesting accounts');
   await window.tronLink.request({ method: 'tron_requestAccounts' })
   window.contract = await window.tronWeb.contract().at(contractAddress)
   // await window.contract.createStkr('asdf', 'asdf', 'asdf', 'asdf', 'asdf').send();
