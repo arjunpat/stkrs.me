@@ -9,6 +9,10 @@ export function sleep(ms) {
 const contractAddress = 'TJwuEKa8SDLxNAdrknHXCWEudCqhodzW6a'
 
 export async function connectToContract() {
+  await window.tronLink.request({method: 'tron_requestAccounts'})
+  while (!window.tronWeb) {
+    await sleep(500)
+  }
   window.contract = await window.tronWeb.contract().at(contractAddress)
   // await window.contract.createStkr('asdf', 'asdf', 'asdf', 'asdf', 'asdf').send();
 }
