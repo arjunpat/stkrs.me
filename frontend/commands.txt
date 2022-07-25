@@ -1,1 +1,0 @@
-createStkr("Software engineer for 5 years", "Google", "Worked at Google as a Software Engineer for 5+ years", "Professional", "https://blog.hubspot.com/hubfs/image8-2.jpg")
